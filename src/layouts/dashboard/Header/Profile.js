@@ -1,43 +1,47 @@
 import { Dropdown } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Down, User, Logout } from "@icon-park/react";
 import styled from "styled-components";
 import routes from "../../../constants/routes";
 
 const Container = styled.div`
-	color: white;
+  color: white;
 `;
 
 export const ProfileBar = () => {
-	const items = [
-		{
-			key: "PROFILE",
-			label: <Link to={routes.login}>Hồ sơ</Link>,
-		},
-		{
-			key: "LOGOUT",
-			label: (
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://www.aliyun.com"
-				>
-					2nd menu item (disabled)
-				</a>
-			),
-			disabled: true,
-		},
-	];
+  const navigate = useNavigate();
 
-	return (
-		<Container>
-			<Dropdown
-				menu={{
-					items,
-				}}
-			>
-				<span>Nguyen Minh Hoang</span>
-			</Dropdown>
-		</Container>
-	);
+  const handleLogout = () => {
+    navigate(routes.login);
+  };
+
+  const items = [
+    {
+      key: "PROFILE",
+      label: <Link to={routes.login}>Hồ sơ</Link>,
+      icon: <User />,
+    },
+    {
+      key: "LOGOUT",
+      label: <span>Đăng xuất</span>,
+      icon: <Logout />,
+      danger: true,
+      onClick: handleLogout,
+    },
+  ];
+
+  return (
+    <Container>
+      <Dropdown
+        menu={{
+          items,
+        }}
+      >
+        <a style={{ color: "white" }}>
+          NGUYEN MINH HOANG <Down />
+        </a>
+      </Dropdown>
+    </Container>
+  );
 };

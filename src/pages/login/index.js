@@ -1,8 +1,10 @@
 import { Button, Card, Form, Input, Row, Typography } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import routes from "../../constants/routes";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const Container = styled.div`
 	position: fixed;
@@ -20,15 +22,43 @@ const LoginFormWrapper = styled.div`
 `;
 
 export const LoginPage = () => {
+	const navigate = useNavigate();
+
+	const handleNavigateRegisterPage = () => {
+		navigate(routes.register);
+	};
+
 	return (
 		<Container>
 			<LoginFormWrapper>
-				<Card title="SWP Projects On-going Report System">
+				<Card bordered={false} title="SWP Projects On-going Report System">
+					<Title level={4} className="text-center">
+						Đăng nhập
+					</Title>
 					<Form layout="vertical">
-						<Form.Item name="email" label="Email">
+						<Form.Item
+							name="email"
+							label="Email"
+							rules={[
+								{
+									required: true,
+									message: "Vui lòng nhập địa chỉ email",
+								},
+							]}
+						>
 							<Input placeholder="Email của bạn..." size="large" />
 						</Form.Item>
-						<Form.Item className="mb-2" name="password" label="Mật khẩu">
+						<Form.Item
+							className="mb-2"
+							name="password"
+							label="Mật khẩu"
+							rules={[
+								{
+									required: true,
+									message: "Vui lòng nhập mật khẩu",
+								},
+							]}
+						>
 							<Input.Password placeholder="Mật khẩu..." size="large" />
 						</Form.Item>
 						<Row justify="end" className="mb-2">
@@ -40,7 +70,11 @@ export const LoginPage = () => {
 						<Row justify="end">
 							<Row align="middle">
 								<Text className="mr-1">Chưa có tài khoản?</Text>
-								<Button className="p-0 font-bold" type="link">
+								<Button
+									className="p-0 font-bold"
+									type="link"
+									onClick={handleNavigateRegisterPage}
+								>
 									Đăng ký ngay
 								</Button>
 							</Row>

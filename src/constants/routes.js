@@ -5,6 +5,7 @@ const routes = {
 	dashboard: {
 		root: "/dashboard",
 		courses: "courses",
+		classes: "classes",
 		accounts: "accounts",
 		projects: "projects",
 		profile: "profile",

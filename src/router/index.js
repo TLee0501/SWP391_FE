@@ -12,6 +12,7 @@ import PageNotFound from "../pages/error/404";
 import ProjectListPage from "../pages/project/list";
 import ProjectDetailPage from "../pages/project/detail";
 import ProfilePage from "../pages/profile";
+import ClassListPage from "../pages/class/list";
 
 export const router = createBrowserRouter([
 	{
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
 					{
 						path: routes.dashboard.profile,
 						element: <ProfilePage />,
+					},
+					{
+						path: routes.dashboard.classes,
+						element: <ClassListPage />,
 					},
 				],
 			},

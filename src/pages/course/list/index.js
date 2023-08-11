@@ -1,12 +1,10 @@
 import React, { useRef, useState } from "react";
-import { Button, Input, Row, Typography } from "antd";
+import { Button, Input, Row } from "antd";
 import { CourseList } from "./components/CourseList";
 import { mockCourses } from "../../../__mocks__/course";
 import { Plus } from "@icon-park/react";
 import { CourseFormModal } from "../components/CourseFormModal";
 import { DeleteCourseModal } from "../components/DeleteCourseModal";
-
-const { Title } = Typography;
 
 export const CourseListPage = () => {
 	const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);

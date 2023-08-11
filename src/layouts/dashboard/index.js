@@ -18,8 +18,9 @@ export const Dashboard = () => {
 				<AppHeader />
 				<Content
 					style={{
-						margin: "24px 16px 0",
+						padding: "16px 16px 0",
 						overflow: "initial",
+						backgroundColor: "white",
 					}}
 				>
 					<Outlet />

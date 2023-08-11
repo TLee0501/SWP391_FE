@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import routes from "../../constants/routes";
+import { FontSize } from "@icon-park/react";
 
 const { Text, Title } = Typography;
 
@@ -34,15 +35,19 @@ export const LoginPage = () => {
 
   return (
     <Container>
+      <Title level={6} className="text-center" style={{ marginTop: '50px', color: '#ffffff', fontFamily: 'Segoe UI Emoji' }}>
+        SWP projects ongoing report
+      </Title>
       <LoginFormWrapper>
-        <Card bordered={false} title="SWP Projects On-going Report System">
-          <Title level={4} className="text-center">
+        <Card bordered={false}>
+          <Title level={6} className="text-center">
             Đăng nhập
           </Title>
           <Form layout="vertical">
             <Form.Item
               name="email"
               label="Email"
+             
               rules={[
                 {
                   required: true,
@@ -56,6 +61,7 @@ export const LoginPage = () => {
               className="mb-2"
               name="password"
               label="Mật khẩu"
+              
               rules={[
                 {
                   required: true,

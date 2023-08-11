@@ -19,7 +19,7 @@ export const ProfileBar = () => {
 	const items = [
 		{
 			key: "PROFILE",
-			label: <Link to={routes.login}>Hồ sơ</Link>,
+			label: <Link to={routes.dashboard.profile}>Hồ sơ</Link>,
 			icon: <User />,
 		},
 		{
@@ -38,9 +38,9 @@ export const ProfileBar = () => {
 					items,
 				}}
 			>
-				<a style={{ color: "white" }}>
+				<span className="cursor-pointer">
 					NGUYEN MINH HOANG <Down />
-				</a>
+				</span>
 			</Dropdown>
 		</Container>
 	);

@@ -1,16 +1,21 @@
-import { Form, Input } from "antd";
+import { Dropdown, Form, Input, Select } from "antd";
 import React, { useRef } from "react";
 import BaseModal from "../../../components/BaseModal";
-import TextArea from "antd/es/input/TextArea";
 
 export const CourseFormModal = ({
 	title,
 	course,
 	open,
+	edit,
 	onCancel,
 	onSubmit,
 }) => {
 	const formRef = useRef();
+
+	const statusOptions = [
+		{ value: true, label: "Kích hoạt" },
+		{ value: false, label: "Chưa kích hoạt" },
+	];
 
 	const onFinish = (values) => {
 		onSubmit(values);
@@ -40,7 +45,7 @@ export const CourseFormModal = ({
 						},
 					]}
 				>
-					<Input placeholder="Mã môn học..." />
+					<Input placeholder="Mã môn học..." disabled={edit} />
 				</Form.Item>
 				<Form.Item
 					name="name"
@@ -54,8 +59,21 @@ export const CourseFormModal = ({
 				>
 					<Input placeholder="Tên môn học..." />
 				</Form.Item>
-				<Form.Item name="description" label="Mô tả">
-					<TextArea placeholder="Mô tả về môn học..." />
+				<Form.Item
+					name="active"
+					label="Trạng thái"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn trạng thái",
+						},
+					]}
+				>
+					<Select
+						options={statusOptions}
+						placeholder="Trạng thái"
+						defaultValue={true}
+					/>
 				</Form.Item>
 			</Form>
 		</BaseModal>

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, Row, Typography } from "antd";
+import { Button, Input, Row, Typography } from "antd";
 import { CourseList } from "./components/CourseList";
 import { mockCourses } from "../../../__mocks__/course";
 import { Plus } from "@icon-park/react";
@@ -56,7 +56,7 @@ export const CourseListPage = () => {
 	return (
 		<div>
 			<Row justify="space-between">
-				<Title level={4}>Danh sách môn học</Title>
+				<Input.Search style={{ width: "50%" }} placeholder="Tìm môn học..." />
 				<Button
 					className="flex-center"
 					type="primary"
@@ -83,6 +83,7 @@ export const CourseListPage = () => {
 				course={updatingCourse.current}
 				onCancel={handleCloseUpdateCourseModal}
 				onSubmit={handleUpdateCourse}
+				edit={true}
 			/>
 			<DeleteCourseModal
 				onCancel={handleCloseDeleteCourseModal}

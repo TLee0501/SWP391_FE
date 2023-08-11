@@ -6,42 +6,42 @@ import styled from "styled-components";
 import routes from "../../../constants/routes";
 
 const Container = styled.div`
-  color: white;
+	color: white;
 `;
 
 export const ProfileBar = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const handleLogout = () => {
-    navigate(routes.login);
-  };
+	const handleLogout = () => {
+		navigate(routes.login);
+	};
 
-  const items = [
-    {
-      key: "PROFILE",
-      label: <Link to={routes.login}>Hồ sơ</Link>,
-      icon: <User />,
-    },
-    {
-      key: "LOGOUT",
-      label: <span>Đăng xuất</span>,
-      icon: <Logout />,
-      danger: true,
-      onClick: handleLogout,
-    },
-  ];
+	const items = [
+		{
+			key: "PROFILE",
+			label: <Link to={routes.login}>Hồ sơ</Link>,
+			icon: <User />,
+		},
+		{
+			key: "LOGOUT",
+			label: <span>Đăng xuất</span>,
+			icon: <Logout />,
+			danger: true,
+			onClick: handleLogout,
+		},
+	];
 
-  return (
-    <Container>
-      <Dropdown
-        menu={{
-          items,
-        }}
-      >
-        <a style={{ color: "white" }}>
-          NGUYEN MINH HOANG <Down />
-        </a>
-      </Dropdown>
-    </Container>
-  );
+	return (
+		<Container>
+			<Dropdown
+				menu={{
+					items,
+				}}
+			>
+				<a style={{ color: "white" }}>
+					NGUYEN MINH HOANG <Down />
+				</a>
+			</Dropdown>
+		</Container>
+	);
 };

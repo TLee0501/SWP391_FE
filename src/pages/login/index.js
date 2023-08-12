@@ -33,6 +33,7 @@ export const LoginPage = () => {
   const handleLogin = (email, password) => {
     AuthApi.login(email, password).then((response) => {
 
+
       if (response === 200) {
         // Login success
         console.log("Success")
@@ -45,13 +46,16 @@ export const LoginPage = () => {
         return false;
       }
 
+
     });
   };
 
   return (
     <Container>
       <Title
+
         level={1}
+
         className="text-center"
         style={{
           marginTop: "50px",

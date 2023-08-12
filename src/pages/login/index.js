@@ -5,6 +5,7 @@ import styled from "styled-components";
 import routes from "../../constants/routes";
 import AuthApi from "../../apis/auth";
 
+
 const { Text, Title } = Typography;
 
 const Container = styled.div`
@@ -25,42 +26,58 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-
   const handleNavigateRegisterPage = () => {
     navigate(routes.register);
   };
 
-  const handleLogin = () => {
-    AuthApi.login("tester123@gmail.com", "dXz1145").then((response) => {
-			if (response === true) {
-				// Login success
-				setLoading(false);
+  const handleLogin = (email, password) => {
+    AuthApi.login(email, password).then((response) => {
+
+      if (response === 200) {
+        // Login success
+        console.log("Success")
         navigate(routes.dashboard.root);
-			} else {
-				// Login fail - show error
-				setLoading(false);
-			}
-		});
-   
+        return true;
+      } else if(response === 404){
+        // Login fail - show error
+        console.log("SOMETHING WENT WRONG")
+        navigate(routes.root);
+        return false;
+      }
+
+    });
   };
 
   return (
     <Container>
-      <Title level={6} className="text-center" style={{ marginTop: '50px', color: '#ffffff', fontFamily: 'Segoe UI Emoji' }}>
+      <Title
+        level={1}
+        className="text-center"
+        style={{
+          marginTop: "50px",
+          color: "#ffffff",
+          fontFamily: "Segoe UI Emoji",
+        }}
+      >
         SWP projects ongoing report
       </Title>
       <LoginFormWrapper>
         <Card bordered={false}>
-          <Title level={6} className="text-center">
+          <Title level={2} className="text-center">
             Đăng nhập
           </Title>
-          <Form layout="vertical">
+          <Form
+            layout="vertical"
+            onFinish={async (values) => {
+              console.log("data: ", values);
+              const { email, password } = values;
+              const response = await handleLogin(email, password);
+            }}
+          >
             <Form.Item
               name="email"
               label="Email"
               labelAlign="right"
-
               rules={[
                 {
                   required: true,
@@ -70,6 +87,7 @@ export const LoginPage = () => {
             >
               <Input placeholder="Email của bạn..." size="large" />
             </Form.Item>
+
             <Form.Item
               className="mb-2"
               name="password"
@@ -87,10 +105,10 @@ export const LoginPage = () => {
               <Button type="link">Quên mật khẩu?</Button>
             </Row>
             <Button
-              onClick={handleLogin}
               className="w-full mb-2"
               type="primary"
               size="large"
+              htmlType="submit"
             >
               Đăng nhập
             </Button>

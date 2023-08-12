@@ -1,9 +1,9 @@
 import { Button, Card, Form, Input, Row, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import routes from "../../constants/routes";
-import { FontSize } from "@icon-park/react";
+import AuthApi from "../../apis/auth";
 
 const { Text, Title } = Typography;
 
@@ -25,12 +25,24 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const handleNavigateRegisterPage = () => {
     navigate(routes.register);
   };
 
   const handleLogin = () => {
-    navigate(routes.dashboard.root);
+    AuthApi.login("tester123@gmail.com", "dXz1145").then((response) => {
+			if (response === true) {
+				// Login success
+				setLoading(false);
+        navigate(routes.dashboard.root);
+			} else {
+				// Login fail - show error
+				setLoading(false);
+			}
+		});
+   
   };
 
   return (
@@ -47,7 +59,8 @@ export const LoginPage = () => {
             <Form.Item
               name="email"
               label="Email"
-             
+              labelAlign="right"
+
               rules={[
                 {
                   required: true,
@@ -61,7 +74,6 @@ export const LoginPage = () => {
               className="mb-2"
               name="password"
               label="Mật khẩu"
-              
               rules={[
                 {
                   required: true,

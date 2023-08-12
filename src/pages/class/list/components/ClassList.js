@@ -14,6 +14,7 @@ export const ClassList = ({ classes }) => {
   return (
     <div>
       <List
+        grid={{ column: 4, gutter: 8 }}
         split={false}
         bordered={false}
         dataSource={classes}

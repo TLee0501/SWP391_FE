@@ -1,26 +1,26 @@
-import { Down, Up } from "@icon-park/react";
-import { Card, Row, Tag, Typography } from "antd";
+import { Card, Descriptions, Typography } from "antd";
 import React from "react";
+import { formatDate } from "../../../../utils";
 
 const { Text } = Typography;
 
 export const ClassItem = ({ data }) => {
+  const items = [
+    {
+      key: "1",
+      label: "Bắt đầu",
+      children: formatDate(data.startDate, "DD/MM/yyyy"),
+    },
+    {
+      key: "2",
+      label: "Kết thúc",
+      children: formatDate(data.endDate, "DD/MM/yyyy"),
+    },
+  ];
+
   return (
-    <Card className="w-full cursor-pointer" hoverable>
-      <Row justify="space-between">
-        <div>
-          <Text className="text-lg font-medium" ellipsis>
-            {data.name}
-          </Text>
-          <Tag
-            className="ml-2"
-            color={data.active ? "blue-inverse" : "default"}
-          >
-            {data.active ? "Kích hoạt" : "Chưa kích hoạt"}
-          </Tag>
-        </div>
-        {/* {!expanded ? <Down size={26} /> : <Up size={26} />} */}
-      </Row>
+    <Card className="w-full cursor-pointer" hoverable title={data.name}>
+      <Descriptions layout="vertical" items={items} />
     </Card>
   );
 };

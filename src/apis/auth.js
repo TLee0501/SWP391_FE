@@ -5,17 +5,17 @@ const login = async (email, password) => {
 		mail: email,
 		password: password,
 	}).catch(function (error){
-		console.log('ERROR: ', error) 
+		console.log('Wrong email or password', error) 
 		return false;
 	});
   return response.status;
 };
 
-const getUserbyID = async (userID) => {
+const getUserbyId = async (userId) => {
 	const response = await BaseApi.get("/Users/GetUser", {
-		userID: userID,
+		userId: userId,
 	}).catch(function (error){
-		console.log('ERROR: ', error) 
+		console.log('Wrong userId ', error) 
 		return false;
 	});
   return response.status;
@@ -23,7 +23,7 @@ const getUserbyID = async (userID) => {
 
 const AuthApi = {
   login,
-  getUserbyID
+  getUserbyId
 };
 
 export default AuthApi;

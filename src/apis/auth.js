@@ -1,7 +1,7 @@
 import BaseApi from ".";
 
 const login = async (email, password) => {
-	const response = await BaseApi.post("/login", {
+	const response = await BaseApi.post("/Users/Login", {
 		email: email,
 		password: password,
 	});

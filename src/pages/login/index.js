@@ -60,7 +60,6 @@ export const LoginPage = () => {
               name="email"
               label="Email"
               labelAlign="right"
-
               rules={[
                 {
                   required: true,
@@ -70,6 +69,7 @@ export const LoginPage = () => {
             >
               <Input placeholder="Email của bạn..." size="large" />
             </Form.Item>
+            
             <Form.Item
               className="mb-2"
               name="password"

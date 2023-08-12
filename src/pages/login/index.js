@@ -31,23 +31,30 @@ export const LoginPage = () => {
     navigate(routes.register);
   };
 
-  const handleLogin = () => {
-    AuthApi.login("tester123@gmail.com", "dXz1145").then((response) => {
-			if (response === true) {
-				// Login success
-				setLoading(false);
+  const handleLogin = (email, password) => {
+    AuthApi.login(email, password).then((response) => {
+      if (response === true) {
+        // Login success
+        setLoading(false);
         navigate(routes.dashboard.root);
-			} else {
-				// Login fail - show error
-				setLoading(false);
-			}
-		});
-   
+      } else {
+        // Login fail - show error
+        setLoading(false);
+      }
+    });
   };
 
   return (
     <Container>
-      <Title level={6} className="text-center" style={{ marginTop: '50px', color: '#ffffff', fontFamily: 'Segoe UI Emoji' }}>
+      <Title
+        level={6}
+        className="text-center"
+        style={{
+          marginTop: "50px",
+          color: "#ffffff",
+          fontFamily: "Segoe UI Emoji",
+        }}
+      >
         SWP projects ongoing report
       </Title>
       <LoginFormWrapper>
@@ -55,7 +62,14 @@ export const LoginPage = () => {
           <Title level={6} className="text-center">
             Đăng nhập
           </Title>
-          <Form layout="vertical">
+          <Form
+            layout="vertical"
+            onFinish={async (values) => {
+              console.log("data: ", values);
+              const { email, password } = values;
+              const response = await handleLogin(email, password);
+            }}
+          >
             <Form.Item
               name="email"
               label="Email"
@@ -87,10 +101,10 @@ export const LoginPage = () => {
               <Button type="link">Quên mật khẩu?</Button>
             </Row>
             <Button
-              onClick={handleLogin}
               className="w-full mb-2"
               type="primary"
               size="large"
+              htmlType="submit"
             >
               Đăng nhập
             </Button>

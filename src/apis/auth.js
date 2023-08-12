@@ -6,11 +6,11 @@ const login = async (email, password) => {
 		password: password,
 	});
 
-	return response.data;
+  return response.data;
 };
 
 const AuthApi = {
-	login,
+  login,
 };
 
 export default AuthApi;

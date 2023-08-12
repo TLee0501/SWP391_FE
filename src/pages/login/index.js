@@ -5,6 +5,7 @@ import styled from "styled-components";
 import routes from "../../constants/routes";
 import AuthApi from "../../apis/auth";
 
+
 const { Text, Title } = Typography;
 
 const Container = styled.div`
@@ -25,29 +26,36 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-
   const handleNavigateRegisterPage = () => {
     navigate(routes.register);
   };
 
   const handleLogin = (email, password) => {
     AuthApi.login(email, password).then((response) => {
-      if (response === true) {
+
+
+      if (response === 200) {
         // Login success
-        setLoading(false);
+        console.log("Success")
         navigate(routes.dashboard.root);
-      } else {
+        return true;
+      } else if(response === 404){
         // Login fail - show error
-        setLoading(false);
+        console.log("SOMETHING WENT WRONG")
+        navigate(routes.root);
+        return false;
       }
+
+
     });
   };
 
   return (
     <Container>
       <Title
-        level={6}
+
+        level={1}
+
         className="text-center"
         style={{
           marginTop: "50px",
@@ -59,7 +67,7 @@ export const LoginPage = () => {
       </Title>
       <LoginFormWrapper>
         <Card bordered={false}>
-          <Title level={6} className="text-center">
+          <Title level={2} className="text-center">
             Đăng nhập
           </Title>
           <Form
@@ -83,7 +91,7 @@ export const LoginPage = () => {
             >
               <Input placeholder="Email của bạn..." size="large" />
             </Form.Item>
-            
+
             <Form.Item
               className="mb-2"
               name="password"

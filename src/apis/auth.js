@@ -1,16 +1,29 @@
 import BaseApi from ".";
 
 const login = async (email, password) => {
-	const response = await BaseApi.post("/login", {
-		email: email,
+	const response = await BaseApi.post("/Users/Login", {
+		mail: email,
 		password: password,
+	}).catch(function (error){
+		console.log('ERROR: ', error) 
+		return false;
 	});
+  return response.status;
+};
 
-	return response.data;
+const getUserbyID = async (userID) => {
+	const response = await BaseApi.get("/Users/GetUser", {
+		userID: userID,
+	}).catch(function (error){
+		console.log('ERROR: ', error) 
+		return false;
+	});
+  return response.status;
 };
 
 const AuthApi = {
-	login,
+  login,
+  getUserbyID
 };
 
 export default AuthApi;

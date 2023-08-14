@@ -32,7 +32,12 @@ export const ClassItem = ({ data }) => {
 		>
 			<Descriptions layout="vertical" items={items} />
 			<Descriptions
-				items={[{ label: "Môn học", children: data.course.name }]}
+				items={[
+					{
+						label: "Môn học",
+						children: `${data.course.code} - ${data.course.name}`,
+					},
+				]}
 			/>
 		</Card>
 	);

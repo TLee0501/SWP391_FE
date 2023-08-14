@@ -1,18 +1,21 @@
 import { Dropdown } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Down, User, Logout } from "@icon-park/react";
 import styled from "styled-components";
 import routes from "../../../constants/routes";
+
 
 const Container = styled.div`
 	color: white;
 `;
 
 export const ProfileBar = () => {
+	const [user, setUser] = useState({})
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
+		localStorage.removeItem("jwt");
 		navigate(routes.login);
 	};
 
@@ -39,7 +42,7 @@ export const ProfileBar = () => {
 				}}
 			>
 				<span className="cursor-pointer">
-					NGUYEN MINH HOANG <Down />
+					{user && user.fullName}	<Down />
 				</span>
 			</Dropdown>
 		</Container>

@@ -10,7 +10,7 @@ export const CreateClassModal = ({ open, onCancel }) => {
 	const courseOptions = mockCourses.map((e) => {
 		return {
 			value: e.id,
-			label: e.name,
+			label: `${e.code} - ${e.name}`,
 		};
 	});
 

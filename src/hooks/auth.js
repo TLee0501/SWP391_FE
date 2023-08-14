@@ -1,5 +1,4 @@
 export const useAuth = () => {
 	const jwt = localStorage.getItem("jwt");
-	// return jwt ? true : false;
-	return true;
+	return jwt ? true : false;
 };

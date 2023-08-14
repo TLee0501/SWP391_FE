@@ -15,7 +15,7 @@ const ClassDetailPage = () => {
 		{
 			key: "CLASS_NAME",
 			label: "Tên lớp",
-			children: <strong>{data.name}</strong>,
+			children: <strong>{data.name?.toUpperCase()}</strong>,
 		},
 		{
 			key: "START_DATE",
@@ -30,7 +30,9 @@ const ClassDetailPage = () => {
 		{
 			key: "COURSE",
 			label: "Môn học",
-			children: <strong>{data?.course?.name}</strong>,
+			children: (
+				<strong>{`${data?.course?.code} - ${data?.course?.name}`}</strong>
+			),
 		},
 	];
 

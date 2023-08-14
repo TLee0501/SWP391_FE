@@ -8,6 +8,7 @@ export const mockAccounts = [
 		phoneNumber: "0385345678",
 		address: "Address 01",
 		role: roles.ADMIN,
+		active: true,
 	},
 	{
 		id: "2",
@@ -16,6 +17,7 @@ export const mockAccounts = [
 		phoneNumber: "0385345671",
 		address: "Address 02",
 		role: roles.TEACHER,
+		active: true,
 	},
 	{
 		id: "3",
@@ -24,5 +26,6 @@ export const mockAccounts = [
 		phoneNumber: "0385345679",
 		address: "Address 03",
 		role: roles.STUDENT,
+		active: false,
 	},
 ];

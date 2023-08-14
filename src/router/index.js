@@ -5,7 +5,6 @@ import { RegisterAccountPage } from "../pages/register";
 import { Dashboard } from "../layouts/dashboard";
 import { AccountListPage } from "../pages/account/list";
 import { CourseListPage } from "../pages/course/list";
-import { AccountDetailPage } from "../pages/account/detail";
 import { CourseDetailPage } from "../pages/course/detail";
 import RootRoute from "./RootRoute";
 import PageNotFound from "../pages/error/404";
@@ -36,10 +35,7 @@ export const router = createBrowserRouter([
 						path: routes.dashboard.accounts,
 						element: <AccountListPage />,
 					},
-					{
-						path: `${routes.dashboard.accounts}/:id`,
-						element: <AccountDetailPage />,
-					},
+
 					{
 						path: routes.dashboard.courses,
 						element: <CourseListPage />,

@@ -1,50 +1,51 @@
+import { Down, Logout, User } from "@icon-park/react";
 import { Dropdown } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Down, User, Logout } from "@icon-park/react";
 import styled from "styled-components";
 import routes from "../../../constants/routes";
-
+import { UserContext } from "../../../providers/user";
 
 const Container = styled.div`
-	color: white;
+  color: white;
 `;
 
 export const ProfileBar = () => {
-	const [user, setUser] = useState({})
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
-	const handleLogout = () => {
-		localStorage.removeItem("jwt");
-		navigate(routes.login);
-	};
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+	setUser(undefined)
+    navigate(routes.login);
+  };
 
-	const items = [
-		{
-			key: "PROFILE",
-			label: <Link to={routes.dashboard.profile}>Hồ sơ</Link>,
-			icon: <User />,
-		},
-		{
-			key: "LOGOUT",
-			label: <span>Đăng xuất</span>,
-			icon: <Logout />,
-			danger: true,
-			onClick: handleLogout,
-		},
-	];
+  const items = [
+    {
+      key: "PROFILE",
+      label: <Link to={routes.dashboard.profile}>Hồ sơ</Link>,
+      icon: <User />,
+    },
+    {
+      key: "LOGOUT",
+      label: <span>Đăng xuất</span>,
+      icon: <Logout />,
+      danger: true,
+      onClick: handleLogout,
+    },
+  ];
 
-	return (
-		<Container>
-			<Dropdown
-				menu={{
-					items,
-				}}
-			>
-				<span className="cursor-pointer">
-					{user && user.fullName}	<Down />
-				</span>
-			</Dropdown>
-		</Container>
-	);
+  return (
+    <Container>
+      <Dropdown
+        menu={{
+          items,
+        }}
+      >
+        <span className="cursor-pointer">
+          {user && user.fullName} <Down />
+        </span>
+      </Dropdown>
+    </Container>
+  );
 };

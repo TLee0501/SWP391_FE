@@ -26,28 +26,8 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({});
-
-  // useEffect(() => {
-  //   handleUser()
-  // }, [])
-
   const handleNavigateRegisterPage = () => {
     navigate(routes.register);
-  };
-
-  const handleUser = () => {
-    try {
-      AuthApi.getUser().then((response) => {
-        console.log("Data: ", response);
-        setUser(response)
-      });
-    }
-    catch (error) {
-      console.log("Fetch data failed");
-      return undefined;
-    }
-
   };
 
   const handleLogin = (email, password) => {
@@ -55,14 +35,12 @@ export const LoginPage = () => {
       if (response === true) {
         // Login success
         console.log("Success")
-        handleUser();
+  
         navigate(routes.dashboard.root);
-        return true;
       } else {
         // Login fail - show error
         console.log("SOMETHING WENT WRONG")
         navigate(routes.login);
-        return false;
       }
     });
   };

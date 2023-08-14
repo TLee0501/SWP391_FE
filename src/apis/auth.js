@@ -1,30 +1,36 @@
 import BaseApi from ".";
 
 const login = async (email, password) => {
-	const response = await BaseApi.post("/Users/Login", {
-		mail: email,
-		password: password,
-	}).catch(function (error){
+	try {
+		const response = await BaseApi.post("/Users/Login", {
+			mail: email,
+			password: password,
+		});
+		if (response.status === 200){
+			const jwt = response.data['token'];
+			localStorage.setItem("jwt", jwt);
+			return true;
+		}
+	} catch (error) {
 		console.log('Wrong email or password', error) 
 		return false;
-	});
-  return response.status;
+	}
 };
 
-
-const getUserbyId = async (userId) => {
-	const response = await BaseApi.get("/Users/GetUser", {
-		userId: userId,
-	}).catch(function (error){
-		console.log('Wrong userId ', error) 
-		return false;
-	});
-  return response.status;
+const getUser = async () => {
+	try {
+		const response = await BaseApi.get("/Users/GetUser");	
+		const user = response.data;
+		return user;
+	} catch (error) {
+		console.log('Wrong userID', error) 
+		return undefined;
+	}
 };
 
 const AuthApi = {
   login,
-  getUserbyId
+  getUser
 };
 
 export default AuthApi;

@@ -3,7 +3,7 @@ import BaseApi from ".";
 const login = async (email, password) => {
 	try {
 		const response = await BaseApi.post("/Users/Login", {
-			mail: email,
+			email: email,
 			password: password,
 		});
 		if (response.status === 200){
@@ -23,7 +23,7 @@ const getUser = async () => {
 		const user = response.data;
 		return user;
 	} catch (error) {
-		console.log('Wrong userID', error) 
+		console.log('Wrong userId', error) 
 		return undefined;
 	}
 };

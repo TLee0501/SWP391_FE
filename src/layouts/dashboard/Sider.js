@@ -25,7 +25,7 @@ export const AppSider = () => {
 	const items = [
 		{
 			key: itemKeys.ACCOUNT,
-			icon: <User />,
+			icon: <User />,	
 			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
 		},
 		{

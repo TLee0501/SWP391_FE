@@ -4,23 +4,25 @@ import { useAuth } from "../hooks/auth";
 import routes, { UnauthorizedRoutes } from "../constants/routes";
 
 const RootRoute = () => {
-	console.log("RootRoute render");
+	// console.log("RootRoute render");
 	const navigate = useNavigate();
-	const location = useLocation();
+	const { pathname } = useLocation();
 	const isAuthenticated = useAuth();
 
 	useEffect(() => {
-		const path = location.pathname;
-		if (!UnauthorizedRoutes.includes(path)) {
+		const path = pathname;
+		if (UnauthorizedRoutes.includes(path)) {
+			if (isAuthenticated) {
+				navigate(routes.dashboard.root);
+			}
 			return;
-		}
-
-		if (isAuthenticated) {
-			navigate(routes.dashboard.root);
 		} else {
-			navigate(routes.login);
+			if (!isAuthenticated) {
+				navigate(routes.login);
+			}
 		}
-	}, [isAuthenticated, navigate, location]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [pathname, isAuthenticated]);
 
 	return <Outlet />;
 };

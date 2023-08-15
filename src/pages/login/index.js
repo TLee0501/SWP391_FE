@@ -1,5 +1,5 @@
 import { Button, Card, Form, Input, Row, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthApi from "../../apis/auth";
@@ -25,12 +25,16 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
 	const navigate = useNavigate();
 
+	const [loading, setLoading] = useState(false);
+
 	const handleNavigateRegisterPage = () => {
 		navigate(routes.register);
 	};
 
 	const handleLogin = async (email, password) => {
+		setLoading(true);
 		const success = await AuthApi.login(email, password);
+		setLoading(false);
 		if (success) {
 			navigate(routes.dashboard.root);
 		} else {
@@ -99,6 +103,7 @@ export const LoginPage = () => {
 							type="primary"
 							size="large"
 							htmlType="submit"
+							loading={loading}
 						>
 							Đăng nhập
 						</Button>

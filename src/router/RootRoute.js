@@ -1,21 +1,28 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
-import routes from "../constants/routes";
+import routes, { UnauthorizedRoutes } from "../constants/routes";
 
 const RootRoute = () => {
-  const navigate = useNavigate();
-  const isAuthenticated = useAuth();
+	console.log("RootRoute render");
+	const navigate = useNavigate();
+	const location = useLocation();
+	const isAuthenticated = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.dashboard.root);
-    } else {
-      navigate(routes.login);
-    }
-  }, []);
+	useEffect(() => {
+		const path = location.pathname;
+		if (!UnauthorizedRoutes.includes(path)) {
+			return;
+		}
 
-  return <Outlet />;
+		if (isAuthenticated) {
+			navigate(routes.dashboard.root);
+		} else {
+			navigate(routes.login);
+		}
+	}, [isAuthenticated, navigate, location]);
+
+	return <Outlet />;
 };
 
 export default RootRoute;

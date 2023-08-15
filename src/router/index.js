@@ -5,7 +5,6 @@ import { RegisterAccountPage } from "../pages/register";
 import { Dashboard } from "../layouts/dashboard";
 import { AccountListPage } from "../pages/account/list";
 import { CourseListPage } from "../pages/course/list";
-import { AccountDetailPage } from "../pages/account/detail";
 import { CourseDetailPage } from "../pages/course/detail";
 import RootRoute from "./RootRoute";
 import PageNotFound from "../pages/error/404";
@@ -13,6 +12,7 @@ import ProjectListPage from "../pages/project/list";
 import ProjectDetailPage from "../pages/project/detail";
 import ProfilePage from "../pages/profile";
 import ClassListPage from "../pages/class/list";
+import ClassDetailPage from "../pages/class/detail";
 
 export const router = createBrowserRouter([
 	{
@@ -36,10 +36,7 @@ export const router = createBrowserRouter([
 						path: routes.dashboard.accounts,
 						element: <AccountListPage />,
 					},
-					{
-						path: `${routes.dashboard.accounts}/:id`,
-						element: <AccountDetailPage />,
-					},
+
 					{
 						path: routes.dashboard.courses,
 						element: <CourseListPage />,
@@ -63,6 +60,10 @@ export const router = createBrowserRouter([
 					{
 						path: routes.dashboard.classes,
 						element: <ClassListPage />,
+					},
+					{
+						path: `${routes.dashboard.classes}/:id`,
+						element: <ClassDetailPage />,
 					},
 				],
 			},

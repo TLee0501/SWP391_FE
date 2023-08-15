@@ -15,12 +15,16 @@ const RootRoute = () => {
 			if (isAuthenticated) {
 				navigate(routes.dashboard.root);
 			}
-			return;
 		} else {
 			if (!isAuthenticated) {
 				navigate(routes.login);
+			} else {
+				if (path === routes.root) {
+					navigate(routes.dashboard.root);
+				}
 			}
 		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pathname, isAuthenticated]);
 

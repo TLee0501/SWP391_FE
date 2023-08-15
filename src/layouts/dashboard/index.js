@@ -6,14 +6,23 @@ import { Outlet, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
 import Lottie from "react-lottie";
 import animationData from "../../assets/lotties/home-animation";
+import AuthApi from "../../apis/auth";
+import { UserContext } from "../../providers/user";
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 export const Dashboard = () => {
-	const location = useLocation();
+
+const location = useLocation();
+const [user, setUser] = useState()
+	
+  useEffect(() => {
+    AuthApi.getUser().then((user) => setUser(user));
+  }, []);
 
 	return (
+     <UserContext.Provider value={{user: user, setUser: setUser}}>
 		<Layout hasSider>
 			<AppSider />
 			<Layout
@@ -49,5 +58,6 @@ export const Dashboard = () => {
 				</Content>
 			</Layout>
 		</Layout>
+</UserContext.Provider>
 	);
 };

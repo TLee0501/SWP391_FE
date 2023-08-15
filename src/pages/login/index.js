@@ -32,21 +32,16 @@ export const LoginPage = () => {
 
   const handleLogin = (email, password) => {
     AuthApi.login(email, password).then((response) => {
-
-
-      if (response === 200) {
+      if (response === true) {
         // Login success
         console.log("Success")
+  
         navigate(routes.dashboard.root);
-        return true;
-      } else if(response === 404){
+      } else {
         // Login fail - show error
         console.log("SOMETHING WENT WRONG")
-        navigate(routes.root);
-        return false;
+        navigate(routes.login);
       }
-
-
     });
   };
 

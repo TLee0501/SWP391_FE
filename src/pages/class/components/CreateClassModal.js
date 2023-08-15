@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BaseModal from "../../../components/BaseModal";
 import { Form, Input, DatePicker, Select } from "antd";
 import moment from "moment";
 import { mockCourses } from "../../../__mocks__/course";
+import CourseApi from "../../../apis/course";
 
 const { RangePicker } = DatePicker;
 
 export const CreateClassModal = ({ open, onCancel }) => {
-	const courseOptions = mockCourses.map((e) => {
+	const [courseLoading, setCourseLoading] = useState(false);
+	const [courses, setCourses] = useState([]);
+
+	const getCourses = async () => {
+		setCourseLoading(true);
+		const data = await CourseApi.searchCourses();
+		setCourses(data);
+		setCourseLoading(false);
+	};
+
+	useEffect(() => {
+		getCourses();
+	}, []);
+
+	const courseOptions = courses.map((e) => {
 		return {
-			value: e.id,
-			label: `${e.code} - ${e.name}`,
+			value: e.courseId,
+			label: `${e.courseCode} - ${e.courseName}`,
 		};
 	});
 
@@ -54,7 +69,12 @@ export const CreateClassModal = ({ open, onCancel }) => {
 						},
 					]}
 				>
-					<Select options={courseOptions} placeholder="Chọn môn học" />
+					<Select
+						showSearch
+						options={courseOptions}
+						placeholder="Chọn môn học"
+						loading={courseLoading}
+					/>
 				</Form.Item>
 			</Form>
 		</BaseModal>

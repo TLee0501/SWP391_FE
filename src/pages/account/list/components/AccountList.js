@@ -1,10 +1,24 @@
-import React from "react";
-import { Table, Button, Tag } from "antd";
-import { mockAccounts } from "../../../../__mocks__/account";
-import { roles } from "../../../../constants/app";
 import { Edit } from "@icon-park/react";
+import { Button, Table, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import UserApi from "../../../../apis/user";
+import { roles } from "../../../../constants/app";
 
 const AccountList = ({ onEditAccount }) => {
+	const [accountLoading, setAccountLoading] = useState(false);
+	const [accounts, setAccounts] = useState([]);
+
+	const getUsers = async (keyword) => {
+		setAccountLoading(true);
+		const data = await UserApi.searchUsers(keyword);
+		setAccounts(data);
+		setAccountLoading(false);
+	};
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
 	const getRoleName = (role) => {
 		switch (role) {
 			case roles.ADMIN:
@@ -77,7 +91,9 @@ const AccountList = ({ onEditAccount }) => {
 		},
 	];
 
-	return <Table dataSource={mockAccounts} columns={columns} />;
+	return (
+		<Table loading={accountLoading} dataSource={accounts} columns={columns} />
+	);
 };
 
 export default AccountList;

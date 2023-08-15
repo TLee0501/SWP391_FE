@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button, Tag } from "antd";
-import { mockAccounts } from "../../../../__mocks__/account";
-import { roles } from "../../../../constants/app";
 import { Edit } from "@icon-park/react";
+import { Button, Table, Tag } from "antd";
+import React, { useEffect, useState } from "react";
 import UserApi from "../../../../apis/user";
+import { roles } from "../../../../constants/app";
 
 const AccountList = ({ onEditAccount }) => {
 	const [accountLoading, setAccountLoading] = useState(false);

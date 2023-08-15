@@ -29,19 +29,13 @@ export const LoginPage = () => {
 		navigate(routes.register);
 	};
 
-	const handleLogin = (email, password) => {
-		AuthApi.login(email, password).then((response) => {
-			if (response === true) {
-				// Login success
-				console.log("Success");
-
-				navigate(routes.dashboard.root);
-			} else {
-				// Login fail - show error
-				console.log("SOMETHING WENT WRONG");
-				navigate(routes.login);
-			}
-		});
+	const handleLogin = async (email, password) => {
+		const success = await AuthApi.login(email, password);
+		if (success) {
+			navigate(routes.dashboard.root);
+		} else {
+			navigate(routes.login);
+		}
 	};
 
 	return (
@@ -67,7 +61,7 @@ export const LoginPage = () => {
 						onFinish={async (values) => {
 							console.log("data: ", values);
 							const { email, password } = values;
-							const response = await handleLogin(email, password);
+							await handleLogin(email, password);
 						}}
 					>
 						<Form.Item

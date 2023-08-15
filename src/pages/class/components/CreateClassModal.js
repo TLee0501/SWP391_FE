@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import BaseModal from "../../../components/BaseModal";
-import { Form, Input, DatePicker, Select } from "antd";
+import { DatePicker, Form, Input, Select } from "antd";
 import moment from "moment";
-import { mockCourses } from "../../../__mocks__/course";
+import React, { useEffect, useState } from "react";
 import CourseApi from "../../../apis/course";
+import BaseModal from "../../../components/BaseModal";
 
 const { RangePicker } = DatePicker;
 

@@ -3,7 +3,15 @@ import React from "react";
 
 const { Title } = Typography;
 
-const BaseModal = ({ open, onCancel, title, children, onOk, okType }) => {
+const BaseModal = ({
+	open,
+	onCancel,
+	title,
+	children,
+	onOk,
+	okType,
+	confirmLoading,
+}) => {
 	return (
 		<Modal
 			destroyOnClose
@@ -14,6 +22,7 @@ const BaseModal = ({ open, onCancel, title, children, onOk, okType }) => {
 			title={<Title level={4}>{title}</Title>}
 			maskClosable={false}
 			onOk={onOk}
+			confirmLoading={confirmLoading}
 			okType={okType}
 		>
 			{children}

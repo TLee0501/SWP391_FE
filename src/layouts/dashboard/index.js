@@ -17,6 +17,7 @@ export const Dashboard = () => {
 	const [user, setUser] = useState();
 
 	useEffect(() => {
+		console.log("Dashboard -> useEffect()");
 		AuthApi.getUser().then((user) => setUser(user));
 	}, []);
 

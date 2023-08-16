@@ -25,8 +25,8 @@ const AccountList = ({ onEditAccount }) => {
 
   const getRoleName = (role) => {
     switch (role) {
-      case roles.UNIVERSITY:
-        return "Nhà trường";
+      case roles.ADMIN:
+        return "Admin";
       case roles.STUDENT:
         return "Sinh viên";
       case roles.TEACHER:

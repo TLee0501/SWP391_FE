@@ -2,9 +2,13 @@ import { Edit } from "@icon-park/react";
 import { Button, Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import UserApi from "../../../../apis/user";
-import { roles } from "../../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
+import { usePermissions } from "../../../../hooks/permission";
 
 const AccountList = ({ onEditAccount }) => {
+	const permissions = usePermissions();
+	const canUpdate = permissions.includes(ALL_PERMISSIONS.account.update);
+
 	const [accountLoading, setAccountLoading] = useState(false);
 	const [accounts, setAccounts] = useState([]);
 
@@ -79,11 +83,11 @@ const AccountList = ({ onEditAccount }) => {
 			},
 			sorter: (a, b) => a.status - b.status,
 		},
-		{
+		canUpdate && {
 			title: "Thao tác",
 			dataIndex: "action",
 			key: "action",
-			render: (_, record) => {
+			render: (_, __) => {
 				return (
 					<Button
 						onClick={onEditAccount}

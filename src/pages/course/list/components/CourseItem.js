@@ -1,10 +1,15 @@
 import { Delete } from "@icon-park/react";
 import { Button, Card, Row, Typography } from "antd";
 import React from "react";
+import { usePermissions } from "../../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../../constants/app";
 
 const { Text } = Typography;
 
 export const CourseItem = ({ course, onDelete, onUpdate }) => {
+	const permissions = usePermissions();
+	const canDelete = permissions.includes(ALL_PERMISSIONS.course.delete);
+
 	const handleUpdate = () => {
 		onUpdate(course);
 	};
@@ -22,13 +27,15 @@ export const CourseItem = ({ course, onDelete, onUpdate }) => {
 						[{course.courseCode}] {course.courseName}
 					</Text>
 				</div>
-				<Button
-					className="flex-center"
-					icon={<Delete />}
-					danger
-					type="text"
-					onClick={handleDelete}
-				/>
+				{canDelete && (
+					<Button
+						className="flex-center"
+						icon={<Delete />}
+						danger
+						type="text"
+						onClick={handleDelete}
+					/>
+				)}
 			</Row>
 		</Card>
 	);

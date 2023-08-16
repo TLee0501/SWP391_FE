@@ -1,5 +1,8 @@
 import React from "react";
+import { Card, Typography } from "antd";
 
-export const ProjectTeamItem = () => {
-	return <div>ProjectTeamItem</div>;
+const { Text } = Typography;
+
+export const ProjectTeamItem = ({ item }) => {
+	return <Text>{item.projectName}</Text>;
 };

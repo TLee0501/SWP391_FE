@@ -1,24 +1,10 @@
-import { Edit } from "@icon-park/react";
-import { Button, Table, Tag } from "antd";
-import React, { useEffect, useState } from "react";
-import UserApi from "../../../../apis/user";
+import React from "react";
+import { Table, Button, Tag } from "antd";
+import { mockAccounts } from "../../../../__mocks__/account";
 import { roles } from "../../../../constants/app";
+import { Edit } from "@icon-park/react";
 
-const AccountList = ({ onEditAccount }) => {
-	const [accountLoading, setAccountLoading] = useState(false);
-	const [accounts, setAccounts] = useState([]);
-
-	const getUsers = async (keyword) => {
-		setAccountLoading(true);
-		const data = await UserApi.searchUsers(keyword);
-		setAccounts(data);
-		setAccountLoading(false);
-	};
-
-	useEffect(() => {
-		getUsers();
-	}, []);
-
+const ProjectList = ({ onEditAccount }) => {
 	const getRoleName = (role) => {
 		switch (role) {
 			case roles.ADMIN:
@@ -37,13 +23,11 @@ const AccountList = ({ onEditAccount }) => {
 			title: "Email",
 			dataIndex: "email",
 			key: "email",
-			sorter: (a, b) => a.email.localeCompare(b.email),
 		},
 		{
 			title: "Họ tên",
 			dataIndex: "fullName",
 			key: "fullName",
-			sorter: (a, b) => a.fullName.localeCompare(b.fullName),
 		},
 		{
 			title: "Vai trò",
@@ -64,7 +48,6 @@ const AccountList = ({ onEditAccount }) => {
 					</Tag>
 				);
 			},
-			sorter: (a, b) => a.role - b.role,
 		},
 		{
 			title: "Trạng thái",
@@ -77,7 +60,6 @@ const AccountList = ({ onEditAccount }) => {
 					</Tag>
 				);
 			},
-			sorter: (a, b) => a.status - b.status,
 		},
 		{
 			title: "Thao tác",
@@ -95,9 +77,7 @@ const AccountList = ({ onEditAccount }) => {
 		},
 	];
 
-	return (
-		<Table loading={accountLoading} dataSource={accounts} columns={columns} />
-	);
+	return <Table dataSource={mockAccounts} columns={columns} />;
 };
 
-export default AccountList;
+export default ProjectList;

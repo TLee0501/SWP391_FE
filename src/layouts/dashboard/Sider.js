@@ -12,12 +12,18 @@ import { Header } from "antd/es/layout/layout";
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
-import { UserContext } from "../../providers/user";
+import { usePermissions } from "../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../constants/app";
 
 export const AppSider = () => {
-  const {user} = useContext(UserContext)
+	const location = useLocation();
+	const permissions = usePermissions();
+	console.log("permissions: ", permissions);
 
-  const location = useLocation();
+	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.view);
+	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.view);
+	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.view);
+	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.view);
 
   const itemKeys = {
     ACCOUNT: "MANAGE_ACCOUNT",
@@ -26,40 +32,33 @@ export const AppSider = () => {
     CLASS: "MANAGE_CLASS",
     TEAM: "MANAGE_TEAM",
   };
-
-  const items = [
-    {
-      key: itemKeys.ACCOUNT,
-      icon: <User size="24" />,
-      label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
-    },
-    {
-      key: itemKeys.COURSE,
-      icon: <DegreeHat size="24" />,
-      label: <Link to={routes.dashboard.courses}>Môn học</Link>,
-    },
-    {
-      key: itemKeys.CLASS,
-      icon: <Classroom size="24" />,
-      label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
-    },
-    {
-      key: itemKeys.PROJECT,
-      icon: <DocumentFolder size="24" />,
-      label: <Link to={routes.dashboard.projects}>Dự án</Link>,
-    },
+	const items = [
+		canViewAccount && {
+			key: itemKeys.ACCOUNT,
+			icon: <User />,
+			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
+		},
+		canViewCourse && {
+			key: itemKeys.COURSE,
+			icon: <DegreeHat />,
+			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
+		},
+		canViewClass && {
+			key: itemKeys.CLASS,
+			icon: <Classroom />,
+			label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
+		},
+		canViewProject && {
+			key: itemKeys.PROJECT,
+			icon: <DocumentFolder />,
+			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
+		},
     {
       key: itemKeys.TEAM,
       icon: <Group size="24" />,
       label: <Link to={routes.dashboard.teams}>Duyệt nhóm</Link>,
     },
-  ];
-
-  const getItems = () => {
-    const allItems = [...items]
-    const {role} = user
-    
-  }
+	];
 
   const getSelectedKey = () => {
     const paths = location.pathname.split("/").filter((e) => e);

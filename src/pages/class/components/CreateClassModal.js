@@ -1,12 +1,20 @@
-import { DatePicker, Form, Input, Select } from "antd";
+import { DatePicker, Form, Input, Select, message } from "antd";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CourseApi from "../../../apis/course";
 import BaseModal from "../../../components/BaseModal";
+import { UserContext } from "../../../providers/user";
+import ClassApi from "../../../apis/class";
 
 const { RangePicker } = DatePicker;
 
-export const CreateClassModal = ({ open, onCancel }) => {
+export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
+	const { user } = useContext(UserContext);
+
+	const formRef = useRef();
+
+	const [classCreating, setClassCreating] = useState(false);
+
 	const [courseLoading, setCourseLoading] = useState(false);
 	const [courses, setCourses] = useState([]);
 
@@ -28,9 +36,39 @@ export const CreateClassModal = ({ open, onCancel }) => {
 		};
 	});
 
+	const handleCreateClass = async (values) => {
+		const { userId } = user;
+		const { course, name, dates } = values;
+
+		const data = {
+			courseId: course,
+			userId: userId,
+			className: name,
+			timeStart: dates[0],
+			timeEnd: dates[1],
+		};
+
+		setClassCreating(true);
+		const success = await ClassApi.createClass(data);
+		if (success) {
+			message.success("Tạo lớp học thành công");
+			onSuccess();
+		} else {
+			message.error("Tạo lớp học thất bại");
+		}
+		setClassCreating(false);
+		onCancel();
+	};
+
 	return (
-		<BaseModal title="Tạo lớp học" open={open} onCancel={onCancel}>
-			<Form layout="vertical">
+		<BaseModal
+			title="Tạo lớp học"
+			open={open}
+			onCancel={onCancel}
+			confirmLoading={classCreating}
+			onOk={() => formRef.current?.submit()}
+		>
+			<Form ref={formRef} layout="vertical" onFinish={handleCreateClass}>
 				<Form.Item
 					name="name"
 					label="Tên lớp học"

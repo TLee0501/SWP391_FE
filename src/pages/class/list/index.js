@@ -8,42 +8,45 @@ import { CreateClassModal } from "../components/CreateClassModal";
 const { Title } = Typography;
 
 const ClassListPage = () => {
-  const [showCreateClassModal, setShowCreateClassModal] = useState(false);
+	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
 
-  const handleShowCreateClassModal = () => {
-    setShowCreateClassModal(true);
-  };
-  const handleCloseCreateClassModal = () => {
-    setShowCreateClassModal(false);
-  };
+	const handleShowCreateClassModal = () => {
+		setShowCreateClassModal(true);
+	};
+	const handleCloseCreateClassModal = () => {
+		setShowCreateClassModal(false);
+	};
 
-  return (
-    <div>
-      <Row justify="space-between" className="mb-4">
-        <Input.Search className="w-1/2" placeholder="Tìm lớp học..." />
-        <Button
-          className="flex-center"
-          type="primary"
-          icon={<Plus />}
-          onClick={handleShowCreateClassModal}
-        >
-          Thêm lớp học
-        </Button>
-      </Row>
-      <Title level={4}>Sắp diễn ra</Title>
-      <ClassList classes={mockClasses} />
-      <Divider />
-      <Title level={4}>Đang diễn ra</Title>
-      <ClassList classes={mockClasses} />
-      <Divider />
-      <Title level={4}>Đã kết thúc</Title>
-      <ClassList classes={mockClasses} />
-      <CreateClassModal
-        open={showCreateClassModal}
-        onCancel={handleCloseCreateClassModal}
-      />
-    </div>
-  );
+	const handleCreateClassSuccess = () => {};
+
+	return (
+		<div>
+			<Row justify="space-between" className="mb-4">
+				<Input.Search className="w-1/2" placeholder="Tìm lớp học..." />
+				<Button
+					className="flex-center"
+					type="primary"
+					icon={<Plus />}
+					onClick={handleShowCreateClassModal}
+				>
+					Thêm lớp học
+				</Button>
+			</Row>
+			<Title level={4}>Sắp diễn ra</Title>
+			<ClassList classes={mockClasses} />
+			<Divider />
+			<Title level={4}>Đang diễn ra</Title>
+			<ClassList classes={mockClasses} />
+			<Divider />
+			<Title level={4}>Đã kết thúc</Title>
+			<ClassList classes={mockClasses} />
+			<CreateClassModal
+				open={showCreateClassModal}
+				onCancel={handleCloseCreateClassModal}
+				onSuccess={handleCreateClassSuccess}
+			/>
+		</div>
+	);
 };
 
 export default ClassListPage;

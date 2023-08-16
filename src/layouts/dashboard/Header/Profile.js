@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import routes from "../../../constants/routes";
 import { UserContext } from "../../../providers/user";
+import { roles } from "../../../constants/app";
 
 const Container = styled.div`
 	color: white;
@@ -35,6 +36,19 @@ export const ProfileBar = () => {
 		},
 	];
 
+	const getRoleName = () => {
+		switch (user?.role) {
+			case roles.ADMIN:
+				return "Admin";
+			case roles.TEACHER:
+				return "Giáo viên";
+			case roles.STUDENT:
+				return "Sinh viên";
+			default:
+				return "";
+		}
+	};
+
 	return (
 		<Container>
 			<Dropdown
@@ -43,7 +57,8 @@ export const ProfileBar = () => {
 				}}
 			>
 				<span className="cursor-pointer">
-					{user?.fullName} ({user?.role?.toUpperCase()}) <Down />
+					{user?.fullName} ({getRoleName()}
+					) <Down />
 				</span>
 			</Dropdown>
 		</Container>

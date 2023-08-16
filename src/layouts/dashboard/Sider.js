@@ -11,9 +11,18 @@ import { Header } from "antd/es/layout/layout";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
+import { usePermissions } from "../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../constants/app";
 
 export const AppSider = () => {
 	const location = useLocation();
+	const permissions = usePermissions();
+	console.log("permissions: ", permissions);
+
+	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.view);
+	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.view);
+	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.view);
+	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.view);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
@@ -23,22 +32,22 @@ export const AppSider = () => {
 	};
 
 	const items = [
-		{
+		canViewAccount && {
 			key: itemKeys.ACCOUNT,
 			icon: <User />,
 			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
 		},
-		{
+		canViewCourse && {
 			key: itemKeys.COURSE,
 			icon: <DegreeHat />,
 			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
 		},
-		{
+		canViewClass && {
 			key: itemKeys.CLASS,
 			icon: <Classroom />,
 			label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
 		},
-		{
+		canViewProject && {
 			key: itemKeys.PROJECT,
 			icon: <DocumentFolder />,
 			label: <Link to={routes.dashboard.projects}>Dự án</Link>,

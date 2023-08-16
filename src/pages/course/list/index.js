@@ -5,8 +5,15 @@ import CourseApi from "../../../apis/course";
 import { CourseFormModal } from "../components/CourseFormModal";
 import { DeleteCourseModal } from "../components/DeleteCourseModal";
 import { CourseList } from "./components/CourseList";
+import { usePermissions } from "../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../constants/app";
 
 export const CourseListPage = () => {
+	const permissions = usePermissions();
+	const canView = permissions.includes(ALL_PERMISSIONS.course.view);
+	const canCreate = permissions.includes(ALL_PERMISSIONS.course.create);
+	const canUpdate = permissions.includes(ALL_PERMISSIONS.course.update);
+
 	const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
 	const [courseCreating, setCourseCreating] = useState(false);
 
@@ -64,6 +71,8 @@ export const CourseListPage = () => {
 
 	// Update course
 	const handleShowUpdateCourseModal = (course) => {
+		if (!canUpdate) return;
+
 		updatingCourse.current = course;
 		setShowUpdateCourseModal(true);
 	};
@@ -93,27 +102,33 @@ export const CourseListPage = () => {
 	return (
 		<div>
 			<Row justify="space-between">
-				<Input.Search
-					style={{ width: "50%" }}
-					placeholder="Tìm môn học theo mã hoặc tên..."
-					onSearch={(value) => getCourses(value)}
-				/>
-				<Button
-					className="flex-center"
-					type="primary"
-					icon={<Plus />}
-					onClick={handleShowAddCourseModal}
-				>
-					Thêm môn học
-				</Button>
+				{canView && (
+					<Input.Search
+						style={{ width: "50%" }}
+						placeholder="Tìm môn học theo mã hoặc tên..."
+						onSearch={(value) => getCourses(value)}
+					/>
+				)}
+				{canCreate && (
+					<Button
+						className="flex-center"
+						type="primary"
+						icon={<Plus />}
+						onClick={handleShowAddCourseModal}
+					>
+						Thêm môn học
+					</Button>
+				)}
 			</Row>
-			<Spin spinning={courseLoading}>
-				<CourseList
-					courses={courses}
-					onUpdate={handleShowUpdateCourseModal}
-					onDelete={handleShowDeleteCourseModal}
-				/>
-			</Spin>
+			{canView && (
+				<Spin spinning={courseLoading}>
+					<CourseList
+						courses={courses}
+						onUpdate={handleShowUpdateCourseModal}
+						onDelete={handleShowDeleteCourseModal}
+					/>
+				</Spin>
+			)}
 			<CourseFormModal
 				open={showCreateCourseModal}
 				title="Tạo môn học"

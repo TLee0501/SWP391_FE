@@ -8,33 +8,33 @@ import { UserContext } from "../../../providers/user";
 import { roles } from "../../../constants/app";
 
 const Container = styled.div`
-	color: white;
+  color: white;
 `;
 
 export const ProfileBar = () => {
-	const navigate = useNavigate();
-	const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
-	const handleLogout = () => {
-		localStorage.removeItem("jwt");
-		setUser(undefined);
-		navigate(routes.login);
-	};
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    setUser(undefined);
+    navigate(routes.login);
+  };
 
-	const items = [
-		{
-			key: "PROFILE",
-			label: <Link to={routes.dashboard.profile}>Hồ sơ</Link>,
-			icon: <User />,
-		},
-		{
-			key: "LOGOUT",
-			label: <span>Đăng xuất</span>,
-			icon: <Logout />,
-			danger: true,
-			onClick: handleLogout,
-		},
-	];
+  const items = [
+    {
+      key: "PROFILE",
+      label: <Link to={routes.dashboard.profile}>Hồ sơ</Link>,
+      icon: <User />,
+    },
+    {
+      key: "LOGOUT",
+      label: <span>Đăng xuất</span>,
+      icon: <Logout />,
+      danger: true,
+      onClick: handleLogout,
+    },
+  ];
 
 	const getRoleName = () => {
 		switch (user?.role) {

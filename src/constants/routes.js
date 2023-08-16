@@ -12,6 +12,6 @@ const routes = {
 	},
 };
 
-export const UnauthorizedRoutes = [routes.root, routes.login, routes.register];
+export const UnauthorizedRoutes = [routes.login, routes.register];
 
 export default routes;

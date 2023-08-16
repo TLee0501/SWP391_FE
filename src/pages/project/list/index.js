@@ -1,53 +1,33 @@
 import { Plus } from "@icon-park/react";
 import { Button, Input, Row } from "antd";
 import React, { useState } from "react";
-import { ProjectModal } from "../components/ProjectModal";
-import AccountList from "../../account/list/components/AccountList";
+import { ProjectList } from "./components/ProjectList";
+import { mockProjects } from "../../../apis/project";
+import { CreateProjectModal } from "../components/CreateProjectModal";
 
 const ProjectListPage = () => {
-  const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
-	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-	const handleShowCreateProjectModal = () => {
-		setShowCreateProjectModal(true);
-	};
-	const handleCloseCreateProjectModal = () => {
-		setShowCreateProjectModal(false);
-	};
-
-	const handleShowUpdateProjectModal = () => {
-		setShowUpdateProjectModal(true);
-	};
-	const handleCloseUpdateProjectModal = () => {
-		setShowUpdateProjectModal(false);
-	};
-
-	return (
-		<div>
-			<Row justify="space-between mb-2">
-				<Input.Search placeholder="Tìm dự án..." className="w-1/2" />
-				<Button
-					onClick={handleShowCreateProjectModal}
-					type="primary"
-					className="flex-center"
-					icon={<Plus />}
-				>
-					Thêm dự án
-				</Button>
-			</Row>
-			<AccountList onEditAccount={handleShowUpdateProjectModal} />
-			<ProjectModal
-				title="Thêm dự án"
-				open={showCreateProjectModal}
-				onCancel={handleCloseCreateProjectModal}
-			/>
-			<ProjectModal
-				title="Cập nhật dự án"
-				open={showUpdateProjectModal}
-				onCancel={handleCloseUpdateProjectModal}
-			/>
-		</div>
-	);
+  return (
+    <div>
+      <Row justify="space-between">
+        <Input.Search placeholder="Tìm dự án..." className="w-1/2" />
+        <Button
+          className="flex-center"
+          type="primary"
+          icon={<Plus />}
+          onClick={() => setShowCreateModal(true)}
+        >
+          Thêm dự án
+        </Button>
+      </Row>
+      <ProjectList projects={mockProjects} />
+      <CreateProjectModal
+        open={showCreateModal}
+        onCancel={() => setShowCreateModal(false)}
+      />
+    </div>
+  );
 };
 
 export default ProjectListPage;

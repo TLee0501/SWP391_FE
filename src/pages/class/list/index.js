@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";
-import { CourseSelect } from "../components/CourseSelect";
+import { CourseSelect } from "../components/ClassSelect";
 
 const ClassListPage = () => {
 	const [showCreateClassModal, setShowCreateClassModal] = useState(false);

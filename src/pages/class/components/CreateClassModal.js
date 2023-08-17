@@ -20,7 +20,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 
 	const getCourses = async () => {
 		setCourseLoading(true);
-		const data = await CourseApi.searchTeams();
+		const data = await CourseApi.searchCourses();
 		setCourses(data);
 		setCourseLoading(false);
 	};

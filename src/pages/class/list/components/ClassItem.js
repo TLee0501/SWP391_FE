@@ -22,7 +22,7 @@ export const ClassItem = ({ data }) => {
 	];
 
 	const handleClick = () => {
-		navigate(data.id);
+		navigate(data.classId);
 	};
 
 	return (

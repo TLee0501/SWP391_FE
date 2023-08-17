@@ -12,29 +12,29 @@ const AccountList = ({ onEditAccount }) => {
 	const [accountLoading, setAccountLoading] = useState(false);
 	const [accounts, setAccounts] = useState([]);
 
-  const getUsers = async (keyword) => {
-    setAccountLoading(true);
-    const data = await UserApi.searchUsers(keyword);
-    setAccounts(data);
-    setAccountLoading(false);
-  };
+	const getUsers = async (keyword) => {
+		setAccountLoading(true);
+		const data = await UserApi.searchUsers(keyword);
+		setAccounts(data);
+		setAccountLoading(false);
+	};
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+	useEffect(() => {
+		getUsers();
+	}, []);
 
-  const getRoleName = (role) => {
-    switch (role) {
-      case roles.ADMIN:
-        return "Admin";
-      case roles.STUDENT:
-        return "Sinh viên";
-      case roles.TEACHER:
-        return "Giáo viên";
-      default:
-        return undefined;
-    }
-  };
+	const getRoleName = (role) => {
+		switch (role) {
+			case roles.ADMIN:
+				return "Admin";
+			case roles.STUDENT:
+				return "Sinh viên";
+			case roles.TEACHER:
+				return "Giáo viên";
+			default:
+				return undefined;
+		}
+	};
 
 	const columns = [
 		{
@@ -99,9 +99,9 @@ const AccountList = ({ onEditAccount }) => {
 		},
 	];
 
-  return (
-    <Table loading={accountLoading} dataSource={accounts} columns={columns} />
-  );
+	return (
+		<Table loading={accountLoading} dataSource={accounts} columns={columns} />
+	);
 };
 
 export default AccountList;

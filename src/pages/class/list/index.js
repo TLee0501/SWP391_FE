@@ -1,9 +1,10 @@
 import { Plus } from "@icon-park/react";
-import { Button, Input, Row, Spin } from "antd";
+import { Button, Col, Input, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";
+import { CourseSelect } from "../components/CourseSelect";
 
 const ClassListPage = () => {
 	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
@@ -18,13 +19,21 @@ const ClassListPage = () => {
 		setShowCreateClassModal(false);
 	};
 
-	const handleCreateClassSuccess = () => {};
+	const handleCreateClassSuccess = () => {
+		getAllClasses();
+	};
 
 	const getAllClasses = async (courseId) => {
 		setClassLoading(true);
 		const data = await ClassApi.getAllClasses(courseId);
 		setClasses(data);
 		setClassLoading(false);
+	};
+
+	const handleSearchClass = (keyword) => {
+		ClassApi.searchClass(undefined, keyword).then((response) =>
+			console.log(response)
+		);
 	};
 
 	useEffect(() => {
@@ -34,15 +43,28 @@ const ClassListPage = () => {
 	return (
 		<div>
 			<Row justify="space-between" className="mb-4">
-				<Input.Search className="w-1/2" placeholder="Tìm lớp học..." />
-				<Button
-					className="flex-center"
-					type="primary"
-					icon={<Plus />}
-					onClick={handleShowCreateClassModal}
-				>
-					Thêm lớp học
-				</Button>
+				<Col span={18}>
+					<Row>
+						<Input.Search
+							className="w-1/2 mr-2"
+							placeholder="Tìm lớp học..."
+							onSearch={handleSearchClass}
+						/>
+						<CourseSelect allowClear />
+					</Row>
+				</Col>
+				<Col span={6}>
+					<Row justify="end">
+						<Button
+							className="flex-center"
+							type="primary"
+							icon={<Plus />}
+							onClick={handleShowCreateClassModal}
+						>
+							Thêm lớp học
+						</Button>
+					</Row>
+				</Col>
 			</Row>
 			<Spin spinning={classLoading}>
 				<ClassList classes={classes} />

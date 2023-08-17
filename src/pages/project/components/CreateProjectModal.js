@@ -1,20 +1,43 @@
-import React from "react";
-import BaseModal from "../../../components/BaseModal";
-import { Form, Input, Select } from "antd";
+import { Form, Input, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { mockClasses } from "../../../__mocks__/class";
+import React, { useRef, useState } from "react";
+import ProjectApi from "../../../apis/project";
+import BaseModal from "../../../components/BaseModal";
+import { ClassSelect } from "./ClassSelect";
 
-export const CreateProjectModal = ({ open, onCancel }) => {
-	const classOptions = mockClasses.map((e) => {
-		return {
-			value: e.id,
-			label: e.name,
+export const CreateProjectModal = ({ open, onCancel, onSuccess }) => {
+	const formRef = useRef();
+	const [loading, setLoading] = useState(false);
+
+	const handleSubmit = async (values) => {
+		const { name, description, classId } = values;
+		const data = {
+			classId: classId,
+			projectName: name,
+			description: description,
 		};
-	});
+
+		setLoading(true);
+		const success = await ProjectApi.createProject(data);
+		if (success) {
+			message.success("Tạo dự án thành công");
+			onSuccess();
+		} else {
+			message.error("Tạo dự án thất bại");
+		}
+		setLoading(false);
+		onCancel();
+	};
 
 	return (
-		<BaseModal title="Thêm dự án" open={open} onCancel={onCancel}>
-			<Form layout="vertical">
+		<BaseModal
+			title="Thêm dự án"
+			open={open}
+			confirmLoading={loading}
+			onCancel={onCancel}
+			onOk={() => formRef.current?.submit()}
+		>
+			<Form ref={formRef} layout="vertical" onFinish={handleSubmit}>
 				<Form.Item
 					name="name"
 					label="Tên dự án"
@@ -40,7 +63,7 @@ export const CreateProjectModal = ({ open, onCancel }) => {
 						},
 					]}
 				>
-					<Select options={classOptions} placeholder="Chọn lớp học" />
+					<ClassSelect />
 				</Form.Item>
 			</Form>
 		</BaseModal>

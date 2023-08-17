@@ -49,10 +49,21 @@ const getAllClasses = async (courseId) => {
 	}
 };
 
+const getClassById = async (id) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetClassByID/${id}`);
+		return response.data;
+	} catch (error) {
+		console.log("Error get class by id: ", error);
+		return undefined;
+	}
+};
+
 const ClassApi = {
 	createClass,
 	searchClass,
 	getAllClasses,
+	getClassById,
 };
 
 export default ClassApi;

@@ -1,10 +1,9 @@
 import { Button, Card, Form, Input, Row, Typography, message } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthApi from "../../apis/auth";
 import routes from "../../constants/routes";
-import { UserContext } from "../../providers/user";
 
 const { Text, Title } = Typography;
 
@@ -26,7 +25,6 @@ const LoginFormWrapper = styled.div`
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(UserContext);
 
   const handleNavigateRegisterPage = () => {
     navigate(routes.register);
@@ -37,7 +35,7 @@ export const LoginPage = () => {
     const success = await AuthApi.login(email, password);
     setLoading(false);
     if (success) {
-      message.success(`Xin chào`);
+      message.success(`Đăng nhập thành công!`);
       navigate(routes.dashboard.root);
     } else {
       message.error("Sai tài khoản hoặc mật khẩu. Vui lòng nhập lại.");

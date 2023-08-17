@@ -28,6 +28,18 @@ export const ALL_PERMISSIONS = {
 		update: "project.update",
 		delete: "project.delete",
 	},
+	team: {
+		view: "team.view",
+		create: "team.create",
+		update: "team.update",
+		delete: "team.delete",
+	},
+	task: {
+		view: "task.view",
+		create: "task.create",
+		update: "task.update",
+		delete: "task.delete",
+	},
 };
 
 export const USER_PERMISSIONS = {
@@ -59,6 +71,11 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.course.view,
 		// PROJECT
 		ALL_PERMISSIONS.project.view,
+		// TASK
+		ALL_PERMISSIONS.task.view,
+		ALL_PERMISSIONS.task.create,
+		ALL_PERMISSIONS.task.update,
+		ALL_PERMISSIONS.task.delete,
 	],
 	[roles.TEACHER]: [
 		// CLASS
@@ -73,5 +90,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.project.create,
 		ALL_PERMISSIONS.project.update,
 		ALL_PERMISSIONS.project.delete,
+		ALL_PERMISSIONS.task.view,
+		
 	],
 };

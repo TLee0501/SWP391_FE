@@ -4,26 +4,29 @@ import {
   User,
   Dashboard,
   Classroom,
-  Group,
+  Checklist,
+  ListCheckbox,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Header } from "antd/es/layout/layout";
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
 import { usePermissions } from "../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../constants/app";
 
 export const AppSider = () => {
-	const location = useLocation();
-	const permissions = usePermissions();
-	console.log("permissions: ", permissions);
+  const location = useLocation();
+  const permissions = usePermissions();
+  console.log("permissions: ", permissions);
 
-	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.view);
-	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.view);
-	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.view);
-	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.view);
+  const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.view);
+  const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.view);
+  const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.view);
+  const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.view);
+  const canViewTeam = permissions?.includes(ALL_PERMISSIONS.team.view);
+  const canViewTask = permissions?.includes(ALL_PERMISSIONS.task.view);
 
   const itemKeys = {
     ACCOUNT: "MANAGE_ACCOUNT",
@@ -31,34 +34,40 @@ export const AppSider = () => {
     PROJECT: "MANAGE_PROJECT",
     CLASS: "MANAGE_CLASS",
     TEAM: "MANAGE_TEAM",
+    TASK: "MANAGE_TASK",
   };
-	const items = [
-		canViewAccount && {
-			key: itemKeys.ACCOUNT,
-			icon: <User />,
-			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
-		},
-		canViewCourse && {
-			key: itemKeys.COURSE,
-			icon: <DegreeHat />,
-			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
-		},
-		canViewClass && {
-			key: itemKeys.CLASS,
-			icon: <Classroom />,
-			label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
-		},
-		canViewProject && {
-			key: itemKeys.PROJECT,
-			icon: <DocumentFolder />,
-			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
-		},
-    {
+  const items = [
+    canViewAccount && {
+      key: itemKeys.ACCOUNT,
+      icon: <User size="24" />,
+      label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
+    },
+    canViewCourse && {
+      key: itemKeys.COURSE,
+      icon: <DegreeHat size="24" />,
+      label: <Link to={routes.dashboard.courses}>Môn học</Link>,
+    },
+    canViewClass && {
+      key: itemKeys.CLASS,
+      icon: <Classroom size="24" />,
+      label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
+    },
+    canViewProject && {
+      key: itemKeys.PROJECT,
+      icon: <DocumentFolder size="24" />,
+      label: <Link to={routes.dashboard.projects}>Dự án</Link>,
+    },
+    canViewTeam && {
       key: itemKeys.TEAM,
-      icon: <Group size="24" />,
+      icon: <Checklist size="24" />,
       label: <Link to={routes.dashboard.teams}>Duyệt nhóm</Link>,
     },
-	];
+    canViewTask && {
+      key: itemKeys.TASK,
+      icon: <ListCheckbox size="24" />,
+      label: <Link to={routes.dashboard.tasks}>Nhiệm vụ</Link>,
+    },
+  ];
 
   const getSelectedKey = () => {
     const paths = location.pathname.split("/").filter((e) => e);
@@ -78,6 +87,8 @@ export const AppSider = () => {
         return itemKeys.CLASS;
       case routes.dashboard.teams:
         return itemKeys.TEAM;
+      case routes.dashboard.tasks:
+        return itemKeys.TASK;
       default:
     }
 

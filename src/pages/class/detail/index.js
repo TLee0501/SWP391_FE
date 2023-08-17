@@ -1,4 +1,5 @@
 import {
+	Button,
 	Card,
 	Collapse,
 	Descriptions,
@@ -14,6 +15,9 @@ import ClassApi from "../../../apis/class";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
 import { formatDate } from "../../../utils";
 import { StudentList } from "./components/StudentList";
+import { useRole } from "../../../hooks/role";
+import { usePermissions } from "../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../constants/app";
 
 const datas = [
 	"Nguyễn Văn A",
@@ -25,6 +29,10 @@ const datas = [
 
 const ClassDetailPage = () => {
 	const { id } = useParams();
+
+	const permissions = usePermissions();
+	const canEnroll = permissions?.includes(ALL_PERMISSIONS.class.enroll);
+
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
 
@@ -68,7 +76,10 @@ const ClassDetailPage = () => {
 	}, [id]);
 
 	return (
-		<BasePageContent title={`Lớp ${data.className}`}>
+		<BasePageContent
+			title={`Lớp ${data.className}`}
+			action={canEnroll && <Button type="primary">Tham gia lớp học</Button>}
+		>
 			<Spin spinning={loading}>
 				<Card className="mt-3 mb-4" title="Thông tin cơ bản">
 					<Descriptions layout="vertical" items={items} />

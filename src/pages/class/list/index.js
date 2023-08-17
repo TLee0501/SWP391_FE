@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { Button, Divider, Input, Row, Typography } from "antd";
 import { Plus } from "@icon-park/react";
-import { ClassList } from "./components/ClassList";
+import { Button, Input, Row, Spin } from "antd";
+import React, { useEffect, useState } from "react";
 import { mockClasses } from "../../../__mocks__/class";
+import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
-
-const { Title } = Typography;
+import { ClassList } from "./components/ClassList";
 
 const ClassListPage = () => {
 	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
+
+	const [classLoading, setClassLoading] = useState(false);
+	const [classes, setClasses] = useState([]);
 
 	const handleShowCreateClassModal = () => {
 		setShowCreateClassModal(true);
@@ -18,6 +20,17 @@ const ClassListPage = () => {
 	};
 
 	const handleCreateClassSuccess = () => {};
+
+	const getAllClasses = async (courseId) => {
+		setClassLoading(true);
+		const data = await ClassApi.getAllClasses(courseId);
+		setClasses(data);
+		setClassLoading(false);
+	};
+
+	useEffect(() => {
+		getAllClasses();
+	}, []);
 
 	return (
 		<div>
@@ -32,14 +45,9 @@ const ClassListPage = () => {
 					Thêm lớp học
 				</Button>
 			</Row>
-			<Title level={4}>Sắp diễn ra</Title>
-			<ClassList classes={mockClasses} />
-			<Divider />
-			<Title level={4}>Đang diễn ra</Title>
-			<ClassList classes={mockClasses} />
-			<Divider />
-			<Title level={4}>Đã kết thúc</Title>
-			<ClassList classes={mockClasses} />
+			<Spin spinning={classLoading}>
+				<ClassList classes={classes} />
+			</Spin>
 			<CreateClassModal
 				open={showCreateClassModal}
 				onCancel={handleCloseCreateClassModal}

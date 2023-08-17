@@ -1,7 +1,6 @@
 import { Plus } from "@icon-park/react";
 import { Button, Input, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { mockClasses } from "../../../__mocks__/class";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";

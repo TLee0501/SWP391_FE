@@ -136,14 +136,14 @@ export const CourseListPage = () => {
 				onSubmit={handleAddCourse}
 				confirmLoading={courseCreating}
 			/>
-			<CourseFormModal
+			{/* <CourseFormModal
 				open={showUpdateCourseModal}
 				title="Cập nhật môn học"
 				course={updatingCourse.current}
 				onCancel={handleCloseUpdateCourseModal}
 				onSubmit={handleUpdateCourse}
 				edit={true}
-			/>
+			/> */}
 			<DeleteCourseModal
 				onCancel={handleCloseDeleteCourseModal}
 				onDeleteSuccess={handleDeleteSuccess}

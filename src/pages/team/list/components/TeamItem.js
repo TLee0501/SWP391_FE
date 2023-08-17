@@ -6,9 +6,9 @@ import { ALL_PERMISSIONS } from "../../../../constants/app";
 
 const { Text } = Typography;
 
-export const CourseItem = ({ course, onDelete, onUpdate }) => {
+export const TeamItem = ({ course, onDelete, onUpdate }) => {
 	const permissions = usePermissions();
-	const canDelete = permissions.includes(ALL_PERMISSIONS.course.delete);
+	const canDelete = permissions.includes(ALL_PERMISSIONS.team.delete);
 
 	const handleUpdate = () => {
 		onUpdate(course);
@@ -24,13 +24,13 @@ export const CourseItem = ({ course, onDelete, onUpdate }) => {
 			<Row justify="space-between">
 				<div>
 					<Text className="text-lg font-medium" ellipsis>
-						{course.courseCode} - {course.courseName}
+						{course.teamName}
 					</Text>
 				</div>
 				{canDelete && (
 					<Button
 						className="flex-center"
-						icon={<Delete size={"20px"}></Delete>}
+						icon={<Delete />}
 						danger
 						type="text"
 						onClick={handleDelete}

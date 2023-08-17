@@ -68,16 +68,16 @@ const AccountList = ({ onEditAccount }) => {
 					</Tag>
 				);
 			},
-			sorter: (a, b) => a.role - b.role,
+			sorter: (a, b) => a.role.localeCompare(b.role),
 		},
 		{
 			title: "Trạng thái",
 			dataIndex: "status",
 			key: "status",
-			render: (_, { active }) => {
+			render: (_, { isBan }) => {
 				return (
-					<Tag color={active ? "blue-inverse" : "red-inverse"}>
-						{active ? "Đang hoạt động" : "Khóa"}
+					<Tag color={!isBan ? "blue-inverse" : "red-inverse"}>
+						{!isBan ? "Đang hoạt động" : "Khóa"}
 					</Tag>
 				);
 			},

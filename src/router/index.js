@@ -13,7 +13,8 @@ import ProjectDetailPage from "../pages/project/detail";
 import ProfilePage from "../pages/profile";
 import ClassListPage from "../pages/class/list";
 import ClassDetailPage from "../pages/class/detail";
-import TeamListPage from "../pages/team";
+import TaskListPage from "../pages/task";
+import { TeamListPage } from "../pages/team/list";
 
 export const router = createBrowserRouter([
 	{
@@ -73,6 +74,14 @@ export const router = createBrowserRouter([
 					{
 						path: `${routes.dashboard.classes}/:id`,
 						element: <TeamListPage />,
+					},
+					{
+						path: routes.dashboard.tasks,
+						element: <TaskListPage />,
+					},
+					{
+						path: `${routes.dashboard.classes}/:id`,
+						element: <TaskListPage />,
 					},
 				],
 			},

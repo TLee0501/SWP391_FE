@@ -1,10 +1,10 @@
-import { DatePicker, Form, Input, message } from "antd";
+import { DatePicker, Form, Input, Select, message } from "antd";
 import moment from "moment";
-import React, { useContext, useRef, useState } from "react";
-import ClassApi from "../../../apis/class";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import CourseApi from "../../../apis/course";
 import BaseModal from "../../../components/BaseModal";
 import { UserContext } from "../../../providers/user";
-import { CourseSelect } from "./CourseSelect";
+import ClassApi from "../../../apis/class";
 
 const { RangePicker } = DatePicker;
 
@@ -14,6 +14,27 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	const formRef = useRef();
 
 	const [classCreating, setClassCreating] = useState(false);
+
+	const [courseLoading, setCourseLoading] = useState(false);
+	const [courses, setCourses] = useState([]);
+
+	const getCourses = async () => {
+		setCourseLoading(true);
+		const data = await CourseApi.searchCourses();
+		setCourses(data);
+		setCourseLoading(false);
+	};
+
+	useEffect(() => {
+		getCourses();
+	}, []);
+
+	const courseOptions = courses.map((e) => {
+		return {
+			value: e.courseId,
+			label: `${e.courseCode} - ${e.courseName}`,
+		};
+	});
 
 	const handleCreateClass = async (values) => {
 		const { userId } = user;
@@ -85,7 +106,12 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 						},
 					]}
 				>
-					<CourseSelect />
+					<Select
+						showSearch
+						options={courseOptions}
+						placeholder="Chọn môn học"
+						loading={courseLoading}
+					/>
 				</Form.Item>
 			</Form>
 		</BaseModal>

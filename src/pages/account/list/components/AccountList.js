@@ -68,7 +68,7 @@ const AccountList = ({ onEditAccount }) => {
 					</Tag>
 				);
 			},
-			sorter: (a, b) => a.role - b.role,
+			sorter: (a, b) => a.role.localeCompare(b.role),
 		},
 		{
 			title: "Trạng thái",

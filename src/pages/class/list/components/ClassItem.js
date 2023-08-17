@@ -12,12 +12,12 @@ export const ClassItem = ({ data }) => {
 		{
 			key: "1",
 			label: "Ngày bắt đầu",
-			children: formatDate(data.startDate, "DD/MM/yyyy"),
+			children: formatDate(data.startTime, "DD/MM/yyyy"),
 		},
 		{
 			key: "2",
 			label: "Ngày kết thúc",
-			children: formatDate(data.endDate, "DD/MM/yyyy"),
+			children: formatDate(data.endTime, "DD/MM/yyyy"),
 		},
 	];
 
@@ -31,7 +31,7 @@ export const ClassItem = ({ data }) => {
 			hoverable
 			title={
 				<Text className="text-base">
-					<span className="font-light">Lớp</span> {data.name}
+					<span className="font-light">Lớp</span> {data.className}
 				</Text>
 			}
 			onClick={handleClick}
@@ -41,7 +41,7 @@ export const ClassItem = ({ data }) => {
 				items={[
 					{
 						label: "Môn học",
-						children: `${data.course.code} - ${data.course.name}`,
+						children: `${data.courseCode} - ${data?.courseName}`,
 					},
 				]}
 			/>

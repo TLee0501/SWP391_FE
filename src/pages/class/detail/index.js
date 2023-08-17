@@ -4,7 +4,9 @@ import {
 	Collapse,
 	Descriptions,
 	Divider,
+	Dropdown,
 	List,
+	Row,
 	Spin,
 	Typography,
 } from "antd";
@@ -18,6 +20,8 @@ import { StudentList } from "./components/StudentList";
 import { useRole } from "../../../hooks/role";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../constants/app";
+import { Key, Setting } from "@icon-park/react";
+import { ClassEnrollKeyModal } from "./components/ClassEnrollKeyModal";
 
 const datas = [
 	"Nguyễn Văn A",
@@ -35,6 +39,8 @@ const ClassDetailPage = () => {
 
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
+
+	const [showEnrollKeyModal, setShowEnrollKeyModal] = useState(false);
 
 	const items = [
 		{
@@ -59,6 +65,15 @@ const ClassDetailPage = () => {
 		},
 	];
 
+	const settingItems = [
+		{
+			key: "ENROLL_KEY",
+			label: "Cập nhật mã tham gia",
+			icon: <Key />,
+			onClick: () => setShowEnrollKeyModal(true),
+		},
+	];
+
 	const getClass = async () => {
 		setLoading(true);
 		const response = await ClassApi.getClassById(id);
@@ -77,8 +92,15 @@ const ClassDetailPage = () => {
 
 	return (
 		<BasePageContent
-			title={`Lớp ${data.className}`}
-			action={canEnroll && <Button type="primary">Tham gia lớp học</Button>}
+			title={<span>{`Lớp ${data.className}`} </span>}
+			action={
+				<Row>
+					{canEnroll && <Button type="primary">Tham gia lớp học</Button>}
+					<Dropdown menu={{ items: settingItems }}>
+						<Button className="flex-center ml-2" icon={<Setting />} />
+					</Dropdown>
+				</Row>
+			}
 		>
 			<Spin spinning={loading}>
 				<Card className="mt-3 mb-4" title="Thông tin cơ bản">
@@ -146,6 +168,11 @@ const ClassDetailPage = () => {
 					<StudentList students={mockStudents} />
 				</Card>
 			</Spin>
+			<ClassEnrollKeyModal
+				open={showEnrollKeyModal}
+				onCancel={() => setShowEnrollKeyModal(false)}
+				classId={data?.classId}
+			/>
 		</BasePageContent>
 	);
 };

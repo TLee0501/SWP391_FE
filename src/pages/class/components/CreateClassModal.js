@@ -113,6 +113,18 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 						loading={courseLoading}
 					/>
 				</Form.Item>
+				<Form.Item
+					name="enrollKey"
+					label="Mã tham gia"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng nhập mã tham gia",
+						},
+					]}
+				>
+					<Input placeholder="Nhập mã tham gia..." />
+				</Form.Item>
 			</Form>
 		</BaseModal>
 	);

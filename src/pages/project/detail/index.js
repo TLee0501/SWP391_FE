@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
-import { Card, Typography } from "antd";
+import { Button, Card, Row, Typography } from "antd";
 import { mockProjects } from "../../../__mocks__/project";
 
 const { Paragraph } = Typography;
@@ -19,10 +19,22 @@ const ProjectDetailPage = () => {
 	}, [id]);
 
 	return (
-		<BasePageContent title={project?.name}>
+		<BasePageContent
+			title={
+				<span>
+					{project?.name} <span></span>
+				</span>
+			}
+		>
 			<Card title="Mô tả dự án" className="mt-4">
 				<Paragraph>{project.description}</Paragraph>
 			</Card>
+			<Row className="mt-4">
+				<Button type="primary" className="mr-2">
+					Cập nhật
+				</Button>
+				<Button danger>Xóa</Button>
+			</Row>
 		</BasePageContent>
 	);
 };

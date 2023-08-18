@@ -89,9 +89,11 @@ const ClassListPage = () => {
           </Row>
         </Col>
       </Row>
+
       <Spin spinning={classLoading}>
         <ClassList classes={classes} onDelete={handleShowDeleteClassModal} />
       </Spin>
+      
       <CreateClassModal
         open={showCreateClassModal}
         onCancel={handleCloseCreateClassModal}

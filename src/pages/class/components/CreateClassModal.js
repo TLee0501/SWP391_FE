@@ -113,6 +113,18 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 						loading={courseLoading}
 					/>
 				</Form.Item>
+				<Form.Item
+					name="name"
+					label="Tên lớp học"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng mã lớp",
+						},
+					]}
+				>
+					<Input placeholder="Nhập tên lớp học..." />
+				</Form.Item>
 			</Form>
 		</BaseModal>
 	);

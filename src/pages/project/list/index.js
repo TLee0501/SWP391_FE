@@ -1,19 +1,22 @@
 import { Plus } from "@icon-park/react";
-import { Button, Col, Input, Row } from "antd";
+import { Button, Col, Input, Row, Spin, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { ProjectList } from "./components/ProjectList";
-import { mockProjects } from "../../../__mocks__/project";
-import { CreateProjectModal } from "../components/CreateProjectModal";
-import { ClassSelect } from "../components/ClassSelect";
 import { useSearchParams } from "react-router-dom";
+import ProjectApi from "../../../apis/project";
+import { ClassSelect } from "../components/ClassSelect";
+import { ProjectDetailModal } from "../components/ProjectDetailModal";
+import { ProjectList } from "./components/ProjectList";
+import { useRole } from "../../../hooks/role";
+import { roles } from "../../../constants/app";
 
 const ProjectListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const role = useRole();
 
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [projects, setProjects] = useState([]);
-
-	const handleCreateProjectSuccess = () => {};
+	const [projectLoading, setProjectLoading] = useState(false);
+	const [projectCreating, setProjectCreating] = useState(false);
 
 	const handleChangeClass = (classId) => {
 		setSearchParams({
@@ -21,8 +24,54 @@ const ProjectListPage = () => {
 		});
 	};
 
-	useEffect(() => {
+	const onClassesLoaded = (data) => {
+		if (data && data.length > 0) {
+			searchParams.set("class", data[0].classId);
+			setSearchParams(searchParams);
+		}
+	};
+
+	const getProjects = async () => {
 		const classId = searchParams.get("class");
+		if (!classId) return;
+
+		const search = searchParams.get("search");
+
+		setProjectLoading(true);
+		const data = await ProjectApi.getProjects(
+			classId,
+			search,
+			// hasUserId
+			role === roles.STUDENT
+		);
+		setProjects(data);
+		setProjectLoading(false);
+	};
+
+	const handleCreateProject = async (data) => {
+		setProjectCreating(true);
+		const success = await ProjectApi.createProject(data);
+		if (success) {
+			message.success("Tạo dự án thành công");
+			getProjects();
+		} else {
+			message.error("Tạo dự án thất bại");
+		}
+		setProjectCreating(false);
+	};
+
+	const handleSearchProjects = (keyword) => {
+		if (keyword) {
+			searchParams.set("search", keyword);
+		} else {
+			searchParams.delete("search");
+		}
+		setSearchParams(searchParams);
+	};
+
+	useEffect(() => {
+		getProjects();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams]);
 
 	return (
@@ -30,8 +79,16 @@ const ProjectListPage = () => {
 			<Row justify="space-between">
 				<Col span={18}>
 					<Row>
-						<Input.Search placeholder="Tìm dự án..." className="w-1/2 mr-2" />
-						<ClassSelect allowClear onChange={handleChangeClass} />
+						<Input.Search
+							placeholder="Tìm dự án..."
+							className="w-1/2 mr-2"
+							onSearch={handleSearchProjects}
+						/>
+						<ClassSelect
+							value={searchParams.get("class")}
+							onChange={handleChangeClass}
+							onLoaded={onClassesLoaded}
+						/>
 					</Row>
 				</Col>
 				<Col span={6}>
@@ -47,11 +104,15 @@ const ProjectListPage = () => {
 					</Row>
 				</Col>
 			</Row>
-			<ProjectList projects={mockProjects} />
-			<CreateProjectModal
+			<Spin spinning={projectLoading}>
+				<ProjectList projects={projects} />
+			</Spin>
+			<ProjectDetailModal
+				title="Thêm dự án"
 				open={showCreateModal}
 				onCancel={() => setShowCreateModal(false)}
-				onSuccess={handleCreateProjectSuccess}
+				onSubmit={handleCreateProject}
+				submitting={projectCreating}
 			/>
 		</div>
 	);

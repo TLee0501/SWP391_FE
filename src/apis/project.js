@@ -21,6 +21,16 @@ const getProjects = async (classId, search, hasUserId) => {
 	}
 };
 
+const getProjectById = async (id) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetProjectByID/${id}`);
+		return response.data;
+	} catch (error) {
+		console.log("Error get project by id: ", error);
+		return undefined;
+	}
+};
+
 const createProject = async (data) => {
 	try {
 		const response = await BaseApi.post(`/${resource}/CreateProject`, data);
@@ -41,9 +51,22 @@ const updateProject = async (data) => {
 	}
 };
 
+const deleteProject = async (id) => {
+	try {
+		const response = await BaseApi.delete(`/${resource}/DeleteProject/${id}`);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error delete project: ", error);
+		return false;
+	}
+};
+
 const ProjectApi = {
+	getProjects,
+	getProjectById,
 	createProject,
 	updateProject,
+	deleteProject,
 };
 
 export default ProjectApi;

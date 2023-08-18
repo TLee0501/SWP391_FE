@@ -7,7 +7,7 @@ import { usePermissions } from "../../../../hooks/permission";
 
 const AccountList = ({ onEditAccount }) => {
 	const permissions = usePermissions();
-	const canUpdate = permissions.includes(ALL_PERMISSIONS.account.update);
+	const canUpdate = permissions?.includes(ALL_PERMISSIONS.account.update);
 
 	const [accountLoading, setAccountLoading] = useState(false);
 	const [accounts, setAccounts] = useState([]);

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal";
 import { Form, Input } from "antd";
 
-export const ClassEnrollKeyModal = ({ open, onCancel, classId }) => {
+export const UpdateEnrollKeyModal = ({ open, onCancel, classId }) => {
 	const formRef = useRef();
 
 	return (

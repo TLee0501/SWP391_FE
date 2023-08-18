@@ -38,7 +38,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 
 	const handleCreateClass = async (values) => {
 		const { userId } = user;
-		const { course, name, dates } = values;
+		const { course, name, dates, enrollCode } = values;
 
 		const data = {
 			courseId: course,
@@ -46,6 +46,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 			className: name,
 			timeStart: dates[0],
 			timeEnd: dates[1],
+			enrollCode: enrollCode,
 		};
 
 		setClassCreating(true);
@@ -114,7 +115,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 					/>
 				</Form.Item>
 				<Form.Item
-					name="enrollKey"
+					name="enrollCode"
 					label="Mã tham gia"
 					rules={[
 						{

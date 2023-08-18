@@ -4,7 +4,6 @@ import { useAuth } from "../hooks/auth";
 import routes, { UnauthorizedRoutes } from "../constants/routes";
 
 const RootRoute = () => {
-	// console.log("RootRoute render");
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const isAuthenticated = useAuth();

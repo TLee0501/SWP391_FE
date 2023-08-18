@@ -5,7 +5,7 @@ import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";
 import { CourseSelect } from "../components/ClassSelect";
-import { DeleteCLassModal } from "../components/DeleteClassModal";
+import { DeleteClassModal } from "../components/DeleteClassModal";
 import { useSearchParams } from "react-router-dom";
 
 const ClassListPage = () => {
@@ -25,8 +25,8 @@ const ClassListPage = () => {
 	};
 
 	// Delete class
-	const handleShowDeleteClassModal = (classes) => {
-		deletingClass.current = classes;
+	const handleShowDeleteClassModal = (currentClass) => {
+		deletingClass.current = currentClass;
 		setShowDeleteClassModal(true);
 	};
 	const handleCloseDeleteClassModal = () => {
@@ -121,11 +121,11 @@ const ClassListPage = () => {
 				onCancel={handleCloseCreateClassModal}
 				onSuccess={handleCreateClassSuccess}
 			/>
-			<DeleteCLassModal
+			<DeleteClassModal
 				onCancel={handleCloseDeleteClassModal}
 				onDeleteSuccess={handleDeleteSuccess}
 				open={showDeleteClassModal}
-				course={deletingClass.current}
+				currentClass={deletingClass.current}
 			/>
 		</div>
 	);

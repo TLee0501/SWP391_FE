@@ -8,7 +8,7 @@ export const ClassSelect = ({ onChange, allowClear, className }) => {
 
 	const getClasses = async () => {
 		setLoading(true);
-		const data = await ClassApi.getAllClasses();
+		const data = await ClassApi.searchClass();
 		setClasses(data);
 		setLoading(false);
 	};

@@ -1,6 +1,7 @@
 import { Form, Input, Typography } from "antd";
 import React, { useContext } from "react";
 import { UserContext } from "../../providers/user";
+import { getRoleName } from "../../utils";
 
 const { Title } = Typography;
 
@@ -16,7 +17,7 @@ const ProfilePage = () => {
 				initialValues={{
 					email: user?.email,
 					fullName: user?.fullName,
-					role: user?.role,
+					role: getRoleName(user?.role),
 				}}
 			>
 				<Form.Item name="fullName" label="Họ tên">

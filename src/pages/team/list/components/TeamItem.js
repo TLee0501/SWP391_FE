@@ -8,7 +8,7 @@ const { Text } = Typography;
 
 export const TeamItem = ({ course, onDelete, onUpdate }) => {
 	const permissions = usePermissions();
-	const canDelete = permissions.includes(ALL_PERMISSIONS.team.delete);
+	const canDelete = permissions?.includes(ALL_PERMISSIONS.team.delete);
 
 	const handleUpdate = () => {
 		onUpdate(course);

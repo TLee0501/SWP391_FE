@@ -2,7 +2,7 @@ import { Select } from "antd";
 import React, { useEffect, useState } from "react";
 import CourseApi from "../../../apis/course";
 
-export const CourseSelect = ({ onChange, allowClear, mode }) => {
+export const CourseSelect = ({ onChange, allowClear, onClear, mode }) => {
 	const [courses, setCourses] = useState([]);
 	const [loading, setLoading] = useState(false);
 
@@ -28,6 +28,7 @@ export const CourseSelect = ({ onChange, allowClear, mode }) => {
 		<Select
 			mode={mode}
 			showSearch
+			onClear={onClear}
 			options={courseOptions}
 			placeholder="Chọn môn học"
 			loading={loading}

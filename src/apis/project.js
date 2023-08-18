@@ -2,6 +2,25 @@ import BaseApi from ".";
 
 const resource = "Projects";
 
+const getProjects = async (classId, search, hasUserId) => {
+	try {
+		const queryParams = {
+			searchName: search,
+			hasUserId,
+		};
+		const response = await BaseApi.get(
+			`/${resource}/GetProjectsByFilter/${classId}`,
+			{
+				params: queryParams,
+			}
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error get projects: ", error);
+		return [];
+	}
+};
+
 const createProject = async (data) => {
 	try {
 		const response = await BaseApi.post(`/${resource}/CreateProject`, data);

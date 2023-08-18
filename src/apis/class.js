@@ -59,11 +59,22 @@ const getClassById = async (id) => {
 	}
 };
 
+const deleteClass = async (id) => {
+	try {
+	  const response = await BaseApi.delete(`/${resource}/DeleteClass/${id}`);
+	  return response.status === 200;
+	} catch (error) {
+	  console.log("Error delete class: ", error);
+	  return false;
+	}
+  };
+
 const ClassApi = {
 	createClass,
 	searchClass,
 	getAllClasses,
 	getClassById,
+	deleteClass,
 };
 
 export default ClassApi;

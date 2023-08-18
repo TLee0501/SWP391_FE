@@ -2,11 +2,11 @@ import { List } from "antd";
 import React from "react";
 import { ClassItem } from "./ClassItem";
 
-export const ClassList = ({ classes }) => {
+export const ClassList = ({ classes, onDelete }) => {
 	const renderItem = (item) => {
 		return (
 			<List.Item>
-				<ClassItem data={item} />
+				<ClassItem data={item} onDelete={onDelete} />
 			</List.Item>
 		);
 	};

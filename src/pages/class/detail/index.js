@@ -17,7 +17,6 @@ import ClassApi from "../../../apis/class";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
 import { formatDate } from "../../../utils";
 import { StudentList } from "./components/StudentList";
-import { useRole } from "../../../hooks/role";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../constants/app";
 import { Key, Setting } from "@icon-park/react";

@@ -8,8 +8,8 @@ import { ALL_PERMISSIONS } from "../../../constants/app";
 
 export const AccountListPage = () => {
 	const permissions = usePermissions();
-	const canCreate = permissions.includes(ALL_PERMISSIONS.account.create);
-	const canView = permissions.includes(ALL_PERMISSIONS.account.view);
+	const canCreate = permissions?.includes(ALL_PERMISSIONS.account.create);
+	const canView = permissions?.includes(ALL_PERMISSIONS.account.view);
 
 	const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
 	const [showUpdateAccountModal, setShowUpdateAccountModal] = useState(false);

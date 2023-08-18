@@ -20,7 +20,8 @@ import { StudentList } from "./components/StudentList";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../constants/app";
 import { Key, Setting } from "@icon-park/react";
-import { ClassEnrollKeyModal } from "./components/ClassEnrollKeyModal";
+import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
+import { EnrollClassModal } from "./components/EnrollClassModal";
 
 const datas = [
 	"Nguyễn Văn A",
@@ -35,11 +36,14 @@ const ClassDetailPage = () => {
 
 	const permissions = usePermissions();
 	const canEnroll = permissions?.includes(ALL_PERMISSIONS.class.enroll);
+	const canSettings = permissions?.includes(ALL_PERMISSIONS.class.settings);
 
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
 
-	const [showEnrollKeyModal, setShowEnrollKeyModal] = useState(false);
+	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
+		useState(false);
+	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 
 	const items = [
 		{
@@ -69,7 +73,7 @@ const ClassDetailPage = () => {
 			key: "ENROLL_KEY",
 			label: "Cập nhật mã tham gia",
 			icon: <Key />,
-			onClick: () => setShowEnrollKeyModal(true),
+			onClick: () => setShowUpdateEnrollKeyModal(true),
 		},
 	];
 
@@ -94,10 +98,19 @@ const ClassDetailPage = () => {
 			title={<span>{`Lớp ${data.className}`} </span>}
 			action={
 				<Row>
-					{canEnroll && <Button type="primary">Tham gia lớp học</Button>}
-					<Dropdown menu={{ items: settingItems }}>
-						<Button className="flex-center ml-2" icon={<Setting />} />
-					</Dropdown>
+					{canEnroll && (
+						<Button
+							type="primary"
+							onClick={() => setShowEnrollClassModal(true)}
+						>
+							Tham gia lớp học
+						</Button>
+					)}
+					{canSettings && (
+						<Dropdown menu={{ items: settingItems }}>
+							<Button className="flex-center ml-2" icon={<Setting />} />
+						</Dropdown>
+					)}
 				</Row>
 			}
 		>
@@ -167,10 +180,14 @@ const ClassDetailPage = () => {
 					<StudentList students={mockStudents} />
 				</Card>
 			</Spin>
-			<ClassEnrollKeyModal
-				open={showEnrollKeyModal}
-				onCancel={() => setShowEnrollKeyModal(false)}
+			<UpdateEnrollKeyModal
+				open={showUpdateEnrollKeyModal}
+				onCancel={() => setShowUpdateEnrollKeyModal(false)}
 				classId={data?.classId}
+			/>
+			<EnrollClassModal
+				open={showEnrollClassModal}
+				onCancel={() => setShowEnrollClassModal(false)}
 			/>
 		</BasePageContent>
 	);

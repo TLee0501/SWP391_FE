@@ -15,7 +15,7 @@ export const ClassList = ({ classes, onDelete }) => {
 		<div>
 			<List
 				grid={{ column: 3, gutter: 8 }}
-				split={false}
+				split={true}
 				bordered={false}
 				dataSource={classes}
 				renderItem={renderItem}

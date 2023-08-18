@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 const { Title } = Typography;
 
 export const ProjectItem = ({ project }) => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(project.id);
-  };
+	const handleClick = () => {
+		navigate(project.projectId);
+	};
 
-  return (
-    <Card className="w-full" hoverable onClick={handleClick}>
-      <Row justify="space-between" align="middle">
-        <Title ellipsis style={{ margin: 0 }} level={5}>
-          {project.name}
-        </Title>
-      </Row>
-    </Card>
-  );
+	return (
+		<Card className="w-full" hoverable onClick={handleClick}>
+			<Row justify="space-between" align="middle">
+				<Title ellipsis style={{ margin: 0 }} level={5}>
+					{project.projectName}
+				</Title>
+			</Row>
+		</Card>
+	);
 };

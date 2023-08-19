@@ -78,12 +78,13 @@ const ProjectListPage = () => {
 		<div>
 			<Row justify="space-between">
 				<Col span={18}>
-					<Row>
+					<Row align="middle">
 						<Input.Search
 							placeholder="Tìm dự án..."
 							className="w-1/2 mr-2"
 							onSearch={handleSearchProjects}
 						/>
+						<span className="mr-2">Lớp:</span>
 						<ClassSelect
 							value={searchParams.get("class")}
 							onChange={handleChangeClass}

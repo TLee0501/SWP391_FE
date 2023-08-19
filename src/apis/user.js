@@ -13,8 +13,31 @@ export const searchUsers = async (keyword) => {
 	}
 };
 
+const banUserbyID = async (userID) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/BanUser/${userID}`);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error ban user: ", error);
+		return false;
+	}
+};
+
+const unbanUserbyID = async (userID) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/BanUser/${userID}`);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error unban user: ", error);
+		return false;
+	}
+};
+
+
 const UserApi = {
 	searchUsers,
+	banUserbyID,
+	unbanUserbyID,
 };
 
 export default UserApi;

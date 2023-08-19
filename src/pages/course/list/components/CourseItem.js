@@ -6,13 +6,9 @@ import { ALL_PERMISSIONS } from "../../../../constants/app";
 
 const { Text } = Typography;
 
-export const CourseItem = ({ course, onDelete, onUpdate }) => {
+export const CourseItem = ({ course, onDelete }) => {
 	const permissions = usePermissions();
 	const canDelete = permissions?.includes(ALL_PERMISSIONS.course.delete);
-
-	const handleUpdate = () => {
-		onUpdate(course);
-	};
 
 	const handleDelete = (e) => {
 		e.stopPropagation();
@@ -20,7 +16,7 @@ export const CourseItem = ({ course, onDelete, onUpdate }) => {
 	};
 
 	return (
-		<Card className="w-full cursor-pointer" hoverable onClick={handleUpdate}>
+		<Card className="w-full cursor-pointer" hoverable>
 			<Row justify="space-between">
 				<div>
 					<Text className="text-lg font-medium" ellipsis>

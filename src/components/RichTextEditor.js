@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill/lib";
 
 export const RichTextEditor = ({ value, onChange, placeholder, height }) => {
 	const [text, setText] = useState();

@@ -71,9 +71,10 @@ const ClassDetailPage = () => {
 						{canEnroll && (
 							<Button
 								type="primary"
+								disabled={data?.enrolled}
 								onClick={() => setShowEnrollClassModal(true)}
 							>
-								Tham gia lớp học
+								{data?.enrolled ? "Đã tham gia" : "Tham gia lớp học"}
 							</Button>
 						)}
 						{canSettings && (
@@ -96,8 +97,10 @@ const ClassDetailPage = () => {
 					classId={data?.classId}
 				/>
 				<EnrollClassModal
+					classId={data?.classId}
 					open={showEnrollClassModal}
 					onCancel={() => setShowEnrollClassModal(false)}
+					onSuccess={() => getClass()}
 				/>
 				<ProjectDescriptionModal
 					open={showProjectDescModal}

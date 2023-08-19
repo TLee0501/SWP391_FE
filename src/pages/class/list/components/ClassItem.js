@@ -1,12 +1,16 @@
-import { Card, Descriptions, Typography } from "antd";
+import { Card, Descriptions, Tag, Typography } from "antd";
 import React from "react";
 import { formatDate } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
+import { useRole } from "../../../../hooks/role";
+import { roles } from "../../../../constants/app";
 
 const { Text } = Typography;
 
 export const ClassItem = ({ data }) => {
 	const navigate = useNavigate();
+
+	const role = useRole();
 
 	const items = [
 		{
@@ -34,6 +38,13 @@ export const ClassItem = ({ data }) => {
 					<span className="font-light">Lớp</span> {data.className}
 				</Text>
 			}
+			extra={
+				role === roles.STUDENT && (
+					<Tag color={data.enrolled ? "blue-inverse" : "default"}>
+						{data.enrolled ? "Đã tham gia" : "Chưa tham gia"}
+					</Tag>
+				)
+			}
 			onClick={handleClick}
 		>
 			<Descriptions layout="vertical" items={items} />
@@ -45,6 +56,16 @@ export const ClassItem = ({ data }) => {
 					},
 				]}
 			/>
+			{role === roles.STUDENT && (
+				<Descriptions
+					items={[
+						{
+							label: "Giáo viên",
+							children: data.teacherName,
+						},
+					]}
+				/>
+			)}
 		</Card>
 	);
 };

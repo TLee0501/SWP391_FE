@@ -2,9 +2,13 @@ import { Card, Descriptions } from "antd";
 import React, { useContext } from "react";
 import { formatDate } from "../../../../utils";
 import { ClassContext } from "../../../../providers/class";
+import { useRole } from "../../../../hooks/role";
+import { roles } from "../../../../constants/app";
 
 export const ClassBasicInfo = () => {
 	const data = useContext(ClassContext);
+
+	const role = useRole();
 
 	const items = [
 		{
@@ -26,6 +30,11 @@ export const ClassBasicInfo = () => {
 			key: "COURSE",
 			label: "Môn học",
 			children: <strong>{`${data?.courseCode} - ${data?.courseName}`}</strong>,
+		},
+		role === roles.STUDENT && {
+			key: "TEACHER",
+			label: "Giáo viên",
+			children: data?.teacherName,
 		},
 	];
 

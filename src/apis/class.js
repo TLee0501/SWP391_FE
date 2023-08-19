@@ -12,18 +12,21 @@ const createClass = async (data) => {
 	}
 };
 
+const enrollClass = async (classId, enrollCode) => {
+	try {
+		const response = await BaseApi.post(`/${resource}/EnrollClass`, {
+			classId,
+			enrollCode,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error enroll class: ", error);
+		return false;
+	}
+};
+
 const searchClass = async (courseId, keyword) => {
 	try {
-		// var queries = [];
-		// if (courseId) {
-		// 	queries.push(`courseId=${courseId}`);
-		// }
-		// if (keyword) {
-		// 	queries.push(`searchText=${keyword}`);
-		// }
-
-		// const query = queries.length > 0 ? `?${queries.join("&")}` : "";
-
 		const response = await BaseApi.get(`/${resource}/SearchClass`, {
 			params: {
 				courseId: courseId,
@@ -48,6 +51,7 @@ const getClassById = async (id) => {
 };
 
 const ClassApi = {
+	enrollClass,
 	createClass,
 	searchClass,
 	getClassById,

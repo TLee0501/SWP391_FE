@@ -2,14 +2,13 @@ import BaseApi from ".";
 
 const resource = "Projects";
 
-const getProjects = async (classId, search, hasUserId) => {
+const getProjects = async (classId, search) => {
 	try {
 		const queryParams = {
 			searchName: search,
-			hasUserId,
 		};
 		const response = await BaseApi.get(
-			`/${resource}/GetProjectsByFilter/${classId}`,
+			`/${resource}/GetAllProjects/${classId}`,
 			{
 				params: queryParams,
 			}

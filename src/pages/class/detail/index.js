@@ -118,7 +118,7 @@ const ClassDetailPage = () => {
 				<Card className="mt-3 mb-4" title="Thông tin cơ bản">
 					<Descriptions layout="vertical" items={items} />
 				</Card>
-				<Divider orientation="center" STYLE="font-size:20px;">
+				<Divider orientation="center" STYLE="font-size:18px;">
 					Danh sách nhóm làm dự án
 				</Divider>
 
@@ -173,7 +173,7 @@ const ClassDetailPage = () => {
 				></Collapse>
 
 				<Card className="mb-4"></Card>
-				<Divider orientation="center" STYLE="font-size:20px;">
+				<Divider orientation="center" STYLE="font-size:18px;">
 					Danh sách sinh viên
 				</Divider>
 				<Card>

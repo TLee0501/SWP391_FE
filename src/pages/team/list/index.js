@@ -5,9 +5,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { TeamFormModal } from "../components/TeamFormModal";
 import { DeleteTeamModal } from "../components/DeleteTeamModal";
 import { usePermissions } from "../../../hooks/permission";
-import { ALL_PERMISSIONS } from "../../../constants/app";
+import { ALL_PERMISSIONS, USER_PERMISSIONS } from "../../../constants/app";
 import CourseApi from "../../../apis/course";
 import { TeamList } from "./components/TeamList";
+import { UpdateTeamModal } from "../components/UpdateTeamModal";
 
 export const TeamListPage = () => {
 	const permissions = usePermissions();

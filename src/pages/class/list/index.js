@@ -7,8 +7,14 @@ import { ClassList } from "./components/ClassList";
 import { CourseSelect } from "../components/ClassSelect";
 import { DeleteClassModal } from "../components/DeleteClassModal";
 import { useSearchParams } from "react-router-dom";
+import { usePermissions } from "../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../constants/app";
 
 const ClassListPage = () => {
+	const permissions = usePermissions();
+	const canCreate = permissions?.includes(ALL_PERMISSIONS.class.create);
+	const canView = permissions?.includes(ALL_PERMISSIONS.class.view);
+
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 	const [classLoading, setClassLoading] = useState(false);
@@ -87,35 +93,41 @@ const ClassListPage = () => {
 		<div>
 			<Row justify="space-between" className="mb-4">
 				<Col span={18}>
-					<Row>
-						<Input.Search
-							className="w-1/2 mr-2"
-							placeholder="Tìm lớp học..."
-							onSearch={handleSearchClass}
-						/>
-						<CourseSelect
-							allowClear
-							onChange={handleChangeCourse}
-							onClear={handleClearCourse}
-						/>
-					</Row>
+					{canView && (
+						<Row>
+							<Input.Search
+								className="w-1/2 mr-2"
+								placeholder="Tìm lớp học..."
+								onSearch={handleSearchClass}
+							/>
+							<CourseSelect
+								allowClear
+								onChange={handleChangeCourse}
+								onClear={handleClearCourse}
+							/>
+						</Row>
+					)}
 				</Col>
 				<Col span={6}>
-					<Row justify="end">
-						<Button
-							className="flex-center"
-							type="primary"
-							icon={<Plus />}
-							onClick={handleShowCreateClassModal}
-						>
-							Thêm lớp học
-						</Button>
-					</Row>
+					{canCreate && (
+						<Row justify="end">
+							<Button
+								className="flex-center"
+								type="primary"
+								icon={<Plus />}
+								onClick={handleShowCreateClassModal}
+							>
+								Thêm lớp học
+							</Button>
+						</Row>
+					)}
 				</Col>
 			</Row>
-			<Spin spinning={classLoading}>
-				<ClassList classes={classes} onDelete={handleShowDeleteClassModal} />
-			</Spin>
+			{canView && (
+				<Spin spinning={classLoading}>
+					<ClassList classes={classes} onDelete={handleShowDeleteClassModal} />
+				</Spin>
+			)}
 			<CreateClassModal
 				open={showCreateClassModal}
 				onCancel={handleCloseCreateClassModal}

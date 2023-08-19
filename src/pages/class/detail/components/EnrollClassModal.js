@@ -1,17 +1,26 @@
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import React, { useRef, useState } from "react";
 import BaseModal from "../../../../components/BaseModal";
+import ClassApi from "../../../../apis/class";
 
-export const EnrollClassModal = ({ open, onCancel, onSuccess }) => {
+export const EnrollClassModal = ({ open, onCancel, onSuccess, classId }) => {
 	const formRef = useRef();
 
 	const [loading, setLoading] = useState(false);
 
 	const onSubmit = async (values) => {
+		if (!classId) return;
+		console.log(values);
 		const { enrollCode } = values;
 		setLoading(true);
-		console.log("Enroll class: ", enrollCode);
-		onSuccess();
+		const success = await ClassApi.enrollClass(classId, enrollCode);
+		if (success) {
+			message.success("Tham gia lớp học thành công");
+			onSuccess();
+		} else {
+			message.error("Tham gia lớp học thất bại");
+		}
+
 		onCancel();
 		setLoading(false);
 	};

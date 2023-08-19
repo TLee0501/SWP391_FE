@@ -10,9 +10,9 @@ import { ALL_PERMISSIONS } from "../../../constants/app";
 
 export const CourseListPage = () => {
 	const permissions = usePermissions();
-	const canView = permissions.includes(ALL_PERMISSIONS.course.view);
-	const canCreate = permissions.includes(ALL_PERMISSIONS.course.create);
-	const canUpdate = permissions.includes(ALL_PERMISSIONS.course.update);
+	const canView = permissions?.includes(ALL_PERMISSIONS.course.view);
+	const canCreate = permissions?.includes(ALL_PERMISSIONS.course.create);
+	const canUpdate = permissions?.includes(ALL_PERMISSIONS.course.update);
 
 	const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
 	const [courseCreating, setCourseCreating] = useState(false);

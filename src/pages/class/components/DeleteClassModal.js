@@ -3,16 +3,16 @@ import BaseModal from "../../../components/BaseModal";
 import { message } from "antd";
 import ClassApi from "../../../apis/class";
 
-export const DeleteCLassModal = ({
+export const DeleteClassModal = ({
 	open,
 	onCancel,
-	classes,
+	currentClass,
 	onDeleteSuccess,
 }) => {
 	const [loading, setLoading] = useState(false);
 
 	const handleDeleteCourse = () => {
-		const { classId } = classes;
+		const { classId } = currentClass;
 		setLoading(true);
 		ClassApi.deleteClass(classId).then((success) => {
 			if (success) {

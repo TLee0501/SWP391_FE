@@ -16,6 +16,7 @@ export const ALL_PERMISSIONS = {
 		update: "class.update",
 		delete: "class.delete",
 		enroll: "class.enroll",
+		settings: "class.settings",
 	},
 	course: {
 		view: "course.view",
@@ -54,6 +55,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.class.create,
 		ALL_PERMISSIONS.class.update,
 		ALL_PERMISSIONS.class.delete,
+		ALL_PERMISSIONS.class.settings,
 		// COURSE
 		ALL_PERMISSIONS.course.view,
 		ALL_PERMISSIONS.course.create,
@@ -100,6 +102,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.class.create,
 		ALL_PERMISSIONS.class.update,
 		ALL_PERMISSIONS.class.delete,
+		ALL_PERMISSIONS.class.settings,
 		// COURSE
 		ALL_PERMISSIONS.course.view,
 		// PROJECT

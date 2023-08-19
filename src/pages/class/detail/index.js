@@ -4,7 +4,9 @@ import {
 	Collapse,
 	Descriptions,
 	Divider,
+	Dropdown,
 	List,
+	Row,
 	Spin,
 	Typography,
 } from "antd";
@@ -15,9 +17,11 @@ import ClassApi from "../../../apis/class";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
 import { formatDate } from "../../../utils";
 import { StudentList } from "./components/StudentList";
-import { useRole } from "../../../hooks/role";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../constants/app";
+import { Key, Setting } from "@icon-park/react";
+import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
+import { EnrollClassModal } from "./components/EnrollClassModal";
 
 const datas = [
 	"Nguyễn Văn A",
@@ -32,9 +36,14 @@ const ClassDetailPage = () => {
 
 	const permissions = usePermissions();
 	const canEnroll = permissions?.includes(ALL_PERMISSIONS.class.enroll);
+	const canSettings = permissions?.includes(ALL_PERMISSIONS.class.settings);
 
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
+
+	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
+		useState(false);
+	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 
 	const items = [
 		{
@@ -59,6 +68,15 @@ const ClassDetailPage = () => {
 		},
 	];
 
+	const settingItems = [
+		{
+			key: "ENROLL_KEY",
+			label: "Cập nhật mã tham gia",
+			icon: <Key />,
+			onClick: () => setShowUpdateEnrollKeyModal(true),
+		},
+	];
+
 	const getClass = async () => {
 		setLoading(true);
 		const response = await ClassApi.getClassById(id);
@@ -77,8 +95,24 @@ const ClassDetailPage = () => {
 
 	return (
 		<BasePageContent
-			title={`Lớp ${data.className}`}
-			action={canEnroll && <Button type="primary">Tham gia lớp học</Button>}
+			title={<span>{`Lớp ${data.className}`} </span>}
+			action={
+				<Row>
+					{canEnroll && (
+						<Button
+							type="primary"
+							onClick={() => setShowEnrollClassModal(true)}
+						>
+							Tham gia lớp học
+						</Button>
+					)}
+					{canSettings && (
+						<Dropdown menu={{ items: settingItems }}>
+							<Button className="flex-center ml-2" icon={<Setting />} />
+						</Dropdown>
+					)}
+				</Row>
+			}
 		>
 			<Spin spinning={loading}>
 				<Card className="mt-3 mb-4" title="Thông tin cơ bản">
@@ -146,6 +180,15 @@ const ClassDetailPage = () => {
 					<StudentList students={mockStudents} />
 				</Card>
 			</Spin>
+			<UpdateEnrollKeyModal
+				open={showUpdateEnrollKeyModal}
+				onCancel={() => setShowUpdateEnrollKeyModal(false)}
+				classId={data?.classId}
+			/>
+			<EnrollClassModal
+				open={showEnrollClassModal}
+				onCancel={() => setShowEnrollClassModal(false)}
+			/>
 		</BasePageContent>
 	);
 };

@@ -4,11 +4,11 @@ import { ClassItem } from "./ClassItem";
 
 const { Text } = Typography;
 
-export const ClassList = ({ classes }) => {
+export const ClassList = ({ classes, onDelete }) => {
 	const renderItem = (item) => {
 		return (
 			<List.Item>
-				<ClassItem data={item} />
+				<ClassItem data={item} onDelete={onDelete} />
 			</List.Item>
 		);
 	};

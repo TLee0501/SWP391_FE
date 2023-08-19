@@ -1,10 +1,11 @@
 import { Plus } from "@icon-park/react";
 import { Button, Col, Input, Row, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";
 import { CourseSelect } from "../components/ClassSelect";
+import { DeleteClassModal } from "../components/DeleteClassModal";
 import { useSearchParams } from "react-router-dom";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../constants/app";
@@ -15,17 +16,28 @@ const ClassListPage = () => {
 	const canView = permissions?.includes(ALL_PERMISSIONS.class.view);
 
 	const [searchParams, setSearchParams] = useSearchParams();
-
-	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
-
+	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 	const [classLoading, setClassLoading] = useState(false);
 	const [classes, setClasses] = useState([]);
+	const deletingClass = useRef();
+
+	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
 
 	const handleShowCreateClassModal = () => {
 		setShowCreateClassModal(true);
 	};
 	const handleCloseCreateClassModal = () => {
 		setShowCreateClassModal(false);
+	};
+
+	// Delete class
+	const handleShowDeleteClassModal = (currentClass) => {
+		deletingClass.current = currentClass;
+		setShowDeleteClassModal(true);
+	};
+	const handleCloseDeleteClassModal = () => {
+		deletingClass.current = undefined;
+		setShowDeleteClassModal(false);
 	};
 
 	const getClasses = async (courseId, keyword) => {
@@ -61,6 +73,10 @@ const ClassListPage = () => {
 	const handleClearCourse = () => {
 		searchParams.delete("course");
 		setSearchParams(searchParams);
+	};
+
+	const handleDeleteSuccess = () => {
+		getClasses();
 	};
 
 	useEffect(() => {
@@ -109,13 +125,19 @@ const ClassListPage = () => {
 			</Row>
 			{canView && (
 				<Spin spinning={classLoading}>
-					<ClassList classes={classes} />
+					<ClassList classes={classes} onDelete={handleShowDeleteClassModal} />
 				</Spin>
 			)}
 			<CreateClassModal
 				open={showCreateClassModal}
 				onCancel={handleCloseCreateClassModal}
 				onSuccess={handleCreateClassSuccess}
+			/>
+			<DeleteClassModal
+				onCancel={handleCloseDeleteClassModal}
+				onDeleteSuccess={handleDeleteSuccess}
+				open={showDeleteClassModal}
+				currentClass={deletingClass.current}
 			/>
 		</div>
 	);

@@ -28,9 +28,28 @@ const getUser = async () => {
   }
 };
 
+const register = async (email, fullName, password) => {
+  try {
+    const response = await BaseApi.post("/Users/CreateStudent", {
+      email: email,
+      fullName: fullName,
+      password: password,
+    });
+    if (response.status === 200) {
+      // const jwt = response.data["token"];
+      // localStorage.setItem("jwt", jwt);
+      return true;
+    }
+  } catch (error) {
+    console.log("Email dupplicated", error);
+    return false;
+  }
+};
+
 const AuthApi = {
   login,
   getUser,
+  register,
 };
 
 export default AuthApi;

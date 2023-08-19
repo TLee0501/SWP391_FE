@@ -1,14 +1,18 @@
-import { Card, Descriptions, Tag, Typography } from "antd";
+import { Button, Card, Descriptions, Tag, Typography } from "antd";
 import React from "react";
 import { formatDate } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
 import { useRole } from "../../../../hooks/role";
-import { roles } from "../../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
+import { usePermissions } from "../../../../hooks/permission";
+import { Delete } from "@icon-park/react";
 
 const { Text } = Typography;
 
-export const ClassItem = ({ data }) => {
+export const ClassItem = ({ data, onDelete }) => {
 	const navigate = useNavigate();
+	const permissions = usePermissions();
+	const canDelete = permissions?.includes(ALL_PERMISSIONS.class.delete);
 
 	const role = useRole();
 
@@ -27,6 +31,11 @@ export const ClassItem = ({ data }) => {
 
 	const handleClick = () => {
 		navigate(data.classId);
+	};
+
+	const handleDelete = (e) => {
+		e.stopPropagation();
+		onDelete(data);
 	};
 
 	return (
@@ -64,6 +73,15 @@ export const ClassItem = ({ data }) => {
 							children: data.teacherName,
 						},
 					]}
+				/>
+			)}
+			{canDelete && (
+				<Button
+					className="flex-center"
+					icon={<Delete size={"20px"}></Delete>}
+					danger
+					type="text"
+					onClick={handleDelete}
 				/>
 			)}
 		</Card>

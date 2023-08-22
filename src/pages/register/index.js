@@ -1,9 +1,21 @@
-import { Button, Card, Form, Input, Row, Typography, message } from "antd";
-import React, { useState } from "react";
+import {
+	Button,
+	Card,
+	Form,
+	Input,
+	Row,
+	Select,
+	Typography,
+	message,
+} from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import routes from "../../constants/routes";
 import AuthApi from "../../apis/auth";
+import { getRoleName } from "../../utils";
+import RoleApi from "../../apis/role";
+import { roles } from "../../constants/app";
 
 const { Text, Title } = Typography;
 
@@ -34,22 +46,49 @@ const FormWrapper = styled.div`
 export const RegisterAccountPage = () => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const [allRoles, setAllRoles] = useState([]);
+
+	const formRef = useRef();
 
 	const handleNavigateLoginPage = () => {
 		navigate(routes.login);
 	};
 
-	const handleRegister = async (email, fullName, password) => {
-		setLoading(true);
-		const success = await AuthApi.register(email, fullName, password);
-		setLoading(false);
-		if (success) {
+	const handleRegister = async (values) => {
+		const { email, fullName, password, roleId } = values;
+		try {
+			setLoading(true);
+			await AuthApi.register(email, fullName, password, roleId);
 			message.success(`Đăng ký thành công!`);
 			navigate(routes.login);
-		} else {
-			message.error("Tài khoản đã tồn tại vui lòng sử dụng tài khoản khác.");
+		} catch (error) {
+			console.log(error);
+			const msg = error.response.data;
+			message.error(msg);
 		}
+
+		setLoading(false);
 	};
+
+	const getAllRoles = async () => {
+		const data = await RoleApi.getAllRoles();
+		const filteredData = data.filter((e) => e.name !== roles.ADMIN);
+		if (filteredData) {
+			formRef.current.setFieldValue("roleId", filteredData[0].id);
+		}
+		setAllRoles(filteredData);
+	};
+
+	const roleOptions = allRoles?.map((e) => {
+		return {
+			value: e.id,
+			label: getRoleName(e.name),
+		};
+	});
+
+	useEffect(() => {
+		getAllRoles();
+	}, []);
 
 	return (
 		<Container>
@@ -58,14 +97,7 @@ export const RegisterAccountPage = () => {
 					<Title level={2} className="text-center">
 						Tạo tài khoản
 					</Title>
-					<Form
-						layout="vertical"
-						onFinish={async (values) => {
-							console.log("data: ", values);
-							const { email, fullName, password } = values;
-							await handleRegister(email, fullName, password);
-						}}
-					>
+					<Form ref={formRef} layout="vertical" onFinish={handleRegister}>
 						<Form.Item
 							name="email"
 							label="Email"
@@ -130,6 +162,18 @@ export const RegisterAccountPage = () => {
 							hasFeedback
 						>
 							<Input.Password placeholder="Xác nhận mật khẩu..." size="large" />
+						</Form.Item>
+						<Form.Item
+							name="roleId"
+							label="Bạn là:"
+							rules={[
+								{
+									required: true,
+									message: "Vui lòng chọn vai trò",
+								},
+							]}
+						>
+							<Select options={roleOptions} />
 						</Form.Item>
 
 						<Button

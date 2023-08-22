@@ -14,11 +14,17 @@ import {
 import ProjectApi from "../../../../apis/project";
 import { Plus } from "@icon-park/react";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
+import { usePermissions } from "../../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../../constants/app";
 
 const { Text } = Typography;
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const data = useContext(ClassContext);
+	const permissions = usePermissions();
+	const canCreateProject = permissions?.includes(
+		ALL_PERMISSIONS.project.create
+	);
 
 	const [projects, setProjects] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -76,17 +82,19 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			title="Danh sách dự án"
 			defaultOpen
 			action={
-				<Button
-					type="primary"
-					icon={<Plus />}
-					className="flex-center"
-					onClick={(e) => {
-						e.stopPropagation();
-						setShowCreateModal(true);
-					}}
-				>
-					Thêm dự án
-				</Button>
+				canCreateProject && (
+					<Button
+						type="primary"
+						icon={<Plus />}
+						className="flex-center"
+						onClick={(e) => {
+							e.stopPropagation();
+							setShowCreateModal(true);
+						}}
+					>
+						Thêm dự án
+					</Button>
+				)
 			}
 		>
 			<Spin spinning={loading}>

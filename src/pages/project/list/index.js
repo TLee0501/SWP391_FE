@@ -1,22 +1,15 @@
-import { Plus } from "@icon-park/react";
-import { Button, Col, Input, Row, Spin, Typography, message } from "antd";
+import { Col, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProjectApi from "../../../apis/project";
-import { ALL_PERMISSIONS, roles } from "../../../constants/app";
+import { ALL_PERMISSIONS } from "../../../constants/app";
 import { usePermissions } from "../../../hooks/permission";
-import { useRole } from "../../../hooks/role";
 import { ClassSelect } from "../components/ClassSelect";
-import { ProjectDetailModal } from "../components/ProjectDetailModal";
 import { ProjectList } from "./components/ProjectList";
-
-const { Title } = Typography;
 
 const ProjectListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const role = useRole();
 	const permissions = usePermissions();
-	const canCreate = permissions?.includes(ALL_PERMISSIONS.project.create);
 	const canView = permissions?.includes(ALL_PERMISSIONS.project.view);
 
 	const [projects, setProjects] = useState([]);
@@ -39,15 +32,8 @@ const ProjectListPage = () => {
 		const classId = searchParams.get("class");
 		if (!classId) return;
 
-		const search = searchParams.get("search");
-
 		setProjectLoading(true);
-		const data = await ProjectApi.getProjects(
-			classId,
-			search,
-			// hasUserId
-			role === roles.STUDENT
-		);
+		const data = await ProjectApi.getWorkingProjects(classId);
 		setProjects(data);
 		setProjectLoading(false);
 	};
@@ -75,9 +61,6 @@ const ProjectListPage = () => {
 			</Row>
 			{canView && (
 				<div>
-					<Title level={4} style={{ margin: 0, marginTop: 12 }}>
-						Dự án đang tham gia
-					</Title>
 					<Spin spinning={projectLoading}>
 						<ProjectList projects={projects} />
 					</Spin>

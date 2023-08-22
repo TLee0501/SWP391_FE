@@ -3,7 +3,7 @@ import { Button, Dropdown, Row, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ClassApi from "../../../apis/class";
-import { ALL_PERMISSIONS } from "../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../constants/app";
 import { usePermissions } from "../../../hooks/permission";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
 import { ClassProvider } from "../../../providers/class";
@@ -14,10 +14,12 @@ import { EnrollClassModal } from "./components/EnrollClassModal";
 import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
 import { ClassProjectList } from "./components/ClassProjectList";
 import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
+import { useRole } from "../../../hooks/role";
 
 const ClassDetailPage = () => {
 	const { id } = useParams();
 
+	const role = useRole();
 	const permissions = usePermissions();
 	const canEnroll = permissions?.includes(ALL_PERMISSIONS.class.enroll);
 	const canSettings = permissions?.includes(ALL_PERMISSIONS.class.settings);
@@ -88,8 +90,8 @@ const ClassDetailPage = () => {
 				<Spin spinning={loading}>
 					<ClassBasicInfo />
 					<ClassProjectList onViewDescription={handleViewProjectDescription} />
-					<ClassTeamList />
-					<ClassStudentList />
+					{role === roles.TEACHER && <ClassTeamList />}
+					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
 				<UpdateEnrollKeyModal
 					open={showUpdateEnrollKeyModal}

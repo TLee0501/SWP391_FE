@@ -20,6 +20,18 @@ const getProjects = async (classId, search) => {
 	}
 };
 
+const getWorkingProjects = async (classId) => {
+	try {
+		const response = await BaseApi.get(
+			`/${resource}/GetWorkingProjects/${classId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error get working projects: ", error);
+		return [];
+	}
+};
+
 const getProjectById = async (id) => {
 	try {
 		const response = await BaseApi.get(`/${resource}/GetProjectByID/${id}`);
@@ -62,6 +74,7 @@ const deleteProject = async (id) => {
 
 const ProjectApi = {
 	getProjects,
+	getWorkingProjects,
 	getProjectById,
 	createProject,
 	updateProject,

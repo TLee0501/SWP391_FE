@@ -124,7 +124,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 						},
 					]}
 				>
-					<Input placeholder="Nhập mã tham gia..." />
+					<Input.Password placeholder="Nhập mã tham gia..." />
 				</Form.Item>
 			</Form>
 		</BaseModal>

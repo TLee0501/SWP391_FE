@@ -19,10 +19,8 @@ const ProjectListPage = () => {
 	const canCreate = permissions?.includes(ALL_PERMISSIONS.project.create);
 	const canView = permissions?.includes(ALL_PERMISSIONS.project.view);
 
-	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [projects, setProjects] = useState([]);
 	const [projectLoading, setProjectLoading] = useState(false);
-	const [projectCreating, setProjectCreating] = useState(false);
 
 	const handleChangeClass = (classId) => {
 		setSearchParams({
@@ -54,27 +52,6 @@ const ProjectListPage = () => {
 		setProjectLoading(false);
 	};
 
-	const handleCreateProject = async (data) => {
-		setProjectCreating(true);
-		const success = await ProjectApi.createProject(data);
-		if (success) {
-			message.success("Tạo dự án thành công");
-			getProjects();
-		} else {
-			message.error("Tạo dự án thất bại");
-		}
-		setProjectCreating(false);
-	};
-
-	const handleSearchProjects = (keyword) => {
-		if (keyword) {
-			searchParams.set("search", keyword);
-		} else {
-			searchParams.delete("search");
-		}
-		setSearchParams(searchParams);
-	};
-
 	useEffect(() => {
 		getProjects();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,20 +72,6 @@ const ProjectListPage = () => {
 						</Row>
 					)}
 				</Col>
-				<Col span={6}>
-					{canCreate && (
-						<Row justify="end">
-							<Button
-								className="flex-center"
-								type="primary"
-								icon={<Plus />}
-								onClick={() => setShowCreateModal(true)}
-							>
-								Thêm dự án
-							</Button>
-						</Row>
-					)}
-				</Col>
 			</Row>
 			{canView && (
 				<div>
@@ -120,13 +83,6 @@ const ProjectListPage = () => {
 					</Spin>
 				</div>
 			)}
-			<ProjectDetailModal
-				title="Thêm dự án"
-				open={showCreateModal}
-				onCancel={() => setShowCreateModal(false)}
-				onSubmit={handleCreateProject}
-				submitting={projectCreating}
-			/>
 		</div>
 	);
 };

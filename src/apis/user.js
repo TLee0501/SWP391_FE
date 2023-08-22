@@ -4,7 +4,7 @@ const resource = "Users";
 
 export const searchUsers = async (keyword) => {
 	try {
-		const query = keyword ? `?txtSearch=${keyword}` : "";
+		const query = keyword ? `?search=${keyword}` : "";
 		const response = await BaseApi.get(`/${resource}/SearchUser${query}`);
 		return response.data;
 	} catch (error) {
@@ -13,9 +13,9 @@ export const searchUsers = async (keyword) => {
 	}
 };
 
-const banUserbyID = async (userID) => {
+const banUser = async (userId) => {
 	try {
-		const response = await BaseApi.put(`/${resource}/BanUser/${userID}`);
+		const response = await BaseApi.put(`/Users/BanUser/${userId}`);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error ban user: ", error);
@@ -23,9 +23,9 @@ const banUserbyID = async (userID) => {
 	}
 };
 
-const unbanUserbyID = async (userID) => {
+const unbanUser = async (userId) => {
 	try {
-		const response = await BaseApi.put(`/${resource}/BanUser/${userID}`);
+		const response = await BaseApi.put(`/Users/UnbanUser/${userId}`);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error unban user: ", error);
@@ -33,11 +33,24 @@ const unbanUserbyID = async (userID) => {
 	}
 };
 
+const updateUserRole = async (userId, roleId) => {
+	try {
+		const response = await BaseApi.put(`/Users/UpdateUserRole`, {
+			userId,
+			roleId,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update user role: ", error);
+		return false;
+	}
+};
 
 const UserApi = {
 	searchUsers,
-	banUserbyID,
-	unbanUserbyID,
+	banUser,
+	unbanUser,
+	updateUserRole,
 };
 
 export default UserApi;

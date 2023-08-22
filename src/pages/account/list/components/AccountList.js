@@ -1,16 +1,19 @@
-import { Edit } from "@icon-park/react";
-import { Button, Table, Tag } from "antd";
-import React, { useEffect, useState } from "react";
+import { Edit, Forbid, More, Unlock } from "@icon-park/react";
+import { Button, Dropdown, Input, Row, Table, Tag, message } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import RoleApi from "../../../../apis/role";
 import UserApi from "../../../../apis/user";
-import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
-import { usePermissions } from "../../../../hooks/permission";
+import { roles } from "../../../../constants/app";
+import { UpdateRoleModal } from "../../components/UpdateRoleModal";
+import { getRoleName } from "../../../../utils";
 
-const AccountList = ({ onEditAccount }) => {
-	const permissions = usePermissions();
-	const canUpdate = permissions?.includes(ALL_PERMISSIONS.account.update);
-
+const AccountList = () => {
 	const [accountLoading, setAccountLoading] = useState(false);
+	const [showUpdateRoleModal, setShowUpdateRoleModal] = useState(false);
 	const [accounts, setAccounts] = useState([]);
+
+	const userRef = useRef();
+	const rolesRef = useRef();
 
 	const getUsers = async (keyword) => {
 		setAccountLoading(true);
@@ -19,21 +22,65 @@ const AccountList = ({ onEditAccount }) => {
 		setAccountLoading(false);
 	};
 
+	const getAllRoles = async () => {
+		const result = await RoleApi.getAllRoles();
+		rolesRef.current = result.filter((e) => e.name !== roles.ADMIN);
+	};
+
+	const banUser = async (userId) => {
+		const success = await UserApi.banUser(userId);
+		if (success) {
+			message.success("Đã khóa tài khoản");
+			getUsers();
+		} else {
+			message.error("Khóa tài khoản thất bại");
+		}
+	};
+
+	const unbanUser = async (userId) => {
+		const success = await UserApi.unbanUser(userId);
+		if (success) {
+			message.success("Đã mở khóa tài khoản");
+			getUsers();
+		} else {
+			message.error("Mở khóa tài khoản thất bại");
+		}
+	};
+
 	useEffect(() => {
 		getUsers();
+		getAllRoles();
 	}, []);
 
-	const getRoleName = (role) => {
-		switch (role) {
-			case roles.ADMIN:
-				return "Admin";
-			case roles.STUDENT:
-				return "Sinh viên";
-			case roles.TEACHER:
-				return "Giáo viên";
-			default:
-				return undefined;
-		}
+	const getActionItems = (record) => {
+		const { isBan, userId, role } = record;
+
+		return [
+			{
+				key: "UPDATE_ROLE",
+				label: "Cập nhật vai trò",
+				icon: <Edit />,
+				disabled: role === roles.ADMIN,
+				onClick: () => {
+					userRef.current = record;
+					setShowUpdateRoleModal(true);
+				},
+			},
+			{
+				key: "SET_STATUS",
+				label: isBan ? "Mở khóa tài khoản" : "Khóa tài khoản",
+				danger: !isBan,
+				icon: !isBan ? <Forbid /> : <Unlock />,
+				onClick: () => {
+					if (isBan) {
+						unbanUser(userId);
+					} else {
+						banUser(userId);
+					}
+				},
+				disabled: role === roles.ADMIN,
+			},
+		];
 	};
 
 	const columns = [
@@ -83,24 +130,51 @@ const AccountList = ({ onEditAccount }) => {
 			},
 			sorter: (a, b) => a.status - b.status,
 		},
-		canUpdate && {
+		{
 			title: "Thao tác",
 			dataIndex: "action",
 			key: "action",
-			render: (_, __) => {
+			render: (_, record) => {
 				return (
-					<Button
-						onClick={onEditAccount}
-						className="flex-center"
-						icon={<Edit />}
-					/>
+					<>
+						{record.role !== roles.ADMIN && (
+							<Dropdown menu={{ items: getActionItems(record) }}>
+								<Button className="flex-center" icon={<More />} />
+							</Dropdown>
+						)}
+					</>
 				);
 			},
 		},
 	];
 
+	const handleSearch = (value) => {
+		getUsers(value);
+	};
+
 	return (
-		<Table loading={accountLoading} dataSource={accounts} columns={columns} />
+		<>
+			<Row justify="space-between mb-2">
+				<Input.Search
+					placeholder="Tìm tài khoản..."
+					className="w-1/2"
+					onSearch={handleSearch}
+				/>
+			</Row>
+			<Table
+				pagination={false}
+				loading={accountLoading}
+				dataSource={accounts}
+				columns={columns}
+			/>
+			<UpdateRoleModal
+				user={userRef.current}
+				open={showUpdateRoleModal}
+				onCancel={() => setShowUpdateRoleModal(false)}
+				allRoles={rolesRef.current}
+				onSuccess={() => getUsers()}
+			/>
+		</>
 	);
 };
 

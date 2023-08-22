@@ -9,6 +9,7 @@ export const ALL_PERMISSIONS = {
 		view: "account.view",
 		create: "account.create",
 		update: "account.update",
+		sider: "account.sider",
 	},
 	class: {
 		view: "class.view",
@@ -17,24 +18,28 @@ export const ALL_PERMISSIONS = {
 		delete: "class.delete",
 		enroll: "class.enroll",
 		settings: "class.settings",
+		sider: "class.sider",
 	},
 	course: {
 		view: "course.view",
 		create: "course.create",
 		update: "course.update",
 		delete: "course.delete",
+		sider: "course.sider",
 	},
 	project: {
 		view: "project.view",
 		create: "project.create",
 		update: "project.update",
 		delete: "project.delete",
+		sider: "project.sider",
 	},
 	team: {
 		view: "team.view",
 		create: "team.create",
 		update: "team.update",
 		delete: "team.delete",
+		sider: "team.sider",
 	},
 	task: {
 		view: "task.view",
@@ -47,6 +52,7 @@ export const ALL_PERMISSIONS = {
 export const USER_PERMISSIONS = {
 	[roles.ADMIN]: [
 		// ACCOUNT
+		ALL_PERMISSIONS.account.sider,
 		ALL_PERMISSIONS.account.view,
 		ALL_PERMISSIONS.account.create,
 		ALL_PERMISSIONS.account.update,
@@ -57,6 +63,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.class.delete,
 		ALL_PERMISSIONS.class.settings,
 		// COURSE
+		ALL_PERMISSIONS.course.sider,
 		ALL_PERMISSIONS.course.view,
 		ALL_PERMISSIONS.course.create,
 		ALL_PERMISSIONS.course.update,
@@ -79,11 +86,13 @@ export const USER_PERMISSIONS = {
 	],
 	[roles.STUDENT]: [
 		// CLASS
+		ALL_PERMISSIONS.class.sider,
 		ALL_PERMISSIONS.class.view,
 		ALL_PERMISSIONS.class.enroll,
 		// COURSE
 		ALL_PERMISSIONS.course.view,
 		// PROJECT
+		ALL_PERMISSIONS.project.sider,
 		ALL_PERMISSIONS.project.view,
 		//TEAM
 		ALL_PERMISSIONS.team.view,
@@ -98,6 +107,7 @@ export const USER_PERMISSIONS = {
 	],
 	[roles.TEACHER]: [
 		// CLASS
+		ALL_PERMISSIONS.class.sider,
 		ALL_PERMISSIONS.class.view,
 		ALL_PERMISSIONS.class.create,
 		ALL_PERMISSIONS.class.update,
@@ -111,8 +121,15 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.project.update,
 		ALL_PERMISSIONS.project.delete,
 		//TEAM
+		ALL_PERMISSIONS.team.sider,
 		ALL_PERMISSIONS.team.view,
 		//TASK
 		ALL_PERMISSIONS.task.view,
 	],
+};
+
+export const TaskStatus = {
+	NEW: 0,
+	INPROGRESS: 1,
+	COMPLETED: 2,
 };

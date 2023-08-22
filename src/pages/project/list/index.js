@@ -1,17 +1,23 @@
 import { Plus } from "@icon-park/react";
-import { Button, Col, Input, Row, Spin, message } from "antd";
+import { Button, Col, Input, Row, Spin, Typography, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProjectApi from "../../../apis/project";
+import { ALL_PERMISSIONS, roles } from "../../../constants/app";
+import { usePermissions } from "../../../hooks/permission";
+import { useRole } from "../../../hooks/role";
 import { ClassSelect } from "../components/ClassSelect";
 import { ProjectDetailModal } from "../components/ProjectDetailModal";
 import { ProjectList } from "./components/ProjectList";
-import { useRole } from "../../../hooks/role";
-import { roles } from "../../../constants/app";
+
+const { Title } = Typography;
 
 const ProjectListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const role = useRole();
+	const permissions = usePermissions();
+	const canCreate = permissions?.includes(ALL_PERMISSIONS.project.create);
+	const canView = permissions?.includes(ALL_PERMISSIONS.project.view);
 
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [projects, setProjects] = useState([]);
@@ -78,36 +84,42 @@ const ProjectListPage = () => {
 		<div>
 			<Row justify="space-between">
 				<Col span={18}>
-					<Row align="middle">
-						<Input.Search
-							placeholder="Tìm dự án..."
-							className="w-1/2 mr-2"
-							onSearch={handleSearchProjects}
-						/>
-						<span className="mr-2">Lớp:</span>
-						<ClassSelect
-							value={searchParams.get("class")}
-							onChange={handleChangeClass}
-							onLoaded={onClassesLoaded}
-						/>
-					</Row>
+					{canView && (
+						<Row align="middle">
+							<span className="mr-2">Lớp:</span>
+							<ClassSelect
+								value={searchParams.get("class")}
+								onChange={handleChangeClass}
+								onLoaded={onClassesLoaded}
+							/>
+						</Row>
+					)}
 				</Col>
 				<Col span={6}>
-					<Row justify="end">
-						<Button
-							className="flex-center"
-							type="primary"
-							icon={<Plus />}
-							onClick={() => setShowCreateModal(true)}
-						>
-							Thêm dự án
-						</Button>
-					</Row>
+					{canCreate && (
+						<Row justify="end">
+							<Button
+								className="flex-center"
+								type="primary"
+								icon={<Plus />}
+								onClick={() => setShowCreateModal(true)}
+							>
+								Thêm dự án
+							</Button>
+						</Row>
+					)}
 				</Col>
 			</Row>
-			<Spin spinning={projectLoading}>
-				<ProjectList projects={projects} />
-			</Spin>
+			{canView && (
+				<div>
+					<Title level={4} style={{ margin: 0, marginTop: 12 }}>
+						Dự án đang tham gia
+					</Title>
+					<Spin spinning={projectLoading}>
+						<ProjectList projects={projects} />
+					</Spin>
+				</div>
+			)}
 			<ProjectDetailModal
 				title="Thêm dự án"
 				open={showCreateModal}

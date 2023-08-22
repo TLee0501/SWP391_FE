@@ -5,7 +5,6 @@ import {
 	Dashboard,
 	Classroom,
 	Checklist,
-	ListCheckbox,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -20,12 +19,11 @@ export const AppSider = () => {
 	const location = useLocation();
 	const permissions = usePermissions();
 
-	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.view);
-	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.view);
-	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.view);
-	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.view);
-	const canViewTeam = permissions?.includes(ALL_PERMISSIONS.team.view);
-	const canViewTask = permissions?.includes(ALL_PERMISSIONS.task.view);
+	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.sider);
+	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.sider);
+	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
+	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
+	const canViewTeam = permissions?.includes(ALL_PERMISSIONS.team.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
@@ -60,11 +58,6 @@ export const AppSider = () => {
 			key: itemKeys.TEAM,
 			icon: <Checklist size="24" />,
 			label: <Link to={routes.dashboard.teams}>Duyệt nhóm</Link>,
-		},
-		canViewTask && {
-			key: itemKeys.TASK,
-			icon: <ListCheckbox size="24" />,
-			label: <Link to={routes.dashboard.tasks}>Nhiệm vụ</Link>,
 		},
 	];
 

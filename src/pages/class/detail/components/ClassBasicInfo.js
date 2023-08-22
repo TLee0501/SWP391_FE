@@ -26,11 +26,6 @@ export const ClassBasicInfo = () => {
 			label: "Ngày kết thúc",
 			children: formatDate(data?.endTime, "DD/MM/yyyy"),
 		},
-		{
-			key: "COURSE",
-			label: "Môn học",
-			children: <strong>{`${data?.courseCode} - ${data?.courseName}`}</strong>,
-		},
 		role === roles.STUDENT && {
 			key: "TEACHER",
 			label: "Giáo viên",
@@ -41,6 +36,18 @@ export const ClassBasicInfo = () => {
 	return (
 		<Card className="mt-3 mb-4" title="Thông tin cơ bản">
 			<Descriptions layout="vertical" items={items} />
+			<Descriptions
+				layout="vertical"
+				items={[
+					{
+						key: "COURSE",
+						label: "Môn học",
+						children: (
+							<strong>{`${data?.courseCode} - ${data?.courseName}`}</strong>
+						),
+					},
+				]}
+			/>
 		</Card>
 	);
 };

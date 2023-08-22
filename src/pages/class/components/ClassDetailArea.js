@@ -1,7 +1,9 @@
 import { Down, Up } from "@icon-park/react";
-import { Divider } from "antd";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import { Row, Typography, Collapse } from "antd";
+
+const { Title } = Typography;
 
 const Container = styled.div`
 	cursor: pointer;
@@ -9,34 +11,18 @@ const Container = styled.div`
 	border-radius: 4px;
 	display: flex;
 	align-items: center;
-	&:hover {
-		background-color: #efefef;
-	}
+	justify-content: space-between;
 `;
 
-export const ClassDetailArea = ({ title, defaultOpen, children }) => {
-	const [show, setShow] = useState(false);
+export const ClassDetailArea = ({ title, children, action }) => {
+	const items = [
+		{
+			key: "COLLAPSE_AREA",
+			label: <Title level={5}>{title}</Title>,
+			children: children,
+			extra: action,
+		},
+	];
 
-	useEffect(() => {
-		if (defaultOpen) {
-			setShow(true);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	return (
-		<div>
-			<Divider orientation="center" style={{ fontSize: 20, padding: 0 }}>
-				<Container onClick={() => setShow(!show)}>
-					{title}{" "}
-					{!show ? (
-						<Down className="ml-2" size={18} />
-					) : (
-						<Up className="ml-2" size={18} />
-					)}
-				</Container>
-			</Divider>
-			{show && children}
-		</div>
-	);
+	return <Collapse ghost items={items} defaultActiveKey="COLLAPSE_AREA" />;
 };

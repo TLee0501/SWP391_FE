@@ -6,35 +6,35 @@ import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
 import { usePermissions } from "../../../../hooks/permission";
 
 const AccountList = ({ onEditAccount }) => {
-  const permissions = usePermissions();
-  const canUpdate = permissions?.includes(ALL_PERMISSIONS.account.update);
+	const permissions = usePermissions();
+	const canUpdate = permissions?.includes(ALL_PERMISSIONS.account.update);
 
-  const [accountLoading, setAccountLoading] = useState(false);
-  const [accounts, setAccounts] = useState([]);
+	const [accountLoading, setAccountLoading] = useState(false);
+	const [accounts, setAccounts] = useState([]);
 
-  const getUsers = async (keyword) => {
-    setAccountLoading(true);
-    const data = await UserApi.searchUsers(keyword);
-    setAccounts(data);
-    setAccountLoading(false);
-  };
+	const getUsers = async (keyword) => {
+		setAccountLoading(true);
+		const data = await UserApi.searchUsers(keyword);
+		setAccounts(data);
+		setAccountLoading(false);
+	};
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+	useEffect(() => {
+		getUsers();
+	}, []);
 
-  const getRoleName = (role) => {
-    switch (role) {
-      case roles.ADMIN:
-        return "Admin";
-      case roles.STUDENT:
-        return "Sinh viên";
-      case roles.TEACHER:
-        return "Giáo viên";
-      default:
-        return undefined;
-    }
-  };
+	const getRoleName = (role) => {
+		switch (role) {
+			case roles.ADMIN:
+				return "Admin";
+			case roles.STUDENT:
+				return "Sinh viên";
+			case roles.TEACHER:
+				return "Giáo viên";
+			default:
+				return undefined;
+		}
+	};
 
   const columns = [
     {
@@ -106,9 +106,9 @@ const AccountList = ({ onEditAccount }) => {
     },
   ];
 
-  return (
-    <Table loading={accountLoading} dataSource={accounts} columns={columns} />
-  );
+	return (
+		<Table loading={accountLoading} dataSource={accounts} columns={columns} />
+	);
 };
 
 export default AccountList;

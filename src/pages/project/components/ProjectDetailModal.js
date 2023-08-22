@@ -68,19 +68,6 @@ export const ProjectDetailModal = ({
 				>
 					<Input placeholder="Nhập tên dự án..." />
 				</Form.Item>
-
-				<Form.Item
-					name="classId"
-					label="Lớp học"
-					rules={[
-						{
-							required: true,
-							message: "Vui lòng chọn lớp học",
-						},
-					]}
-				>
-					<ClassSelect disabled={edit} />
-				</Form.Item>
 			</Form>
 
 			<div style={{ marginBottom: 8 }}>

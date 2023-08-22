@@ -1,3 +1,4 @@
+import { CornerUpRight } from "@icon-park/react";
 import { Card, Row, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ export const ProjectItem = ({ project }) => {
 				<Title ellipsis style={{ margin: 0 }} level={5}>
 					{project.projectName}
 				</Title>
+				<CornerUpRight size={18} />
 			</Row>
 		</Card>
 	);

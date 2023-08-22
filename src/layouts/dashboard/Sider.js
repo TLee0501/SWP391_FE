@@ -31,6 +31,7 @@ export const AppSider = () => {
     PROJECT: "MANAGE_PROJECT",
     CLASS: "MANAGE_CLASS",
     TASK: "MANAGE_TASK",
+    TEAM_REQUEST: "MANAGE_TEAM_REQUEST"
   };
   const items = [
     canViewAccount && {

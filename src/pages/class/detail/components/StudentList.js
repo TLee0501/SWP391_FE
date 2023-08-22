@@ -1,7 +1,28 @@
 import { Table, Tag, Tooltip } from "antd";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import ClassApi from "../../../../apis/class";
+import { ClassContext } from "../../../../providers/class";
 
-export const StudentList = ({ students }) => {
+export const StudentList = () => {
+  const data = useContext(ClassContext);
+  const [studentLoading, setStudentLoading] = useState(false);
+  const [student, setStudent] = useState([]);
+
+
+  // const getUsers = async (classId) => {
+  //   setStudentLoading(true);
+  //   const data = await ClassApi.getUserInClass(classId);
+  //   setStudent(data);
+  //   setStudentLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   const { classId } = data;
+  //   if (!classId) return;
+  //   getUsers(classId);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data]);
+
   const columns = [
     {
       title: "Họ tên",
@@ -38,9 +59,10 @@ export const StudentList = ({ students }) => {
 
   return (
     <Table
+      loading={studentLoading}
       pagination={false}
       bordered
-      dataSource={students}
+      dataSource={student}
       columns={columns}
     />
   );

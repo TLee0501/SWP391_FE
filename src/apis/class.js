@@ -50,21 +50,36 @@ const getClassById = async (id) => {
 	}
 };
 
+const getClassStudents = async (classId) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetUsersInClass`, {
+			params: {
+				classId: classId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.log("Error get class students: ", error);
+		return undefined;
+	}
+};
+
 const deleteClass = async (id) => {
 	try {
-	  const response = await BaseApi.delete(`/${resource}/DeleteClass/${id}`);
-	  return response.status === 200;
+		const response = await BaseApi.delete(`/${resource}/DeleteClass/${id}`);
+		return response.status === 200;
 	} catch (error) {
-	  console.log("Error delete class: ", error);
-	  return false;
+		console.log("Error delete class: ", error);
+		return false;
 	}
-  };
+};
 
 const ClassApi = {
 	enrollClass,
 	createClass,
 	searchClass,
 	getClassById,
+	getClassStudents,
 	deleteClass,
 };
 

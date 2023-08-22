@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-import { Edit } from "@icon-park/react";
-import { Button, Row, Table, Tag } from "antd";
-import React, { useEffect, useState } from "react";
-=======
 import { Edit, Forbid, More, Unlock } from "@icon-park/react";
 import { Button, Dropdown, Input, Row, Table, Tag, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import RoleApi from "../../../../apis/role";
->>>>>>> f489860133ec2d5d3da22afafaa86af05ca827f5
 import UserApi from "../../../../apis/user";
 import { roles } from "../../../../constants/app";
 import { UpdateRoleModal } from "../../components/UpdateRoleModal";

@@ -3,6 +3,7 @@ import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { ClassContext } from "../../../../providers/class";
 import {
 	Button,
+	Card,
 	Empty,
 	List,
 	Row,
@@ -19,12 +20,12 @@ import { CreateTeamRequest } from "./CreateTeamRequest";
 
 const { Text } = Typography;
 
-export const ClassProjectList = () => {
+export const ClassProjectList = ({ onViewDescription }) => {
 	const data = useContext(ClassContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
 		ALL_PERMISSIONS.project.create,
-		ALL_PERMISSIONS.team.create,
+		ALL_PERMISSIONS.team.create
 	);
 
 	const [projects, setProjects] = useState([]);
@@ -66,62 +67,78 @@ export const ClassProjectList = () => {
 		setShowCreateTeamRequestModal(false);
 		setTeamRequestCreating(false);
 	};
+
 	const renderItem = (item) => {
 		return (
-			<ClassDetailArea
-				title="Danh sách dự án"
-				defaultOpen
-				action={
-					canCreateProject && (
+			<List.Item>
+				<Card className="w-full">
+					<Row justify="space-between" align="middle">
+						<Text>{item.projectName}</Text>
 						<Row>
 							<Button
-								type="primary"
-								icon={<Plus />}
-								className="flex-center"
-								onClick={(e) => {
-									e.stopPropagation();
-									setShowCreateModal(true);
-								}}
-							>
-								Thêm dự án
-							</Button>
-							<Button
-								type="primary"
+								type="link"
 								className="mr-2"
 								onClick={() => setShowCreateTeamRequestModal(true)}
 							>
 								Đăng ký
 							</Button>
+							<Button type="text" onClick={() => onViewDescription(item)}>
+								Xem mô tả
+							</Button>
 						</Row>
-					)
-				}
-			>
-				<Spin spinning={loading}>
-					<List
-						dataSource={projects}
-						renderItem={renderItem}
-						locale={{
-							emptyText: (
-								<Empty description={<Text disabled>Chưa có dự án nào</Text>} />
-							),
-						}}
-					/>
-				</Spin>
-				<ProjectDetailModal
-					title="Thêm dự án"
-					open={showCreateModal}
-					onCancel={() => setShowCreateModal(false)}
-					onSubmit={handleCreateProject}
-					submitting={projectCreating}
-				/>
-				<CreateTeamRequest
-					open={showCreateTeamRequestModal}
-					title="Đăng ký nhóm và dự án"
-					onCancel={handleCloseCreateTeamRequestModal}
-					// onSubmit={handleAddCourse}
-					confirmLoading={teamRequestCreating}
-				/>
-			</ClassDetailArea>
+					</Row>
+				</Card>
+			</List.Item>
 		);
 	};
-}
+
+	return (
+		<ClassDetailArea
+			title="Danh sách dự án"
+			defaultOpen
+			action={
+				canCreateProject && (
+					<Row>
+						<Button
+							type="primary"
+							icon={<Plus />}
+							className="flex-center"
+							onClick={(e) => {
+								e.stopPropagation();
+								setShowCreateModal(true);
+							}}
+						>
+							Thêm dự án
+						</Button>
+					</Row>
+				)
+			}
+		>
+			<Spin spinning={loading}>
+				<List
+					dataSource={projects}
+					renderItem={renderItem}
+					locale={{
+						emptyText: (
+							<Empty description={<Text disabled>Chưa có dự án nào</Text>} />
+						),
+					}}
+				/>
+			</Spin>
+			<ProjectDetailModal
+				title="Thêm dự án"
+				open={showCreateModal}
+				onCancel={() => setShowCreateModal(false)}
+				onSubmit={handleCreateProject}
+				submitting={projectCreating}
+			/>
+			<CreateTeamRequest
+				open={showCreateTeamRequestModal}
+				title="Đăng ký nhóm và dự án"
+				onCancel={handleCloseCreateTeamRequestModal}
+				// onSubmit={handleAddCourse}
+				confirmLoading={teamRequestCreating}
+			/>
+		</ClassDetailArea>
+	);
+};

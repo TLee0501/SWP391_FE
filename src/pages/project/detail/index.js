@@ -241,6 +241,7 @@ const ProjectDetailPage = () => {
 				onCancel={() => setShowUpdateTaskModal(false)}
 				title="Cập nhật công việc"
 				task={updatingTask.current}
+				edit={true}
 			/>
 			<DeleteTaskModal
 				task={deletingTask}

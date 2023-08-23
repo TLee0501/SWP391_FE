@@ -4,7 +4,7 @@ import {
 	User,
 	Dashboard,
 	Classroom,
-	Checklist,
+	ListCheckbox,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -23,15 +23,15 @@ export const AppSider = () => {
 	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.sider);
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
 	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
-	const canViewTeam = permissions?.includes(ALL_PERMISSIONS.team.sider);
+	const canViewTeamRequest = permissions?.includes(ALL_PERMISSIONS.task.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
 		COURSE: "MANAGE_COURSE",
 		PROJECT: "MANAGE_PROJECT",
 		CLASS: "MANAGE_CLASS",
-		TEAM: "MANAGE_TEAM",
 		TASK: "MANAGE_TASK",
+		TEAM_REQUEST: "MANAGE_TEAM_REQUEST",
 	};
 	const items = [
 		canViewAccount && {
@@ -54,10 +54,10 @@ export const AppSider = () => {
 			icon: <DocumentFolder size="24" />,
 			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
 		},
-		canViewTeam && {
-			key: itemKeys.TEAM,
-			icon: <Checklist size="24" />,
-			label: <Link to={routes.dashboard.teams}>Duyệt nhóm</Link>,
+		canViewTeamRequest && {
+			key: itemKeys.TEAM_REQUEST,
+			icon: <ListCheckbox size="24" />,
+			label: <Link to={routes.dashboard.team_request}>Duyệt nhóm</Link>,
 		},
 	];
 
@@ -77,10 +77,8 @@ export const AppSider = () => {
 				return itemKeys.PROJECT;
 			case routes.dashboard.classes:
 				return itemKeys.CLASS;
-			case routes.dashboard.teams:
-				return itemKeys.TEAM;
-			case routes.dashboard.tasks:
-				return itemKeys.TASK;
+			case routes.dashboard.team_request:
+				return itemKeys.TEAM_REQUEST;
 			default:
 		}
 

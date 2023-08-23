@@ -28,7 +28,7 @@ const Container = styled.div`
 
 const FormWrapper = styled.div`
 	width: 40%;
-	max-height: 600px;
+	max-height: 1000px;
 
 	position: absolute;
 	left: 50%;

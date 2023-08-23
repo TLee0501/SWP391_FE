@@ -128,7 +128,7 @@ const AccountList = () => {
 					</Tag>
 				);
 			},
-			sorter: (a, b) => a.status - b.status,
+			sorter: (a, b) => a.isBan - b.isBan,
 		},
 		{
 			title: "Thao tác",

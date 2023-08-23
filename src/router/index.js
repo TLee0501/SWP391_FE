@@ -13,69 +13,65 @@ import ProjectDetailPage from "../pages/project/detail";
 import ProfilePage from "../pages/profile";
 import ClassListPage from "../pages/class/list";
 import ClassDetailPage from "../pages/class/detail";
-import { TeamRequestPage } from "../pages/team_request/list";
+import { TeamListPage } from "../pages/team/list";
 
 export const router = createBrowserRouter([
-  {
-    path: routes.root,
-    element: <RootRoute />,
-    errorElement: <PageNotFound />,
-    children: [
-      {
-        path: routes.login,
-        element: <LoginPage />,
-      },
-      {
-        path: routes.register,
-        element: <RegisterAccountPage />,
-      },
-      {
-        path: routes.dashboard.root,
-        element: <Dashboard />,
-        children: [
-          {
-            path: routes.dashboard.accounts,
-            element: <AccountListPage />,
-          },
+	{
+		path: routes.root,
+		element: <RootRoute />,
+		errorElement: <PageNotFound />,
+		children: [
+			{
+				path: routes.login,
+				element: <LoginPage />,
+			},
+			{
+				path: routes.register,
+				element: <RegisterAccountPage />,
+			},
+			{
+				path: routes.dashboard.root,
+				element: <Dashboard />,
+				children: [
+					{
+						path: routes.dashboard.accounts,
+						element: <AccountListPage />,
+					},
 
-          {
-            path: routes.dashboard.courses,
-            element: <CourseListPage />,
-          },
-          {
-            path: `${routes.dashboard.courses}/:id`,
-            element: <CourseDetailPage />,
-          },
-          {
-            path: routes.dashboard.projects,
-            element: <ProjectListPage />,
-          },
-          {
-            path: `${routes.dashboard.projects}/:id`,
-            element: <ProjectDetailPage />,
-          },
-          {
-            path: routes.dashboard.profile,
-            element: <ProfilePage />,
-          },
-          {
-            path: routes.dashboard.classes,
-            element: <ClassListPage />,
-          },
-          {
-            path: `${routes.dashboard.classes}/:id`,
-            element: <ClassDetailPage />,
-          },
-          {
-						path: routes.dashboard.team_request,
-						element: <TeamRequestPage />,
+					{
+						path: routes.dashboard.courses,
+						element: <CourseListPage />,
 					},
 					{
-						path: `${routes.dashboard.team_request}/:id`,
-						element: <TeamRequestPage />,
+						path: `${routes.dashboard.courses}/:id`,
+						element: <CourseDetailPage />,
 					},
-        ],
-      },
-    ],
-  },
+					{
+						path: routes.dashboard.projects,
+						element: <ProjectListPage />,
+					},
+					{
+						path: `${routes.dashboard.projects}/:id`,
+						element: <ProjectDetailPage />,
+					},
+					{
+						path: routes.dashboard.profile,
+						element: <ProfilePage />,
+					},
+					{
+						path: routes.dashboard.classes,
+						element: <ClassListPage />,
+					},
+					{
+						path: `${routes.dashboard.classes}/:id`,
+						element: <ClassDetailPage />,
+					},
+					{
+						path: routes.dashboard.teamRequest,
+						element: <TeamListPage />,
+					},
+				],
+			},
+		],
+	},
 ]);

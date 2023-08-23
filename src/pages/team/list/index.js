@@ -24,7 +24,7 @@ export const TeamListPage = () => {
 
 	const getTeamRequests = async (classId) => {
 		setTeamLoading(true);
-		const data = TeamApi.getProjectTeamRequests(classId);
+		const data = await TeamApi.getProjectTeamRequests(classId);
 		setTeamRequests(data);
 		setTeamLoading(false);
 	};

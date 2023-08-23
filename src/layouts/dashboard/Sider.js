@@ -23,14 +23,13 @@ export const AppSider = () => {
 	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.sider);
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
 	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
-	const canViewTeamRequest = permissions?.includes(ALL_PERMISSIONS.task.sider);
+	const canViewTeamRequest = permissions?.includes(ALL_PERMISSIONS.team.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
 		COURSE: "MANAGE_COURSE",
 		PROJECT: "MANAGE_PROJECT",
 		CLASS: "MANAGE_CLASS",
-		TASK: "MANAGE_TASK",
 		TEAM_REQUEST: "MANAGE_TEAM_REQUEST",
 	};
 	const items = [
@@ -57,7 +56,7 @@ export const AppSider = () => {
 		canViewTeamRequest && {
 			key: itemKeys.TEAM_REQUEST,
 			icon: <ListCheckbox size="24" />,
-			label: <Link to={routes.dashboard.team_request}>Duyệt nhóm</Link>,
+			label: <Link to={routes.dashboard.teamRequest}>Duyệt nhóm</Link>,
 		},
 	];
 
@@ -77,7 +76,7 @@ export const AppSider = () => {
 				return itemKeys.PROJECT;
 			case routes.dashboard.classes:
 				return itemKeys.CLASS;
-			case routes.dashboard.team_request:
+			case routes.dashboard.teamRequest:
 				return itemKeys.TEAM_REQUEST;
 			default:
 		}

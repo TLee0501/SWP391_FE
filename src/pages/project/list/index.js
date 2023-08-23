@@ -15,22 +15,22 @@ const ProjectListPage = () => {
 	const [projects, setProjects] = useState([]);
 	const [projectLoading, setProjectLoading] = useState(false);
 
-	const handleChangeClass = (classId) => {
-		setSearchParams({
-			class: classId,
-		});
-	};
+  const handleChangeClass = (classId) => {
+    setSearchParams({
+      class: classId,
+    });
+  };
 
-	const onClassesLoaded = (data) => {
-		if (data && data.length > 0) {
-			searchParams.set("class", data[0].classId);
-			setSearchParams(searchParams);
-		}
-	};
+  const onClassesLoaded = (data) => {
+    if (data && data.length > 0) {
+      searchParams.set("class", data[0].classId);
+      setSearchParams(searchParams);
+    }
+  };
 
-	const getProjects = async () => {
-		const classId = searchParams.get("class");
-		if (!classId) return;
+  const getProjects = async () => {
+    const classId = searchParams.get("class");
+    if (!classId) return;
 
 		setProjectLoading(true);
 		const data = await ProjectApi.getWorkingProjects(classId);

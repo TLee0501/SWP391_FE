@@ -95,24 +95,11 @@ const ProjectDetailPage = () => {
 		setTaskLoading(false);
 	};
 
-	const handleUpdateProject = async (values) => {
-		const { projectName, description } = values;
-		const data = {
-			projectId: project?.projectId,
-			projectName: projectName,
-			description: description,
-		};
-		setProjectUpdating(true);
-		const success = await ProjectApi.updateProject(data);
-		if (success) {
-			message.success("Cập nhật dự án thành công");
-			await getProject();
-		} else {
-			message.success("Cập nhật dự án thất bại");
-		}
-		setProjectUpdating(false);
-		setShowUpdateProjectModal(false);
-	};
+  useEffect(() => {
+    if (!id) return;
+    getProject();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
 	const handleTaskItemClick = (task) => {
 		updatingTask.current = task;
@@ -227,7 +214,7 @@ const ProjectDetailPage = () => {
 				project={project}
 				open={showUpdateProjectModal}
 				onCancel={() => setShowUpdateProjectModal(false)}
-				onSubmit={handleUpdateProject}
+				// onSubmit={handleUpdateProject}
 				submitting={projectUpdating}
 				title="Cập nhật dự án"
 				edit

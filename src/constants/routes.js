@@ -10,7 +10,7 @@ const routes = {
     projects: "projects",
     teams: "teams",
     profile: "profile",
-    tasks: "tasks",
+    team_request: "team_requests"
   },
 };
 

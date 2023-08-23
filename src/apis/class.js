@@ -73,6 +73,15 @@ const deleteClass = async (id) => {
 		return false;
 	}
 };
+const getUserInClass = async (id) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetUsersInClass?classId=${id}`);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error get student in class: ", error);
+		return false;
+	}
+};
 
 const ClassApi = {
 	enrollClass,
@@ -81,6 +90,7 @@ const ClassApi = {
 	getClassById,
 	getClassStudents,
 	deleteClass,
+	getUserInClass,
 };
 
 export default ClassApi;

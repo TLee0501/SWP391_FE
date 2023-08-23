@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { ClassContext } from "../../../../providers/class";
 import {
@@ -17,6 +17,8 @@ import { ProjectDetailModal } from "../../../project/components/ProjectDetailMod
 import { usePermissions } from "../../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../../constants/app";
 import { CreateTeamRequest } from "./CreateTeamRequest";
+import ClassApi from "../../../../apis/class";
+import TeamRequestApi from "../../../../apis/team";
 
 const { Text } = Typography;
 
@@ -27,14 +29,18 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		ALL_PERMISSIONS.project.create,
 		ALL_PERMISSIONS.team.create
 	);
-
-	const [projects, setProjects] = useState([]);
+	const [students, setStudents] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [projects, setProjects] = useState([]);
 	const [projectCreating, setProjectCreating] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showCreateTeamRequestModal, setShowCreateTeamRequestModal] =
 		useState(false);
 	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
+	const [Creating, setCreating] = useState(false);
+
+	const projectIdRef = useRef()
+	const classIdRef = useRef()
 
 	const getProjectsInClass = async (classId) => {
 		setLoading(true);
@@ -68,6 +74,51 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		setTeamRequestCreating(false);
 	};
 
+
+	const getStudents = async (classId) => {
+		setLoading(true);
+		const result = await ClassApi.getClassStudents(classId);
+		setStudents(result);
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		const { classId } = data;
+		if (!classId) return;
+
+		getStudents(classId);
+	}, [data]);
+
+	// Add course
+	const handleShowAddCourseModal = () => {
+		setShowCreateModal(true);
+	};
+	const handleCloseCreateModal = () => {
+		setShowCreateModal(false);
+		setCreating(false);
+	};
+	const handleCreateTeamRequest = (request) => {
+		setCreating(true);
+
+		const { classId, projectId, teamName, listStudent } = request;
+		const data = {
+			classId: classId,
+			projectId: projectId,
+			teamName: teamName,
+			listStudent: listStudent,
+		};
+
+		TeamRequestApi.createTeamRequest(data).then(({ success, data }) => {
+			if (success) {
+				message.success(data);
+				handleCloseCreateModal();
+			} else {
+				message.error(data);
+			}
+			setCreating(false);
+		});
+	};
+
 	const renderItem = (item) => {
 		return (
 			<List.Item>
@@ -78,7 +129,10 @@ export const ClassProjectList = ({ onViewDescription }) => {
 							<Button
 								type="link"
 								className="mr-2"
-								onClick={() => setShowCreateTeamRequestModal(true)}
+								onClick={() => {
+									projectIdRef.current = item.projectId;
+									setShowCreateTeamRequestModal(true)
+								}}
 							>
 								Đăng ký
 							</Button>
@@ -136,8 +190,12 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				open={showCreateTeamRequestModal}
 				title="Đăng ký nhóm và dự án"
 				onCancel={handleCloseCreateTeamRequestModal}
-				// onSubmit={handleAddCourse}
 				confirmLoading={teamRequestCreating}
+				Students={students}
+				Projects={projects}
+				onSubmit={handleCreateTeamRequest}
+				projectId={projectIdRef.current}
+				classId={data.classId}
 			/>
 		</ClassDetailArea>
 	);

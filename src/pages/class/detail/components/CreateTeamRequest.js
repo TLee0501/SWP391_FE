@@ -1,19 +1,7 @@
-import { Button, Form, Input, Row, Select } from "antd";
+import { Button, Form, Input, Row, Select, message } from "antd";
 import React, { useRef } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import BaseModal from "../../../../components/BaseModal";
-import { roles } from "../../../../constants/app";
-
-const roleOptions = [
-  {
-    value: roles.STUDENT,
-    label: "Sinh viên",
-  },
-  {
-    value: roles.TEACHER,
-    label: "Phạm Phú Minh Hưng",
-  },
-];
 
 export const CreateTeamRequest = ({
   title,
@@ -21,12 +9,34 @@ export const CreateTeamRequest = ({
   onCancel,
   onSubmit,
   confirmLoading,
+  Students,
+  Projects,
+  projectId,
+  classId,
 }) => {
   const formRef = useRef();
 
   const onFinish = (values) => {
-    onSubmit(values);
+    onSubmit({...values, projectId, classId});
+
+    console.log({...values, projectId, classId});
+    console.log(projectId);
+    console.log(classId);
   };
+
+  const studentList = Students.map(item => {
+    return {
+      value: item.userId,
+      label: item.email
+    }
+  });
+  const project = Projects.map(item => {
+    return {
+      value: item.projectId,
+      label: item.projectName
+    }
+  });
+  console.log(studentList);
 
   return (
     <BaseModal
@@ -46,19 +56,14 @@ export const CreateTeamRequest = ({
         onFinish={onFinish}
       >
         <Form.Item
-          name="projectName"
-          label="Chọn dự án"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn dự án",
-            },
-          ]}
+          label="Dự án"
+          name={"projectId"}
         >
-          <Select defaultValue={"- Chọn"} options={roleOptions} />
+          <Select defaultValue={projectId} options={project} disabled={true} />
         </Form.Item>
+
         <Form.Item
-          name="code"
+          name="teamName"
           label="Tên nhóm"
           rules={[
             {
@@ -69,32 +74,35 @@ export const CreateTeamRequest = ({
         >
           <Input placeholder="Tên nhóm..." />
         </Form.Item>
+
         <Form.List
-          name="email"
-          rules={[
-            {
-              validator: async (_, email) => {
-                if (!email || email.length > 6) {
-                  return Promise.reject(new Error("Tối đa 5 email"));
-                }
-              },
-            },
-          ]}
+          name="listStudent"
+
         >
           {(fields, { add, remove }) => (
             <>
-              {fields.map(({ field }) => (
+              {fields.map((field, index) => (
                 <Row align="middle" justify={"space-around"}>
                   <Form.Item
                     {...field}
-                    label="Email"
+                    rules={[
+                      {
+                        validator: async () => {
+                          if (!fields.length || fields.length > 6) {
+                            return Promise.reject(new Error("Tối đa 5 email"));
+                          }
+                        },
+                      },
+                    ]}
+                    label=  {`Email ${index + 1}`}
                     style={{
                       width: "90%",
                       maxWidth: "100%"
                     }}
                   >
-                    <Select defaultValue={"- Chọn"} options={roleOptions} />
+                    <Select placeholder="- Chọn email sinh viên" options={studentList} />
                   </Form.Item>
+
 
                   <MinusCircleOutlined
                     style={{ color: "red", fontSize: "20px" }}

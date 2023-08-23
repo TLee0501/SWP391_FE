@@ -37,10 +37,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const [showCreateTeamRequestModal, setShowCreateTeamRequestModal] =
 		useState(false);
 	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
-	const [Creating, setCreating] = useState(false);
 
 	const projectIdRef = useRef();
-	const classIdRef = useRef();
 
 	const getProjectsInClass = async (classId) => {
 		setLoading(true);
@@ -88,16 +86,12 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		getStudents(classId);
 	}, [data]);
 
-	// Add course
-	const handleShowAddCourseModal = () => {
-		setShowCreateModal(true);
-	};
 	const handleCloseCreateModal = () => {
 		setShowCreateModal(false);
-		setCreating(false);
 	};
+
 	const handleCreateTeamRequest = (request) => {
-		setCreating(true);
+		setTeamRequestCreating(true);
 
 		const { classId, projectId, teamName, listStudent } = request;
 		const data = {
@@ -114,7 +108,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			} else {
 				message.error(data);
 			}
-			setCreating(false);
+			setTeamRequestCreating(false);
 		});
 	};
 

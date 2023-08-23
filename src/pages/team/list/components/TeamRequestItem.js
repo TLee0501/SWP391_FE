@@ -1,8 +1,8 @@
-import { CornerDownRight, EveryUser } from "@icon-park/react";
+import { CornerDownRight } from "@icon-park/react";
 import { Card, Col, Descriptions, Row, Typography } from "antd";
 import React from "react";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 export const TeamRequestItem = ({ teamRequest, onClick }) => {
 	const items = [

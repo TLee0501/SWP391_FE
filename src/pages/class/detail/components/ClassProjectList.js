@@ -37,10 +37,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const [showCreateTeamRequestModal, setShowCreateTeamRequestModal] =
 		useState(false);
 	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
-	const [Creating, setCreating] = useState(false);
 
-	const projectIdRef = useRef()
-	const classIdRef = useRef()
+	const projectIdRef = useRef();
 
 	const getProjectsInClass = async (classId) => {
 		setLoading(true);
@@ -74,7 +72,6 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		setTeamRequestCreating(false);
 	};
 
-
 	const getStudents = async (classId) => {
 		setLoading(true);
 		const result = await ClassApi.getClassStudents(classId);
@@ -89,16 +86,12 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		getStudents(classId);
 	}, [data]);
 
-	// Add course
-	const handleShowAddCourseModal = () => {
-		setShowCreateModal(true);
-	};
 	const handleCloseCreateModal = () => {
 		setShowCreateModal(false);
-		setCreating(false);
 	};
+
 	const handleCreateTeamRequest = (request) => {
-		setCreating(true);
+		setTeamRequestCreating(true);
 
 		const { classId, projectId, teamName, listStudent } = request;
 		const data = {
@@ -115,7 +108,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			} else {
 				message.error(data);
 			}
-			setCreating(false);
+			setTeamRequestCreating(false);
 		});
 	};
 
@@ -131,7 +124,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 								className="mr-2"
 								onClick={() => {
 									projectIdRef.current = item.projectId;
-									setShowCreateTeamRequestModal(true)
+									setShowCreateTeamRequestModal(true);
 								}}
 							>
 								Đăng ký

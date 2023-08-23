@@ -21,7 +21,6 @@ import { ProjectDescriptionModal } from "../components/ProjectDescriptionModal";
 import { ProjectDetailModal } from "../components/ProjectDetailModal";
 import { DeleteProjectModal } from "./components/DeleteProjectModal";
 import { TaskListSection } from "./components/TaskListSection";
-import { mockTasks } from "../../../__mocks__/task";
 import { TaskModal } from "./components/TaskModal";
 import { DeleteTaskModal } from "./components/DeleteTaskModal";
 import TaskApi from "../../../apis/task";
@@ -95,11 +94,11 @@ const ProjectDetailPage = () => {
 		setTaskLoading(false);
 	};
 
-  useEffect(() => {
-    if (!id) return;
-    getProject();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+	useEffect(() => {
+		if (!id) return;
+		getProject();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [id]);
 
 	const handleTaskItemClick = (task) => {
 		updatingTask.current = task;
@@ -235,6 +234,7 @@ const ProjectDetailPage = () => {
 				onCancel={() => setShowCreateTaskModal(false)}
 				title="Thêm công việc"
 				onSubmit={handleCreateTask}
+				confirmLoading={taskCreating}
 			/>
 			<TaskModal
 				open={showUpdateTaskModal}

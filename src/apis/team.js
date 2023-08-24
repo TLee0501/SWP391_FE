@@ -52,10 +52,31 @@ const createTeamRequest = async (request) => {
 	}
 };
 
+const AcceptTeamRequest = async (teamId) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/AcceptTeamProjectrequest/${teamId}`, teamId);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error accept team request: ", error);
+		return false;
+	}
+};
+const DenyTeamRequest = async (teamId) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/DenyTeamProjectrequest/${teamId}`, teamId);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error deny team request: ", error);
+		return false;
+	}
+};
+
 const TeamApi = {
 	getProjectTeamRequests,
 	getTeamRequestById,
 	createTeamRequest,
+	AcceptTeamRequest,
+	DenyTeamRequest,
 };
 
 export default TeamApi;

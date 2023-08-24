@@ -2,7 +2,6 @@ import { Form, Input, Typography } from "antd";
 import React, { useEffect, useRef } from "react";
 import BaseModal from "../../../components/BaseModal";
 import { RichTextEditor } from "../../../components/RichTextEditor";
-import { ClassSelect } from "./ClassSelect";
 
 const { Text } = Typography;
 
@@ -31,6 +30,7 @@ export const ProjectDetailModal = ({
 			classId: classId,
 			projectName: name,
 			description: descRef.current,
+			projectId: project?.projectId,
 		};
 
 		onSubmit && (await onSubmit(data));

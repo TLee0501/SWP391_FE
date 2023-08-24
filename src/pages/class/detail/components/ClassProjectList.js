@@ -12,13 +12,14 @@ import {
 	message,
 } from "antd";
 import ProjectApi from "../../../../apis/project";
-import { Plus } from "@icon-park/react";
+import { Delete, Plus, PreviewOpen } from "@icon-park/react";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { usePermissions } from "../../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../../constants/app";
 import { CreateTeamRequest } from "./CreateTeamRequest";
 import ClassApi from "../../../../apis/class";
 import TeamRequestApi from "../../../../apis/team";
+import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
 
 const { Text } = Typography;
 
@@ -26,16 +27,22 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const data = useContext(ClassContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
-		ALL_PERMISSIONS.project.create,
+		ALL_PERMISSIONS.project.create
+	);
+	const canDeleteProject = permissions?.includes(
+		ALL_PERMISSIONS.project.delete
 	);
 	const canRegisterTeamRequest = permissions?.includes(
-		ALL_PERMISSIONS.team.create,
+		ALL_PERMISSIONS.team.create
 	);
 	const [students, setStudents] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState([]);
 	const [projectCreating, setProjectCreating] = useState(false);
-	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [projectDeleting, setProjectDeleting] = useState(false);
+
+	const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
+	const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
 	const [showCreateTeamRequestModal, setShowCreateTeamRequestModal] =
 		useState(false);
 	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
@@ -88,11 +95,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		getStudents(classId);
 	}, [data]);
 
-	const handleCloseCreateModal = () => {
-		setShowCreateModal(false);
-	};
-
-	const handleCreateTeamRequest = (request) => {
+	const handleCreateTeamRequest = async (request) => {
 		setTeamRequestCreating(true);
 
 		const { classId, projectId, teamName, listStudent } = request;
@@ -103,15 +106,32 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			listStudent: listStudent,
 		};
 
-		TeamRequestApi.createTeamRequest(data).then(({ success, data }) => {
+		const response = await TeamRequestApi.createTeamRequest(data);
+		if (response.success) {
+			message.success("Đã gửi yêu cầu đăng ký nhóm");
+		} else {
+			message.error("Gửi yêu cầu thất bại");
+		}
+		setTeamRequestCreating(false);
+		setShowCreateTeamRequestModal(false);
+	};
+
+	const handleDeleteProject = () => {
+		const projectId = projectIdRef.current;
+		if (!projectId) return;
+		setProjectDeleting(true);
+		ProjectApi.deleteProject(projectId).then((success) => {
 			if (success) {
-				message.success(data);
-				handleCloseCreateModal();
+				message.success("Đã xóa dự án");
+				const { classId } = data;
+				if (!classId) return;
+				getProjectsInClass(classId);
 			} else {
-				message.error(data);
+				message.error("Xóa dự án thất bại");
 			}
-			setTeamRequestCreating(false);
 		});
+		setProjectDeleting(false);
+		setShowDeleteProjectModal(false);
 	};
 
 	const renderItem = (item) => {
@@ -121,20 +141,35 @@ export const ClassProjectList = ({ onViewDescription }) => {
 					<Row justify="space-between" align="middle">
 						<Text>{item.projectName}</Text>
 						<Row>
-							{canRegisterTeamRequest && <Button
-								type="link"
-								className="mr-2"
-								onClick={() => {
-									projectIdRef.current = item.projectId;
-									setShowCreateTeamRequestModal(true);
-								}}
-							>
-								Đăng ký
-							</Button>
-							}
-							<Button type="text" onClick={() => onViewDescription(item)}>
-								Xem mô tả
-							</Button>
+							{canRegisterTeamRequest && (
+								<Button
+									type="link"
+									className="mr-2"
+									onClick={() => {
+										projectIdRef.current = item.projectId;
+										setShowCreateTeamRequestModal(true);
+									}}
+								>
+									Đăng ký nhóm
+								</Button>
+							)}
+							{canDeleteProject && (
+								<Button
+									type="text"
+									icon={<Delete />}
+									danger
+									className="flex-center mr-2"
+									onClick={() => {
+										projectIdRef.current = item.projectId;
+										setShowDeleteProjectModal(true);
+									}}
+								/>
+							)}
+							<Button
+								className="flex-center"
+								onClick={() => onViewDescription(item)}
+								icon={<PreviewOpen />}
+							/>
 						</Row>
 					</Row>
 				</Card>
@@ -155,7 +190,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 							className="flex-center"
 							onClick={(e) => {
 								e.stopPropagation();
-								setShowCreateModal(true);
+								setShowCreateProjectModal(true);
 							}}
 						>
 							Thêm dự án
@@ -177,8 +212,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			</Spin>
 			<ProjectDetailModal
 				title="Thêm dự án"
-				open={showCreateModal}
-				onCancel={() => setShowCreateModal(false)}
+				open={showCreateProjectModal}
+				onCancel={() => setShowCreateProjectModal(false)}
 				onSubmit={handleCreateProject}
 				submitting={projectCreating}
 			/>
@@ -192,6 +227,13 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				onSubmit={handleCreateTeamRequest}
 				projectId={projectIdRef.current}
 				classId={data.classId}
+			/>
+			<ConfirmDeleteModal
+				title="Bạn muốn xóa dự án này?"
+				open={showDeleteProjectModal}
+				onCancel={() => setShowDeleteProjectModal(false)}
+				onOk={handleDeleteProject}
+				loading={projectDeleting}
 			/>
 		</ClassDetailArea>
 	);

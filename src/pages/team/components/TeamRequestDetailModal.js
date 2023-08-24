@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import BaseModal from "../../../components/BaseModal";
 import { Button, Col, List, Row, Typography, message } from "antd";
 import { Check, Forbid } from "@icon-park/react";
+import { useRole } from "../../../hooks/role";
+import { roles } from "../../../constants/app";
 import TeamApi from "../../../apis/team";
 
 const { Text, Title } = Typography;
 
 export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
+	const role = useRole();
 	const [showAcceptTeamRequestModal, setShowAcceptTeamRequestModal] =
 		useState(false);
 	const [showRejectTeamRequestModal, setShowDenyTeamRequestModal] =
@@ -53,28 +56,39 @@ export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
 				renderItem={renderMemberItem}
 				className="mb-4"
 			/>
-			<Row gutter={8} justify="end">
-				<Col>
-					<Button className="flex-center" icon={<Check />} type="primary" onClick={() => {
-						getAcceptTeamRequest(teamRequest?.teamId);
-						console.log(teamRequest?.teamId);
-						setShowAcceptTeamRequestModal(true);
-						message.success(`Duyệt thành công!`);
-					}}>
-						Duyệt
-					</Button>
-				</Col>
-				<Col>
-					<Button icon={<Forbid />} className="flex-center" danger onClick={() => {
-						getDenyTeamRequest(teamRequest?.teamId);
-						console.log(teamRequest?.teamId);
-						setShowDenyTeamRequestModal(true);
-						message.success(`Nhóm đã bị từ chối!`);
-					}}>
-						Từ chối
-					</Button>
-				</Col>
-			</Row>
+			{role === roles.TEACHER && (
+				<Row gutter={8} justify="end">
+					<Col>
+						<Button
+							className="flex-center"
+							icon={<Check />}
+							type="primary"
+							onClick={() => {
+								getAcceptTeamRequest(teamRequest?.teamId);
+								setShowAcceptTeamRequestModal(true);
+								message.success(`Duyệt thành công!`);
+							}}
+						>
+							Duyệt
+						</Button>
+					</Col>
+					<Col>
+						<Button
+							icon={<Forbid />}
+							className="flex-center"
+							danger
+							onClick={() => {
+								getDenyTeamRequest(teamRequest?.teamId);
+								console.log(teamRequest?.teamId);
+								setShowDenyTeamRequestModal(false);
+								message.success(`Nhóm đã bị từ chối!`);
+							}}
+						>
+							Từ chối
+						</Button>
+					</Col>
+				</Row>
+			)}
 		</BaseModal>
 	);
 };

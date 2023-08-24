@@ -95,6 +95,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.project.sider,
 		ALL_PERMISSIONS.project.view,
 		//TEAM
+		ALL_PERMISSIONS.team.sider,
 		ALL_PERMISSIONS.team.view,
 		ALL_PERMISSIONS.team.create,
 		ALL_PERMISSIONS.team.update,

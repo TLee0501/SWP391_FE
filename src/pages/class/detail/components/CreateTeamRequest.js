@@ -73,7 +73,7 @@ export const CreateTeamRequest = ({
 							{fields.map((field, index) => (
 								<Row align="middle" justify={"space-around"}>
 									<Form.Item
-										{...field}									
+										{...field}							
 										label={`Email ${index + 1}`}
 										style={{
 											width: "90%",

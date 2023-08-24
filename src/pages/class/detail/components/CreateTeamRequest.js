@@ -1,7 +1,9 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Row, Select } from "antd";
+import { Button, Form, Input, Row, Select, Typography, message } from "antd";
 import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal";
+
+const { Text } = Typography;
 
 export const CreateTeamRequest = ({
 	title,
@@ -16,18 +18,14 @@ export const CreateTeamRequest = ({
 }) => {
 	const formRef = useRef();
 
-	const onFinish = (values) => {
-		onSubmit({ ...values, projectId, classId });
-
-		console.log({ ...values, projectId, classId });
-		console.log(projectId);
-		console.log(classId);
+	const onFinish = async (values) => {
+		await onSubmit({ ...values, projectId, classId });
 	};
 
 	const studentList = Students.map((item) => {
 		return {
 			value: item.userId,
-			label: item.email,
+			label: `${item.fullName} (${item.email})`,
 		};
 	});
 	const project = Projects.map((item) => {
@@ -36,7 +34,6 @@ export const CreateTeamRequest = ({
 			label: item.projectName,
 		};
 	});
-	console.log(studentList);
 	return (
 		<BaseModal
 			title={title}
@@ -45,11 +42,7 @@ export const CreateTeamRequest = ({
 			onOk={() => formRef.current.submit()}
 			confirmLoading={confirmLoading}
 		>
-			<Form
-				ref={formRef}
-				layout="vertical"
-				onFinish={onFinish}
-			>
+			<Form ref={formRef} layout="vertical" onFinish={onFinish}>
 				<Form.Item label="Dự án" name={"projectId"}>
 					<Select defaultValue={projectId} options={project} disabled={true} />
 				</Form.Item>
@@ -67,45 +60,61 @@ export const CreateTeamRequest = ({
 					<Input placeholder="Tên nhóm..." />
 				</Form.Item>
 
-				<Form.List name="listStudent" >
+				<Text strong style={{ fontSize: 16 }}>
+					Thành viên nhóm (Tối đa 5)
+				</Text>
+				<div className="mb-2"></div>
+				<Form.List name="listStudent">
 					{(fields, { add, remove }) => (
 						<>
 							{fields.map((field, index) => (
 								<Row align="middle" justify={"space-around"}>
 									<Form.Item
-										{...field}									
-										label={`Email ${index + 1}`}
+										{...field}
+										label={`Thành viên ${index + 1}`}
 										style={{
 											width: "90%",
 											maxWidth: "100%",
 										}}
 									>
 										<Select
-											placeholder="- Chọn email sinh viên"
+											placeholder="Chọn thành viên"
 											options={studentList}
+											allowClear
 										/>
 									</Form.Item>
 
-									<MinusCircleOutlined
-										style={{ color: "red", fontSize: "20px" }}
+									<Button
+										className="flex-center"
+										type="text"
+										danger
+										icon={<MinusCircleOutlined />}
 										onClick={() => remove(field.name)}
 									/>
 								</Row>
 							))}
-							<Form.Item>
-								<Button
-									type="dashed"
-									onClick={() => add()}
-									block
-									icon={<PlusOutlined />}
-								>
-									Thêm sinh viên
-								</Button>
-							</Form.Item>
+							{fields.length < 5 && (
+								<Form.Item>
+									<Button
+										type="dashed"
+										onClick={() => {
+											if (fields.length >= 5) {
+												message.error("Đã vượt quá số lượng thành viên");
+												return;
+											}
+											add();
+										}}
+										block
+										icon={<PlusOutlined />}
+									>
+										Thêm thành viên
+									</Button>
+								</Form.Item>
+							)}
 						</>
 					)}
 				</Form.List>
 			</Form>
-		</BaseModal >
+		</BaseModal>
 	);
 };

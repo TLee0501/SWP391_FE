@@ -15,6 +15,7 @@ import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
 import { ClassProjectList } from "./components/ClassProjectList";
 import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
 import { useRole } from "../../../hooks/role";
+import ProjectApi from "../../../apis/project";
 
 const ClassDetailPage = () => {
 	const { id } = useParams();
@@ -52,9 +53,15 @@ const ClassDetailPage = () => {
 		setLoading(false);
 	};
 
+	const checkProjectStatus = async (classId) => {
+		const result = await ProjectApi.checkClassProjectStatus(classId);
+		console.log(result);
+	};
+
 	useEffect(() => {
 		if (id) {
 			getClass();
+			checkProjectStatus(id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id]);
@@ -93,7 +100,7 @@ const ClassDetailPage = () => {
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
-				
+
 				<UpdateEnrollKeyModal
 					open={showUpdateEnrollKeyModal}
 					onCancel={() => setShowUpdateEnrollKeyModal(false)}

@@ -2,10 +2,14 @@ import React from "react";
 import BaseModal from "../../../components/BaseModal";
 import { Button, Col, List, Row, Typography } from "antd";
 import { Check, Forbid } from "@icon-park/react";
+import { useRole } from "../../../hooks/role";
+import { roles } from "../../../constants/app";
 
 const { Text, Title } = Typography;
 
 export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
+	const role = useRole();
+
 	const renderMemberItem = (user) => {
 		return <List.Item>{user.fullName}</List.Item>;
 	};
@@ -32,18 +36,20 @@ export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
 				renderItem={renderMemberItem}
 				className="mb-4"
 			/>
-			<Row gutter={8} justify="end">
-				<Col>
-					<Button className="flex-center" icon={<Check />} type="primary">
-						Duyệt
-					</Button>
-				</Col>
-				<Col>
-					<Button icon={<Forbid />} className="flex-center" danger>
-						Từ chối
-					</Button>
-				</Col>
-			</Row>
+			{role === roles.TEACHER && (
+				<Row gutter={8} justify="end">
+					<Col>
+						<Button className="flex-center" icon={<Check />} type="primary">
+							Duyệt
+						</Button>
+					</Col>
+					<Col>
+						<Button icon={<Forbid />} className="flex-center" danger>
+							Từ chối
+						</Button>
+					</Col>
+				</Row>
+			)}
 		</BaseModal>
 	);
 };

@@ -1,5 +1,5 @@
 import { PreviewOpen } from "@icon-park/react";
-import { Button, Table, Typography } from "antd";
+import { Button, Table, Tag, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
@@ -49,10 +49,22 @@ export const ClassList = ({ classes, onDelete }) => {
 			dataIndex: "teacherName",
 			key: "teacherName",
 		});
+		columns.push({
+			title: "Trạng thái",
+			dataIndex: "enrolled",
+			key: "enrolled",
+			render: (_, { enrolled }) => {
+				console.log(enrolled);
+				return (
+					<Tag color={enrolled ? "purple-inverse" : "default"}>
+						{enrolled ? "Đã tham gia" : "Chưa tham gia"}
+					</Tag>
+				);
+			},
+		});
 	}
 
 	columns.push({
-		title: "Thao tác",
 		dataIndex: "action",
 		key: "action",
 		render: (_, { classId }) => {

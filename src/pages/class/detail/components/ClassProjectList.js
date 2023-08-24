@@ -12,7 +12,7 @@ import {
 	message,
 } from "antd";
 import ProjectApi from "../../../../apis/project";
-import { Plus } from "@icon-park/react";
+import { Plus, PreviewOpen } from "@icon-park/react";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { usePermissions } from "../../../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../../../constants/app";
@@ -26,10 +26,10 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const data = useContext(ClassContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
-		ALL_PERMISSIONS.project.create,
+		ALL_PERMISSIONS.project.create
 	);
 	const canRegisterTeamRequest = permissions?.includes(
-		ALL_PERMISSIONS.team.create,
+		ALL_PERMISSIONS.team.create
 	);
 	const [students, setStudents] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -88,11 +88,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		getStudents(classId);
 	}, [data]);
 
-	const handleCloseCreateModal = () => {
-		setShowCreateModal(false);
-	};
-
-	const handleCreateTeamRequest = (request) => {
+	const handleCreateTeamRequest = async (request) => {
 		setTeamRequestCreating(true);
 
 		const { classId, projectId, teamName, listStudent } = request;
@@ -103,15 +99,14 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			listStudent: listStudent,
 		};
 
-		TeamRequestApi.createTeamRequest(data).then(({ success, data }) => {
-			if (success) {
-				message.success(data);
-				handleCloseCreateModal();
-			} else {
-				message.error(data);
-			}
-			setTeamRequestCreating(false);
-		});
+		const response = await TeamRequestApi.createTeamRequest(data);
+		if (response.success) {
+			message.success("Đã gửi yêu cầu đăng ký nhóm");
+		} else {
+			message.error("Gửi yêu cầu thất bại");
+		}
+		setTeamRequestCreating(false);
+		setShowCreateTeamRequestModal(false);
 	};
 
 	const renderItem = (item) => {
@@ -121,20 +116,23 @@ export const ClassProjectList = ({ onViewDescription }) => {
 					<Row justify="space-between" align="middle">
 						<Text>{item.projectName}</Text>
 						<Row>
-							{canRegisterTeamRequest && <Button
-								type="link"
-								className="mr-2"
-								onClick={() => {
-									projectIdRef.current = item.projectId;
-									setShowCreateTeamRequestModal(true);
-								}}
-							>
-								Đăng ký
-							</Button>
-							}
-							<Button type="text" onClick={() => onViewDescription(item)}>
-								Xem mô tả
-							</Button>
+							{canRegisterTeamRequest && (
+								<Button
+									type="link"
+									className="mr-2"
+									onClick={() => {
+										projectIdRef.current = item.projectId;
+										setShowCreateTeamRequestModal(true);
+									}}
+								>
+									Đăng ký
+								</Button>
+							)}
+							<Button
+								className="flex-center"
+								onClick={() => onViewDescription(item)}
+								icon={<PreviewOpen />}
+							/>
 						</Row>
 					</Row>
 				</Card>

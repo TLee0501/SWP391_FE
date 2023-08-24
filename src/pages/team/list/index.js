@@ -30,9 +30,8 @@ export const TeamListPage = () => {
 	};
 
 	const onLoadClasses = (classList) => {
-		if (!classList) return;
-		const { classId } = classList[0];
-		searchParams.set("class", classId);
+		if (!classList || classList.length <= 0) return;
+		searchParams.set("class", classList[0]?.classId);
 		setSearchParams(searchParams);
 	};
 	const handleChangeClass = (classId) => {

@@ -37,7 +37,6 @@ export const CreateTeamRequest = ({
 		};
 	});
 	console.log(studentList);
-
 	return (
 		<BaseModal
 			title={title}
@@ -49,10 +48,6 @@ export const CreateTeamRequest = ({
 			<Form
 				ref={formRef}
 				layout="vertical"
-				// initialValues={{
-				//   code: teamName?.teamName,
-				//   name: teamName?.listStudent,
-				// }}
 				onFinish={onFinish}
 			>
 				<Form.Item label="Dự án" name={"projectId"}>
@@ -72,22 +67,13 @@ export const CreateTeamRequest = ({
 					<Input placeholder="Tên nhóm..." />
 				</Form.Item>
 
-				<Form.List name="listStudent">
+				<Form.List name="listStudent" >
 					{(fields, { add, remove }) => (
 						<>
 							{fields.map((field, index) => (
 								<Row align="middle" justify={"space-around"}>
 									<Form.Item
-										{...field}
-										rules={[
-											{
-												validator: async () => {
-													if (!fields.length || fields.length > 6) {
-														return Promise.reject(new Error("Tối đa 5 email"));
-													}
-												},
-											},
-										]}
+										{...field}									
 										label={`Email ${index + 1}`}
 										style={{
 											width: "90%",
@@ -120,6 +106,6 @@ export const CreateTeamRequest = ({
 					)}
 				</Form.List>
 			</Form>
-		</BaseModal>
+		</BaseModal >
 	);
 };

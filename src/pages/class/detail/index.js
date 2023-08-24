@@ -93,6 +93,7 @@ const ClassDetailPage = () => {
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
+				
 				<UpdateEnrollKeyModal
 					open={showUpdateEnrollKeyModal}
 					onCancel={() => setShowUpdateEnrollKeyModal(false)}

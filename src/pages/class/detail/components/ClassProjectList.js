@@ -27,7 +27,9 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
 		ALL_PERMISSIONS.project.create,
-		ALL_PERMISSIONS.team.create
+	);
+	const canRegisterTeamRequest = permissions?.includes(
+		ALL_PERMISSIONS.team.create,
 	);
 	const [students, setStudents] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -119,7 +121,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 					<Row justify="space-between" align="middle">
 						<Text>{item.projectName}</Text>
 						<Row>
-							<Button
+							{canRegisterTeamRequest && <Button
 								type="link"
 								className="mr-2"
 								onClick={() => {
@@ -129,6 +131,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 							>
 								Đăng ký
 							</Button>
+							}
 							<Button type="text" onClick={() => onViewDescription(item)}>
 								Xem mô tả
 							</Button>

@@ -1,7 +1,7 @@
-import { Key, Setting } from "@icon-park/react";
+import { Delete, Key, Setting } from "@icon-park/react";
 import { Button, Dropdown, Row, Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ClassApi from "../../../apis/class";
 import { ALL_PERMISSIONS, roles } from "../../../constants/app";
 import { usePermissions } from "../../../hooks/permission";
@@ -17,8 +17,10 @@ import { ProjectDescriptionModal } from "../../project/components/ProjectDescrip
 import { useRole } from "../../../hooks/role";
 import ProjectApi from "../../../apis/project";
 import { ProjectDetailModal } from "../../project/components/ProjectDetailModal";
+import { ConfirmDeleteModal } from "../../../components/ConfirmDeleteModal";
 
 const ClassDetailPage = () => {
+	const navigate = useNavigate();
 	const { id } = useParams();
 
 	const role = useRole();
@@ -31,6 +33,7 @@ const ClassDetailPage = () => {
 	const [projectUpdating, setProjectUpdating] = useState(false);
 
 	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
+	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 
 	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
 		useState(false);
@@ -45,6 +48,13 @@ const ClassDetailPage = () => {
 			label: "Cập nhật mã tham gia",
 			icon: <Key />,
 			onClick: () => setShowUpdateEnrollKeyModal(true),
+		},
+		{
+			key: "DELETE_CLASS",
+			label: "Xóa lớp",
+			icon: <Delete />,
+			danger: true,
+			onClick: () => setShowDeleteClassModal(true),
 		},
 	];
 
@@ -98,6 +108,18 @@ const ClassDetailPage = () => {
 		} else {
 			setShowProjectDescModal(true);
 		}
+	};
+
+	const handleDeleteClass = async () => {
+		if (!id) return;
+		const success = await ClassApi.deleteClass(id);
+		if (success) {
+			message.success("Đã xóa lớp học");
+			navigate(-1);
+		} else {
+			message.error("Xóa lớp học thất bại");
+		}
+		setShowDeleteClassModal(false);
 	};
 
 	return (
@@ -154,6 +176,12 @@ const ClassDetailPage = () => {
 					submitting={projectUpdating}
 					edit={true}
 					project={projectRef.current}
+				/>
+				<ConfirmDeleteModal
+					title="Bạn muốn xóa lớp học này?"
+					open={showDeleteClassModal}
+					onCancel={() => setShowDeleteClassModal(false)}
+					onOk={() => handleDeleteClass()}
 				/>
 			</BasePageContent>
 		</ClassProvider>

@@ -1,4 +1,4 @@
-import { Col, Row, Spin } from "antd";
+import { Col, Row, Select, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { usePermissions } from "../../../hooks/permission";
 import { ClassSelect } from "../../project/components/ClassSelect";
 import { TeamRequestDetailModal } from "../components/TeamRequestDetailModal";
 import { TeamRequestList } from "./components/TeamRequestList";
+import { TeamRequestStatus } from "../../../constants/enum";
 
 export const TeamListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -22,9 +23,29 @@ export const TeamListPage = () => {
 
 	const teamRequestRef = useRef();
 
+	const statusOptions = [
+		{
+			label: "Chờ duyệt",
+			value: TeamRequestStatus.pending,
+		},
+		{
+			label: "Đã duyệt",
+			value: TeamRequestStatus.approved,
+		},
+		{
+			label: "Từ chối",
+			value: TeamRequestStatus.denied,
+		},
+	];
+
 	const getTeamRequests = async (classId) => {
+		console.log("get team: ", classId);
 		setTeamLoading(true);
-		const data = await TeamApi.getProjectTeamRequests(classId);
+		var data = await TeamApi.getProjectTeamRequests(classId);
+		const searchStatus = searchParams.get("status");
+		if (searchStatus !== undefined && searchStatus != null) {
+			data = data.filter((e) => e.status === parseInt(searchStatus));
+		}
 		setTeamRequests(data);
 		setTeamLoading(false);
 	};
@@ -47,6 +68,7 @@ export const TeamListPage = () => {
 	useEffect(() => {
 		const classId = searchParams.get("class");
 		getTeamRequests(classId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams]);
 
 	return (
@@ -60,6 +82,20 @@ export const TeamListPage = () => {
 								value={searchParams.get("class")}
 								onLoaded={onLoadClasses}
 								onChange={handleChangeClass}
+							/>
+							<span className="mr-2 ml-4">Trạng thái:</span>
+							<Select
+								allowClear
+								placeholder="Chọn trạng thái"
+								options={statusOptions}
+								onChange={(status) => {
+									if (status === undefined) {
+										searchParams.delete("status");
+									} else {
+										searchParams.set("status", status);
+									}
+									setSearchParams(searchParams);
+								}}
 							/>
 						</Col>
 					</Row>

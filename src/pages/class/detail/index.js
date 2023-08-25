@@ -1,4 +1,4 @@
-import { Delete, Key, Setting } from "@icon-park/react";
+import { Delete, Edit, Key, Setting } from "@icon-park/react";
 import { Button, Dropdown, Row, Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

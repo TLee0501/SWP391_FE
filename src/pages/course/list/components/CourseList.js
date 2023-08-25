@@ -4,11 +4,11 @@ import { CourseItem } from "./CourseItem";
 
 const { Text } = Typography;
 
-export const CourseList = ({ courses, onDelete }) => {
+export const CourseList = ({ courses, onDelete, onUpdate }) => {
 	const renderItem = (course) => {
 		return (
 			<List.Item>
-				<CourseItem course={course} onDelete={onDelete} />
+				<CourseItem course={course} onDelete={onDelete} onUpdate={onUpdate} />
 			</List.Item>
 		);
 	};

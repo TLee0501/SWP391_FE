@@ -93,6 +93,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 					]}
 				>
 					<RangePicker
+						format="DD/MM/YYYY"
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 					/>

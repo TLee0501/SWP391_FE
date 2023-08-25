@@ -8,9 +8,11 @@ import { CourseSelect } from "../components/ClassSelect";
 import { DeleteClassModal } from "../components/DeleteClassModal";
 import { useSearchParams } from "react-router-dom";
 import { usePermissions } from "../../../hooks/permission";
-import { ALL_PERMISSIONS } from "../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../constants/app";
+import { useRole } from "../../../hooks/role";
 
 const ClassListPage = () => {
+	const role = useRole();
 	const permissions = usePermissions();
 	const canCreate = permissions?.includes(ALL_PERMISSIONS.class.create);
 	const canView = permissions?.includes(ALL_PERMISSIONS.class.view);
@@ -124,23 +126,27 @@ const ClassListPage = () => {
 								onChange={handleChangeCourse}
 								onClear={handleClearCourse}
 							/>
-							<span className="mr-2 ml-4">Trạng thái:</span>
-							<Select
-								allowClear
-								options={statusOptions}
-								placeholder="Chọn trạng thái"
-								onChange={(enrolled) => {
-									if (enrolled === undefined || enrolled == null) {
-										return;
-									}
-									searchParams.set("enrolled", enrolled);
-									setSearchParams(searchParams);
-								}}
-								onClear={() => {
-									searchParams.delete("enrolled");
-									setSearchParams(searchParams);
-								}}
-							/>
+							{role === roles.STUDENT && (
+								<>
+									<span className="mr-2 ml-4">Trạng thái:</span>
+									<Select
+										allowClear
+										options={statusOptions}
+										placeholder="Chọn trạng thái"
+										onChange={(enrolled) => {
+											if (enrolled === undefined || enrolled == null) {
+												return;
+											}
+											searchParams.set("enrolled", enrolled);
+											setSearchParams(searchParams);
+										}}
+										onClear={() => {
+											searchParams.delete("enrolled");
+											setSearchParams(searchParams);
+										}}
+									/>
+								</>
+							)}
 						</Row>
 					)}
 				</Col>

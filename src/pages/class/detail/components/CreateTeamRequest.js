@@ -1,5 +1,6 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Row, Select, Typography, message } from "antd";
+import { User } from "@icon-park/react";
+import { Button, Col, Form, Row, Select, Typography, message } from "antd";
 import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal";
 
@@ -13,13 +14,13 @@ export const CreateTeamRequest = ({
 	confirmLoading,
 	Students,
 	Projects,
-	projectId,
+	project,
 	classId,
 }) => {
 	const formRef = useRef();
 
 	const onFinish = async (values) => {
-		await onSubmit({ ...values, projectId, classId });
+		await onSubmit({ ...values, projectId: project?.projectId, classId });
 	};
 
 	const studentList = Students.map((item) => {
@@ -28,12 +29,7 @@ export const CreateTeamRequest = ({
 			label: `${item.fullName} (${item.email})`,
 		};
 	});
-	const project = Projects.map((item) => {
-		return {
-			value: item.projectId,
-			label: item.projectName,
-		};
-	});
+
 	return (
 		<BaseModal
 			title={title}
@@ -42,24 +38,22 @@ export const CreateTeamRequest = ({
 			onOk={() => formRef.current.submit()}
 			confirmLoading={confirmLoading}
 		>
-			<Form ref={formRef} layout="vertical" onFinish={onFinish}>
-				<Form.Item label="Dự án" name={"projectId"}>
-					<Select defaultValue={projectId} options={project} disabled={true} />
-				</Form.Item>
-
-				<Form.Item
-					name="teamName"
-					label="Tên nhóm"
-					rules={[
-						{
-							required: true,
-							message: "Vui lòng nhập tên nhóm",
-						},
-					]}
-				>
-					<Input placeholder="Tên nhóm..." />
-				</Form.Item>
-
+			<Form
+				ref={formRef}
+				layout="vertical"
+				onFinish={onFinish}
+				initialValues={{
+					listStudent: [undefined],
+				}}
+			>
+				<div>
+					<Text strong style={{ fontSize: 16 }}>
+						Dự án mong muốn làm:
+					</Text>
+				</div>
+				<div className="mb-4 mt-2">
+					<Text>{project?.projectName}</Text>
+				</div>
 				<Text strong style={{ fontSize: 16 }}>
 					Thành viên nhóm (Tối đa 5)
 				</Text>
@@ -67,32 +61,43 @@ export const CreateTeamRequest = ({
 				<Form.List name="listStudent">
 					{(fields, { add, remove }) => (
 						<>
-							{fields.map((field, index) => (
-								<Row align="middle" justify={"space-around"}>
-									<Form.Item
-										{...field}
-										label={`Thành viên ${index + 1}`}
-										style={{
-											width: "90%",
-											maxWidth: "100%",
-										}}
-									>
-										<Select
-											placeholder="Chọn thành viên"
-											options={studentList}
-											allowClear
-										/>
-									</Form.Item>
-
-									<Button
-										className="flex-center"
-										type="text"
-										danger
-										icon={<MinusCircleOutlined />}
-										onClick={() => remove(field.name)}
-									/>
-								</Row>
-							))}
+							{fields.map((field, index) => {
+								return (
+									<Row key={field.key} align="middle" gutter={4}>
+										<Col span={22}>
+											<Form.Item
+												{...field}
+												label={`Thành viên ${index + 1}`}
+												key={`member-${index}`}
+												rules={[
+													{
+														required: true,
+														message: "Vui lòng chọn thành viên nhóm",
+													},
+												]}
+											>
+												<Select
+													placeholder="Chọn thành viên"
+													options={studentList}
+													allowClear
+													suffixIcon={<User />}
+												/>
+											</Form.Item>
+										</Col>
+										<Col>
+											{fields.length > 1 && (
+												<Button
+													className="flex-center mt-1"
+													type="text"
+													danger
+													icon={<MinusCircleOutlined />}
+													onClick={() => remove(field.name)}
+												/>
+											)}
+										</Col>
+									</Row>
+								);
+							})}
 							{fields.length < 5 && (
 								<Form.Item>
 									<Button

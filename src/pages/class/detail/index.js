@@ -70,7 +70,6 @@ const ClassDetailPage = () => {
 
 	const checkProjectStatus = async (classId) => {
 		const result = await ProjectApi.checkClassProjectStatus(classId);
-		console.log(result);
 	};
 
 	const handleUpdateProject = async (values) => {
@@ -148,7 +147,11 @@ const ClassDetailPage = () => {
 			>
 				<Spin spinning={loading}>
 					<ClassBasicInfo />
-					<ClassProjectList onViewDescription={handleViewProjectDescription} />
+					{(data?.enrolled || role === roles.TEACHER) && (
+						<ClassProjectList
+							onViewDescription={handleViewProjectDescription}
+						/>
+					)}
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>

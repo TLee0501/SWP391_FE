@@ -48,6 +48,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
 
 	const projectIdRef = useRef();
+	const projectRef = useRef();
 
 	const getProjectsInClass = async (classId) => {
 		setLoading(true);
@@ -146,7 +147,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 									type="link"
 									className="mr-2"
 									onClick={() => {
-										projectIdRef.current = item.projectId;
+										projectRef.current = item;
 										setShowCreateTeamRequestModal(true);
 									}}
 								>
@@ -219,13 +220,13 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			/>
 			<CreateTeamRequest
 				open={showCreateTeamRequestModal}
-				title="Đăng ký nhóm và dự án"
+				title="Đăng ký nhóm làm dự án"
 				onCancel={handleCloseCreateTeamRequestModal}
 				confirmLoading={teamRequestCreating}
 				Students={students}
 				Projects={projects}
 				onSubmit={handleCreateTeamRequest}
-				projectId={projectIdRef.current}
+				project={projectRef.current}
 				classId={data.classId}
 			/>
 			<ConfirmDeleteModal

@@ -63,10 +63,15 @@ export const TeamListPage = () => {
 							/>
 						</Col>
 					</Row>
+					<div className="mb-4"></div>
 					<Spin spinning={teamLoading}>
 						<TeamRequestList
 							teamRequests={teamRequests}
 							onClickItem={handleClickTeamRequest}
+							reload={() => {
+								const classId = searchParams.get("class");
+								getTeamRequests(classId);
+							}}
 						/>
 					</Spin>
 				</>

@@ -1,4 +1,4 @@
-import { CornerDownRight } from "@icon-park/react";
+import { SendEmail } from "@icon-park/react";
 import { Card, Col, Descriptions, Row, Typography } from "antd";
 import React from "react";
 
@@ -35,7 +35,7 @@ export const TeamRequestItem = ({ teamRequest, onClick }) => {
 				</Col>
 				<Col span={4}>
 					<Row justify="end">
-						<CornerDownRight size={20} />
+						<SendEmail size={20} />
 					</Row>
 				</Col>
 			</Row>

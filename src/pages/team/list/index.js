@@ -4,11 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import TeamApi from "../../../apis/team";
 import { ALL_PERMISSIONS } from "../../../constants/app";
+import { TeamRequestStatus } from "../../../constants/enum";
 import { usePermissions } from "../../../hooks/permission";
 import { ClassSelect } from "../../project/components/ClassSelect";
 import { TeamRequestDetailModal } from "../components/TeamRequestDetailModal";
 import { TeamRequestList } from "./components/TeamRequestList";
-import { TeamRequestStatus } from "../../../constants/enum";
 
 export const TeamListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -39,13 +39,14 @@ export const TeamListPage = () => {
 	];
 
 	const getTeamRequests = async (classId) => {
-		console.log("get team: ", classId);
 		setTeamLoading(true);
 		var data = await TeamApi.getProjectTeamRequests(classId);
+
 		const searchStatus = searchParams.get("status");
 		if (searchStatus !== undefined && searchStatus != null) {
 			data = data.filter((e) => e.status === parseInt(searchStatus));
 		}
+
 		setTeamRequests(data);
 		setTeamLoading(false);
 	};

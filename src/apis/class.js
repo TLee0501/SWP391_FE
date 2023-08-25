@@ -73,12 +73,23 @@ const deleteClass = async (id) => {
 		return false;
 	}
 };
+
 const getUserInClass = async (id) => {
 	try {
 		const response = await BaseApi.get(`/${resource}/GetUsersInClass?classId=${id}`);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error get student in class: ", error);
+		return false;
+	}
+};
+
+const updateClass = async (data) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/UpdateClass`, data);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update class: ", error);
 		return false;
 	}
 };
@@ -91,6 +102,7 @@ const ClassApi = {
 	getClassStudents,
 	deleteClass,
 	getUserInClass,
+	updateClass,
 };
 
 export default ClassApi;

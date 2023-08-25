@@ -1,4 +1,4 @@
-import { Check, Edit, Forbid, More } from "@icon-park/react";
+import { Check, Forbid, More } from "@icon-park/react";
 import {
 	Button,
 	Dropdown,
@@ -10,10 +10,10 @@ import {
 	message,
 } from "antd";
 import React from "react";
+import TeamApi from "../../../../apis/team";
+import { roles } from "../../../../constants/app";
 import { TeamRequestStatus } from "../../../../constants/enum";
 import { useRole } from "../../../../hooks/role";
-import { roles } from "../../../../constants/app";
-import TeamApi from "../../../../apis/team";
 
 const { Text } = Typography;
 
@@ -72,10 +72,6 @@ export const TeamRequestList = ({ teamRequests, onClickItem, reload }) => {
 			record?.status === TeamRequestStatus.pending
 		) {
 			return [
-				{
-					label: "Cập nhật",
-					icon: <Edit />,
-				},
 				{
 					label: "Hủy yêu cầu",
 					icon: <Forbid />,

@@ -1,5 +1,7 @@
-import { Table } from "antd";
+import { Empty, Table, Typography } from "antd";
 import React from "react";
+
+const { Text } = Typography;
 
 export const StudentList = ({ students }) => {
 	const columns = [
@@ -26,6 +28,13 @@ export const StudentList = ({ students }) => {
 			bordered
 			dataSource={students}
 			columns={columns}
+			locale={{
+				emptyText: (
+					<Empty
+						description={<Text disabled>Chưa có sinh viên tham gia lớp</Text>}
+					/>
+				),
+			}}
 		/>
 	);
 };

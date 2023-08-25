@@ -1,5 +1,5 @@
 import { PreviewOpen } from "@icon-park/react";
-import { Button, Table, Tag, Typography } from "antd";
+import { Button, Empty, Table, Tag, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
@@ -79,5 +79,16 @@ export const ClassList = ({ classes, onDelete }) => {
 		},
 	});
 
-	return <Table dataSource={classes} columns={columns} pagination={false} />;
+	return (
+		<Table
+			dataSource={classes}
+			columns={columns}
+			pagination={false}
+			locale={{
+				emptyText: (
+					<Empty description={<Text disabled>Chưa có lớp học nào</Text>} />
+				),
+			}}
+		/>
+	);
 };

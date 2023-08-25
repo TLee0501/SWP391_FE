@@ -4,6 +4,8 @@ import React, { useContext } from "react";
 import { MemberTaskItem } from "./MemberTaskItem";
 import { ProjectContext } from "../../../../providers/project";
 import TaskApi from "../../../../apis/task";
+import { useRole } from "../../../../hooks/role";
+import { roles } from "../../../../constants/app";
 
 export const MemberTaskList = ({
 	taskId,
@@ -11,6 +13,7 @@ export const MemberTaskList = ({
 	onAssign,
 	onUnAssign,
 }) => {
+	const role = useRole();
 	const { token } = theme.useToken();
 	const project = useContext(ProjectContext);
 
@@ -60,11 +63,13 @@ export const MemberTaskList = ({
 						/>
 					);
 				})}
-				<Dropdown trigger={["click"]} menu={{ items: memberItems }}>
-					<Tag style={tagPlusStyle}>
-						<Plus /> <span>Thêm thành viên</span>
-					</Tag>
-				</Dropdown>
+				{role === roles.STUDENT && (
+					<Dropdown trigger={["click"]} menu={{ items: memberItems }}>
+						<Tag style={tagPlusStyle}>
+							<Plus /> <span>Thêm thành viên</span>
+						</Tag>
+					</Dropdown>
+				)}
 			</Space>
 		</div>
 	);

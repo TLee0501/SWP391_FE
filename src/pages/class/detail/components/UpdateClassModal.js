@@ -3,10 +3,11 @@ import BaseModal from "../../../../components/BaseModal";
 import { DatePicker, Form, Input, message } from "antd";
 import moment from "moment";
 import ClassApi from "../../../../apis/class";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 
-export const UpdateClassModal = ({ open, onCancel, classId }) => {
+export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 	const formRef = useRef();
 
 	const [classUpdating, setClassUpdating] = useState(false);
@@ -14,19 +15,20 @@ export const UpdateClassModal = ({ open, onCancel, classId }) => {
 	const handleUpdateClass = async (values) => {
 		const { className, enrollCode, dates } = values;
 
-		const data = {
-			classId: classId,
+		const request = {
+			classId: data?.classId,
 			className: className,
 			timeStart: dates[0],
 			timeEnd: dates[1],
 			enrollCode: enrollCode,
-			isCompleted: false
+			isCompleted: false,
 		};
 
 		setClassUpdating(true);
-		const success = await ClassApi.updateClass(data);
+		const success = await ClassApi.updateClass(request);
 		if (success) {
 			message.success("Cập nhật lớp học thành công");
+			onSuccess && onSuccess();
 		} else {
 			message.error("Cập nhật lớp học thất bại");
 		}
@@ -40,8 +42,18 @@ export const UpdateClassModal = ({ open, onCancel, classId }) => {
 			onCancel={onCancel}
 			title="Cập nhật môn học"
 			onOk={() => formRef.current?.submit()}
+			confirmLoading={classUpdating}
 		>
-			<Form ref={formRef} layout="vertical" onFinish={handleUpdateClass} >
+			<Form
+				ref={formRef}
+				layout="vertical"
+				onFinish={handleUpdateClass}
+				initialValues={{
+					className: data?.className,
+					enrollCode: data?.enrollCode,
+					dates: [dayjs(data?.startTime), dayjs(data?.endTime)],
+				}}
+			>
 				<Form.Item
 					name="className"
 					label="Tên lớp học"
@@ -78,6 +90,7 @@ export const UpdateClassModal = ({ open, onCancel, classId }) => {
 				>
 					<RangePicker
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+						format={"DD/MM/YYYY"}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 					/>
 				</Form.Item>

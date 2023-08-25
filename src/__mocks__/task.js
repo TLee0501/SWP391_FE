@@ -10,3 +10,33 @@ export const mockTasks = [
 		description: "Implement features",
 	},
 ];
+
+export const mockTaskMembers = [
+	{
+		id: "1",
+		fullName: "Nguyễn Văn A",
+	},
+	{
+		id: "2",
+		fullName: "Nguyễn Văn B",
+	},
+];
+
+export const mockAllTaskMembers = [
+	{
+		id: "1",
+		fullName: "Nguyễn Văn A",
+	},
+	{
+		id: "2",
+		fullName: "Nguyễn Văn B",
+	},
+	{
+		id: "3",
+		fullName: "Nguyễn Văn C",
+	},
+	{
+		id: "4",
+		fullName: "Nguyễn Văn D",
+	},
+];

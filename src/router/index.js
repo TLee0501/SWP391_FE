@@ -14,6 +14,7 @@ import ProfilePage from "../pages/profile";
 import ClassListPage from "../pages/class/list";
 import ClassDetailPage from "../pages/class/detail";
 import { TeamListPage } from "../pages/team/list";
+import ProjectReportListPage from "../pages/report/list";
 
 export const router = createBrowserRouter([
 	{
@@ -69,6 +70,14 @@ export const router = createBrowserRouter([
 					{
 						path: routes.dashboard.teamRequest,
 						element: <TeamListPage />,
+					},
+					{
+						path: routes.dashboard.report,
+						element: <ProjectReportListPage />,
+					},
+					{
+						path: `${routes.dashboard.report}/:id`,
+						element: <ProjectDetailPage />,
 					},
 				],
 			},

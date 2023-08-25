@@ -20,18 +20,27 @@ export const Dashboard = () => {
 	const [user, setUser] = useState();
 
 	useEffect(() => {
-		AuthApi.getUser().then((user) => {
-			document.title = `${getRoleName(user.role)} | Dashboard`;
-			setUser(user);
-			if (location.pathname === routes.dashboard.root) {
-				var path = routes.dashboard.classes;
-				if (user.role === roles.ADMIN) {
-					path = routes.dashboard.accounts;
+		AuthApi.getUser()
+			.then((user) => {
+				if (!user) {
+					localStorage.removeItem("jwt");
+					navigate(routes.login);
+					return;
 				}
+				document.title = `${getRoleName(user.role)} | Dashboard`;
+				setUser(user);
+				if (location.pathname === routes.dashboard.root) {
+					var path = routes.dashboard.classes;
+					if (user.role === roles.ADMIN) {
+						path = routes.dashboard.accounts;
+					}
 
-				navigate(path);
-			}
-		});
+					navigate(path);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

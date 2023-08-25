@@ -50,11 +50,39 @@ const getAllTasks = async (projectId) => {
 	}
 };
 
+const assignTask = async (taskId, memberId) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/AssignTask`, {
+			taskId,
+			memberId,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error assign task: ", error);
+		return false;
+	}
+};
+
+const unAssignTask = async (taskId, memberId) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/UnAssignTask`, {
+			taskId,
+			memberId,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error un assign task: ", error);
+		return false;
+	}
+};
+
 const TaskApi = {
 	createTask,
 	updateTask,
 	deleteTask,
 	getAllTasks,
+	assignTask,
+	unAssignTask,
 };
 
 export default TaskApi;

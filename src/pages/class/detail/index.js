@@ -1,23 +1,23 @@
-import { Delete, Edit, Key, Setting } from "@icon-park/react";
+import { Delete, Edit, Setting } from "@icon-park/react";
 import { Button, Dropdown, Row, Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ClassApi from "../../../apis/class";
+import ProjectApi from "../../../apis/project";
+import { ConfirmDeleteModal } from "../../../components/ConfirmDeleteModal";
 import { ALL_PERMISSIONS, roles } from "../../../constants/app";
 import { usePermissions } from "../../../hooks/permission";
+import { useRole } from "../../../hooks/role";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
 import { ClassProvider } from "../../../providers/class";
+import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
+import { ProjectDetailModal } from "../../project/components/ProjectDetailModal";
 import { ClassBasicInfo } from "./components/ClassBasicInfo";
+import { ClassProjectList } from "./components/ClassProjectList";
 import { ClassStudentList } from "./components/ClassStudentList";
 import { ClassTeamList } from "./components/ClassTeamList";
 import { EnrollClassModal } from "./components/EnrollClassModal";
-import { ClassProjectList } from "./components/ClassProjectList";
-import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
-import { useRole } from "../../../hooks/role";
 import { UpdateClassModal } from "./components/UpdateClassModal";
-import ProjectApi from "../../../apis/project";
-import { ProjectDetailModal } from "../../project/components/ProjectDetailModal";
-import { ConfirmDeleteModal } from "../../../components/ConfirmDeleteModal";
 
 const ClassDetailPage = () => {
 	const navigate = useNavigate();
@@ -35,8 +35,7 @@ const ClassDetailPage = () => {
 	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
 	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 
-	const [showUpdateEClassModal, setShowUpdateClassModal] =
-		useState(false);
+	const [showUpdateEClassModal, setShowUpdateClassModal] = useState(false);
 	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 	const [showProjectDescModal, setShowProjectDescModal] = useState(false);
 
@@ -46,8 +45,8 @@ const ClassDetailPage = () => {
 		{
 			key: "UPDATE_CLASS",
 			label: "Cập nhật lớp học",
-			icon: <Edit size="20"/>,
-			
+			icon: <Edit size="20" />,
+
 			onClick: () => setShowUpdateClassModal(true),
 		},
 		{
@@ -155,11 +154,12 @@ const ClassDetailPage = () => {
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
-			
+
 				<UpdateClassModal
 					open={showUpdateEClassModal}
 					onCancel={() => setShowUpdateClassModal(false)}
-					classId={data?.classId}
+					data={data}
+					onSuccess={() => getClass()}
 				/>
 				<EnrollClassModal
 					classId={data?.classId}

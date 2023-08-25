@@ -4,6 +4,11 @@ import React from "react";
 export const StudentList = ({ students }) => {
 	const columns = [
 		{
+			title: "MSSV",
+			dataIndex: "mssv",
+			key: "mssv",
+		},
+		{
 			title: "Họ tên",
 			dataIndex: "fullName",
 			key: "fullName",

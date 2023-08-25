@@ -11,6 +11,7 @@ const routes = {
 		teams: "teams",
 		profile: "profile",
 		teamRequest: "team-requests",
+		report: "project-report",
 	},
 };
 

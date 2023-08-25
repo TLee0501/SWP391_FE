@@ -2,11 +2,14 @@ import { Form, Input, Typography } from "antd";
 import React, { useContext } from "react";
 import { UserContext } from "../../providers/user";
 import { getRoleName } from "../../utils";
+import { useRole } from "../../hooks/role";
+import { roles } from "../../constants/app";
 
 const { Title } = Typography;
 
 const ProfilePage = () => {
 	const { user } = useContext(UserContext);
+	const role = useRole();
 
 	return (
 		<div>
@@ -18,8 +21,14 @@ const ProfilePage = () => {
 					email: user?.email,
 					fullName: user?.fullName,
 					role: getRoleName(user?.role),
+					mssv: user?.mssv,
 				}}
 			>
+				{role === roles.STUDENT && (
+					<Form.Item name="mssv" label="Mã số sinh viên">
+						<Input placeholder="MSSV..." disabled readOnly />
+					</Form.Item>
+				)}
 				<Form.Item name="fullName" label="Họ tên">
 					<Input placeholder="Họ và tên của bạn..." disabled readOnly />
 				</Form.Item>

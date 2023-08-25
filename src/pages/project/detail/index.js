@@ -1,41 +1,29 @@
-import { Add, Delete, Edit, Info, More } from "@icon-park/react";
-import {
-	Button,
-	Card,
-	Divider,
-	Dropdown,
-	Spin,
-	Typography,
-	message,
-} from "antd";
+import { Add, Info } from "@icon-park/react";
+import { Button, Divider, Spin, Typography, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ProjectApi from "../../../apis/project";
+import TaskApi from "../../../apis/task";
 import { ProgressIndicator } from "../../../components/ProgressIndicator";
-import { RawHtml } from "../../../components/RawHtml";
-import { ALL_PERMISSIONS, roles } from "../../../constants/app";
-import { usePermissions } from "../../../hooks/permission";
-import { useRole } from "../../../hooks/role";
+import { TaskStatus } from "../../../constants/enum";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
+import { ProjectProvider } from "../../../providers/project";
 import { ProjectDescriptionModal } from "../components/ProjectDescriptionModal";
-import { ProjectDetailModal } from "../components/ProjectDetailModal";
 import { DeleteProjectModal } from "./components/DeleteProjectModal";
+import { DeleteTaskModal } from "./components/DeleteTaskModal";
 import { TaskListSection } from "./components/TaskListSection";
 import { TaskModal } from "./components/TaskModal";
-import { DeleteTaskModal } from "./components/DeleteTaskModal";
-import TaskApi from "../../../apis/task";
-import { TaskStatus } from "../../../constants/enum";
-import { ProjectProvider } from "../../../providers/project";
+import { useRole } from "../../../hooks/role";
+import { roles } from "../../../constants/app";
+import { ProjectStudentList } from "./components/ProjectStudentList";
 
 const { Text } = Typography;
 
 const ProjectDetailPage = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
+
 	const role = useRole();
-	const permissions = usePermissions();
-	const canDelete = permissions?.includes(ALL_PERMISSIONS.project.delete);
-	const canUpdate = permissions?.includes(ALL_PERMISSIONS.project.update);
 
 	// Loading states
 	const [loading, setLoading] = useState(false);
@@ -53,8 +41,6 @@ const ProjectDetailPage = () => {
 	const completedTasks = tasks.filter((e) => e.status === TaskStatus.completed);
 
 	// Modal states
-	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
-	const [projectUpdating, setProjectUpdating] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [showDescModal, setShowDescModal] = useState(false);
 	const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
@@ -63,22 +49,6 @@ const ProjectDetailPage = () => {
 
 	const updatingTask = useRef();
 	const deletingTask = useRef();
-
-	const actionItems = [
-		{
-			key: "UPDATE_PROJECT",
-			label: "Cập nhật",
-			icon: <Edit />,
-			onClick: () => setShowUpdateProjectModal(true),
-		},
-		{
-			key: "DELETE_PROJECT",
-			label: "Xóa",
-			icon: <Delete />,
-			danger: true,
-			onClick: () => setShowDeleteModal(true),
-		},
-	];
 
 	const getProject = async () => {
 		setLoading(true);
@@ -172,30 +142,22 @@ const ProjectDetailPage = () => {
 						title={
 							<span>
 								{project?.projectName}{" "}
-								{role === roles.STUDENT && (
-									<Button
-										size={32}
-										type="link"
-										icon={<Info />}
-										onClick={() => setShowDescModal(true)}
-									/>
-								)}
+								<Button
+									size={32}
+									type="link"
+									icon={<Info />}
+									onClick={() => setShowDescModal(true)}
+								/>
 							</span>
 						}
-						action={
-							(canDelete || canUpdate) && (
-								<Dropdown menu={{ items: actionItems }}>
-									<Button className="flex-center" icon={<More />} />
-								</Dropdown>
-							)
-						}
 					>
-						{role !== roles.STUDENT && (
-							<Card title="Mô tả dự án" className="mt-4">
-								<RawHtml html={project?.description} />
-							</Card>
+						{role === roles.TEACHER && (
+							<div className="mt-4">
+								<ProjectStudentList />
+								<Divider />
+							</div>
 						)}
-						<div className="my-3">
+						<div className="my-4">
 							<Text>
 								Công việc đã hoàn thành:{" "}
 								<strong>
@@ -211,14 +173,16 @@ const ProjectDetailPage = () => {
 							title="Công việc cần làm"
 							tasks={newTasks}
 							action={
-								<Button
-									type="primary"
-									icon={<Add />}
-									className="flex-center"
-									onClick={() => setShowCreateTaskModal(true)}
-								>
-									Thêm công việc
-								</Button>
+								role === roles.STUDENT && (
+									<Button
+										type="primary"
+										icon={<Add />}
+										className="flex-center"
+										onClick={() => setShowCreateTaskModal(true)}
+									>
+										Thêm công việc
+									</Button>
+								)
 							}
 							onTaskItemClick={handleTaskItemClick}
 							onTaskItemDelete={handleTaskItemDelete}
@@ -246,15 +210,6 @@ const ProjectDetailPage = () => {
 					</BasePageContent>
 				</ProjectProvider>
 			</Spin>
-			<ProjectDetailModal
-				project={project}
-				open={showUpdateProjectModal}
-				onCancel={() => setShowUpdateProjectModal(false)}
-				// onSubmit={handleUpdateProject}
-				submitting={projectUpdating}
-				title="Cập nhật dự án"
-				edit
-			/>
 			<DeleteProjectModal
 				open={showDeleteModal}
 				onCancel={() => setShowDeleteModal(false)}

@@ -5,6 +5,7 @@ import {
 	Dashboard,
 	Classroom,
 	ListCheckbox,
+	Analysis,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -24,6 +25,7 @@ export const AppSider = () => {
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
 	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
 	const canViewTeamRequest = permissions?.includes(ALL_PERMISSIONS.team.sider);
+	const canViewReport = permissions?.includes(ALL_PERMISSIONS.report.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
@@ -31,32 +33,38 @@ export const AppSider = () => {
 		PROJECT: "MANAGE_PROJECT",
 		CLASS: "MANAGE_CLASS",
 		TEAM_REQUEST: "MANAGE_TEAM_REQUEST",
+		REPORT: "MANAGE_REPORT",
 	};
 	const items = [
 		canViewAccount && {
 			key: itemKeys.ACCOUNT,
-			icon: <User size="24" />,
+			icon: <User size={20} />,
 			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
 		},
 		canViewCourse && {
 			key: itemKeys.COURSE,
-			icon: <DegreeHat size="24" />,
+			icon: <DegreeHat size={20} />,
 			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
 		},
 		canViewClass && {
 			key: itemKeys.CLASS,
-			icon: <Classroom size="24" />,
+			icon: <Classroom size={20} />,
 			label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
 		},
 		canViewProject && {
 			key: itemKeys.PROJECT,
-			icon: <DocumentFolder size="24" />,
+			icon: <DocumentFolder size={20} />,
 			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
 		},
 		canViewTeamRequest && {
 			key: itemKeys.TEAM_REQUEST,
-			icon: <ListCheckbox size="24" />,
+			icon: <ListCheckbox size={20} />,
 			label: <Link to={routes.dashboard.teamRequest}>Duyệt nhóm</Link>,
+		},
+		canViewReport && {
+			key: itemKeys.REPORT,
+			icon: <Analysis size={20} />,
+			label: <Link to={routes.dashboard.report}>Báo cáo dự án</Link>,
 		},
 	];
 
@@ -78,6 +86,8 @@ export const AppSider = () => {
 				return itemKeys.CLASS;
 			case routes.dashboard.teamRequest:
 				return itemKeys.TEAM_REQUEST;
+			case routes.dashboard.report:
+				return itemKeys.REPORT;
 			default:
 		}
 

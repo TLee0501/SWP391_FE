@@ -18,6 +18,15 @@ const AccountList = () => {
 	const getUsers = async (keyword) => {
 		setAccountLoading(true);
 		const data = await UserApi.searchUsers(keyword);
+		data.sort((a, b) => {
+			if (a.role === roles.ADMIN) {
+				return -1; // a comes before b
+			}
+			if (b.role === roles.ADMIN) {
+				return 1; // b comes before a
+			}
+			return 0; // no change in order
+		});
 		setAccounts(data);
 		setAccountLoading(false);
 	};

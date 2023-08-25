@@ -23,7 +23,7 @@ const getUser = async () => {
 		const user = response.data;
 		return user;
 	} catch (error) {
-		console.log("Wrong userId", error);
+		console.log("Error get user: ", error);
 		return undefined;
 	}
 };

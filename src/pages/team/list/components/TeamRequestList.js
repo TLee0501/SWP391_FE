@@ -106,7 +106,6 @@ export const TeamRequestList = ({ teamRequests, onClickItem, reload }) => {
 			title: "Trạng thái",
 			key: "status",
 			render: (_, { status }) => {
-				console.log(status);
 				return (
 					<Tag
 						color={

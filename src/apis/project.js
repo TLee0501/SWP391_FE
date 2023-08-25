@@ -72,6 +72,18 @@ const deleteProject = async (id) => {
 	}
 };
 
+const checkClassProjectStatus = async (classId) => {
+	try {
+		const response = await BaseApi.get(
+			`/${resource}/GetProjectsAndStatusByClassIDandUserID/${classId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error checkClassProjectStatus: ", error);
+		return undefined;
+	}
+};
+
 const ProjectApi = {
 	getProjects,
 	getWorkingProjects,
@@ -79,6 +91,7 @@ const ProjectApi = {
 	createProject,
 	updateProject,
 	deleteProject,
+	checkClassProjectStatus,
 };
 
 export default ProjectApi;

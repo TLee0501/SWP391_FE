@@ -1,5 +1,5 @@
 import { Plus } from "@icon-park/react";
-import { Button, Col, Input, Row, Spin } from "antd";
+import { Button, Col, Input, Row, Select, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
@@ -23,6 +23,17 @@ const ClassListPage = () => {
 
 	const [showCreateClassModal, setShowCreateClassModal] = useState(false);
 
+	const statusOptions = [
+		{
+			label: "Đã tham gia",
+			value: true,
+		},
+		{
+			label: "Chưa tham gia",
+			value: false,
+		},
+	];
+
 	const handleShowCreateClassModal = () => {
 		setShowCreateClassModal(true);
 	};
@@ -40,9 +51,15 @@ const ClassListPage = () => {
 		setShowDeleteClassModal(false);
 	};
 
-	const getClasses = async (courseId, keyword) => {
+	const getClasses = async (courseId, keyword, enrolled) => {
 		setClassLoading(true);
-		const data = await ClassApi.searchClass(courseId, keyword);
+		console.log(courseId, keyword, enrolled);
+		var data = await ClassApi.searchClass(courseId, keyword);
+
+		if (enrolled != null && enrolled !== undefined) {
+			console.log(data);
+			data = data.filter((e) => e.enrolled === enrolled);
+		}
 		setClasses(data);
 		setClassLoading(false);
 	};
@@ -86,29 +103,48 @@ const ClassListPage = () => {
 	useEffect(() => {
 		const courseId = searchParams.get("course");
 		const search = searchParams.get("search");
-		getClasses(courseId, search);
+		const enrolled = searchParams.get("enrolled");
+		getClasses(courseId, search, enrolled ? enrolled === "true" : undefined);
 	}, [searchParams]);
 
 	return (
 		<div>
 			<Row justify="space-between" className="mb-4">
-				<Col span={18}>
+				<Col span={22}>
 					{canView && (
-						<Row>
+						<Row align="middle" className="w-full">
 							<Input.Search
-								className="w-1/2 mr-2"
+								className="w-1/3 mr-2"
 								placeholder="Tìm lớp học..."
 								onSearch={handleSearchClass}
 							/>
+							<span className="mr-2">Môn học:</span>
 							<CourseSelect
 								allowClear
 								onChange={handleChangeCourse}
 								onClear={handleClearCourse}
 							/>
+							<span className="mr-2 ml-4">Trạng thái:</span>
+							<Select
+								allowClear
+								options={statusOptions}
+								placeholder="Chọn trạng thái"
+								onChange={(enrolled) => {
+									if (enrolled === undefined || enrolled == null) {
+										return;
+									}
+									searchParams.set("enrolled", enrolled);
+									setSearchParams(searchParams);
+								}}
+								onClear={() => {
+									searchParams.delete("enrolled");
+									setSearchParams(searchParams);
+								}}
+							/>
 						</Row>
 					)}
 				</Col>
-				<Col span={6}>
+				<Col span={2}>
 					{canCreate && (
 						<Row justify="end">
 							<Button

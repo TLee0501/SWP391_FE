@@ -43,7 +43,7 @@ export const EnrollClassModal = ({ open, onCancel, onSuccess, classId }) => {
 						},
 					]}
 				>
-					<Input placeholder="Mã tham gia lớp học..." />
+					<Input.Password placeholder="Mã tham gia lớp học..." />
 				</Form.Item>
 			</Form>
 		</BaseModal>

@@ -13,7 +13,7 @@ export const CourseFormModal = ({
 	const formRef = useRef();
 
 	const onFinish = (values) => {
-		onSubmit(values);
+		onSubmit({ ...values, courseId: course?.courseId });
 	};
 
 	return (

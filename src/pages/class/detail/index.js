@@ -49,13 +49,13 @@ const ClassDetailPage = () => {
 
 			onClick: () => setShowUpdateClassModal(true),
 		},
-		{
-			key: "DELETE_CLASS",
-			label: "Xóa lớp",
-			icon: <Delete />,
-			danger: true,
-			onClick: () => setShowDeleteClassModal(true),
-		},
+		// {
+		// 	key: "DELETE_CLASS",
+		// 	label: "Xóa lớp",
+		// 	icon: <Delete />,
+		// 	danger: true,
+		// 	onClick: () => setShowDeleteClassModal(true),
+		// },
 	];
 
 	const getClass = async () => {

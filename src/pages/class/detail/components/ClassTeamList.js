@@ -1,4 +1,4 @@
-import { Button, Collapse, List, Spin, Typography } from "antd";
+import { Button, Collapse, Empty, List, Spin, Typography } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import TeamApi from "../../../../apis/team";
 import { ClassContext } from "../../../../providers/class";
@@ -6,6 +6,8 @@ import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TableReport } from "@icon-park/react";
 import { useNavigate } from "react-router";
 import routes from "../../../../constants/routes";
+
+const { Text } = Typography;
 
 export const ClassTeamList = () => {
 	const navigate = useNavigate();
@@ -64,7 +66,11 @@ export const ClassTeamList = () => {
 	return (
 		<ClassDetailArea title="Danh sách nhóm làm dự án" defaultOpen>
 			<Spin spinning={loading}>
-				<Collapse items={items} />
+				{items.length > 0 ? (
+					<Collapse items={items} />
+				) : (
+					<Empty description={<Text disabled>Chưa có nhóm nào đăng ký</Text>} />
+				)}
 			</Spin>
 		</ClassDetailArea>
 	);

@@ -9,6 +9,7 @@ import animationData from "../../assets/lotties/home-animation";
 import AuthApi from "../../apis/auth";
 import { UserContext } from "../../providers/user";
 import { roles } from "../../constants/app";
+import { getRoleName } from "../../utils";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -20,6 +21,7 @@ export const Dashboard = () => {
 
 	useEffect(() => {
 		AuthApi.getUser().then((user) => {
+			document.title = `${getRoleName(user.role)} | Dashboard`;
 			setUser(user);
 			if (location.pathname === routes.dashboard.root) {
 				var path = routes.dashboard.classes;

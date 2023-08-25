@@ -54,7 +54,10 @@ const createTeamRequest = async (request) => {
 
 const AcceptTeamRequest = async (teamId) => {
 	try {
-		const response = await BaseApi.put(`/${resource}/AcceptTeamProjectrequest/${teamId}`, teamId);
+		const response = await BaseApi.put(
+			`/${resource}/AcceptTeamProjectrequest/${teamId}`,
+			teamId
+		);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error accept team request: ", error);
@@ -63,10 +66,25 @@ const AcceptTeamRequest = async (teamId) => {
 };
 const DenyTeamRequest = async (teamId) => {
 	try {
-		const response = await BaseApi.put(`/${resource}/DenyTeamProjectrequest/${teamId}`, teamId);
+		const response = await BaseApi.put(
+			`/${resource}/DenyTeamProjectrequest/${teamId}`,
+			teamId
+		);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error deny team request: ", error);
+		return false;
+	}
+};
+
+const cancelTeamRequest = async (teamId) => {
+	try {
+		const response = await BaseApi.put(
+			`/${resource}/CancelTeamProjectrequest/${teamId}`
+		);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error cancel team request: ", error);
 		return false;
 	}
 };
@@ -77,6 +95,7 @@ const TeamApi = {
 	createTeamRequest,
 	AcceptTeamRequest,
 	DenyTeamRequest,
+	cancelTeamRequest,
 };
 
 export default TeamApi;

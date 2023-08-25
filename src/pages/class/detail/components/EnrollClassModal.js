@@ -18,7 +18,7 @@ export const EnrollClassModal = ({ open, onCancel, onSuccess, classId }) => {
 			message.success("Tham gia lớp học thành công");
 			onSuccess();
 		} else {
-			message.error("Tham gia lớp học thất bại");
+			message.error("Mã tham gia không hợp lệ");
 		}
 
 		onCancel();

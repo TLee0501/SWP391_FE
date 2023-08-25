@@ -26,7 +26,7 @@ export const TeamRequestList = ({ teamRequests, onClickItem, reload }) => {
 			message.success("Đã duyệt yêu cầu đăng ký nhóm");
 			reload();
 		} else {
-			message.error("Có lỗi xảy ra");
+			message.error("Sinh viên này đã có nhóm, vui lòng từ chối yêu cầu");
 		}
 	};
 

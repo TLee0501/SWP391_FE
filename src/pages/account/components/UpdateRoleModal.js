@@ -60,7 +60,7 @@ export const UpdateRoleModal = ({
 						},
 					]}
 				>
-					<Select options={roleOptions} />
+					<Select options={roleOptions} placeholder="Chọn vai trò" />
 				</Form.Item>
 			</Form>
 		</BaseModal>

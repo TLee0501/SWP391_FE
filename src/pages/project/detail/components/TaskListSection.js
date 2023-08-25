@@ -11,6 +11,8 @@ export const TaskListSection = ({
 	tasks,
 	onTaskItemClick,
 	onTaskItemDelete,
+	onAssignMember,
+	onUnAssignMember,
 }) => {
 	const [expanded, setExpanded] = useState(true);
 
@@ -31,6 +33,8 @@ export const TaskListSection = ({
 					tasks={tasks}
 					onItemClick={onTaskItemClick}
 					onItemDelete={onTaskItemDelete}
+					onAssignMember={onAssignMember}
+					onUnAssignMember={onUnAssignMember}
 				/>
 			)}
 		</div>

@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import BaseModal from "../../../../components/BaseModal";
 import { Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { TaskStatus } from "../../../../constants/app";
+import React, { useRef } from "react";
+import BaseModal from "../../../../components/BaseModal";
+import { TaskStatus } from "../../../../constants/enum";
 
 export const TaskModal = ({
 	open,
@@ -17,15 +17,15 @@ export const TaskModal = ({
 
 	const statusOptions = [
 		{
-			value: TaskStatus.NEW,
+			value: TaskStatus.new,
 			label: "Cần làm",
 		},
 		{
-			value: TaskStatus.INPROGRESS,
+			value: TaskStatus.inProgress,
 			label: "Đang làm",
 		},
 		{
-			value: TaskStatus.COMPLETED,
+			value: TaskStatus.completed,
 			label: "Đã hoàn thành",
 		},
 	];
@@ -41,10 +41,13 @@ export const TaskModal = ({
 			<Form
 				ref={formRef}
 				layout="vertical"
-				onFinish={onSubmit}
+				onFinish={(values) => {
+					onSubmit({ ...values, taskId: task?.taskId });
+				}}
 				initialValues={{
 					taskName: task?.taskName,
 					taskDescription: task?.taskDescription,
+					status: task?.status,
 				}}
 			>
 				<Form.Item
@@ -73,7 +76,7 @@ export const TaskModal = ({
 							},
 						]}
 					>
-						<Select options={statusOptions} defaultValue={TaskStatus.NEW} />
+						<Select options={statusOptions} />
 					</Form.Item>
 				)}
 			</Form>

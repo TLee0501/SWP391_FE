@@ -3,3 +3,9 @@ export const TeamRequestStatus = {
 	approved: 1,
 	denied: 2,
 };
+
+export const TaskStatus = {
+	new: 0,
+	inProgress: 1,
+	completed: 2,
+};

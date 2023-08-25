@@ -4,11 +4,23 @@ import { TaskItem } from "./TaskItem";
 
 const { Text } = Typography;
 
-export const TaskList = ({ tasks, onItemClick, onItemDelete }) => {
+export const TaskList = ({
+	tasks,
+	onItemClick,
+	onItemDelete,
+	onAssignMember,
+	onUnAssignMember,
+}) => {
 	const renderItem = (item) => {
 		return (
 			<List.Item>
-				<TaskItem task={item} onClick={onItemClick} onDelete={onItemDelete} />
+				<TaskItem
+					task={item}
+					onClick={onItemClick}
+					onDelete={onItemDelete}
+					onAssignMember={onAssignMember}
+					onUnAssignMember={onUnAssignMember}
+				/>
 			</List.Item>
 		);
 	};

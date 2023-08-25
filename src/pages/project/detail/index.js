@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProjectApi from "../../../apis/project";
 import { ProgressIndicator } from "../../../components/ProgressIndicator";
 import { RawHtml } from "../../../components/RawHtml";
-import { ALL_PERMISSIONS, TaskStatus, roles } from "../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../constants/app";
 import { usePermissions } from "../../../hooks/permission";
 import { useRole } from "../../../hooks/role";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
@@ -24,6 +24,8 @@ import { TaskListSection } from "./components/TaskListSection";
 import { TaskModal } from "./components/TaskModal";
 import { DeleteTaskModal } from "./components/DeleteTaskModal";
 import TaskApi from "../../../apis/task";
+import { TaskStatus } from "../../../constants/enum";
+import { ProjectProvider } from "../../../providers/project";
 
 const { Text } = Typography;
 
@@ -39,15 +41,16 @@ const ProjectDetailPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [taskLoading, setTaskLoading] = useState(false);
 	const [taskCreating, setTaskCreating] = useState(false);
+	const [taskUpdating, setTaskUpdating] = useState(false);
 
 	// Data states
 	const [project, setProject] = useState({});
 	const [tasks, setTasks] = useState([]);
-	const newTasks = tasks.filter((e) => e.status === TaskStatus.NEW);
+	const newTasks = tasks.filter((e) => e.status === TaskStatus.new);
 	const inProgressTasks = tasks.filter(
-		(e) => e.status === TaskStatus.INPROGRESS
+		(e) => e.status === TaskStatus.inProgress
 	);
-	const completedTasks = tasks.filter((e) => e.status === TaskStatus.COMPLETED);
+	const completedTasks = tasks.filter((e) => e.status === TaskStatus.completed);
 
 	// Modal states
 	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
@@ -127,6 +130,32 @@ const ProjectDetailPage = () => {
 		setShowCreateTaskModal(false);
 	};
 
+	const handleUpdateTask = async (values) => {
+		const { taskName, taskDescription, taskId, status } = values;
+		setTaskUpdating(true);
+		const success = await TaskApi.updateTask({
+			taskId,
+			taskName,
+			description: taskDescription,
+			status,
+		});
+		if (success) {
+			getProjectTasks();
+		} else {
+			message.error("Có lỗi xảy ra");
+		}
+		setTaskUpdating(false);
+		setShowUpdateTaskModal(false);
+	};
+
+	const handleUnAssignMember = (taskId, memberId) => {
+		TaskApi.unAssignTask(taskId, memberId).then((success) => {
+			if (success) {
+				getProjectTasks();
+			}
+		});
+	};
+
 	useEffect(() => {
 		if (!id) return;
 
@@ -138,76 +167,84 @@ const ProjectDetailPage = () => {
 	return (
 		<>
 			<Spin spinning={loading || taskLoading}>
-				<BasePageContent
-					title={
-						<span>
-							{project?.projectName}{" "}
-							{role === roles.STUDENT && (
-								<Button
-									size={32}
-									type="link"
-									icon={<Info />}
-									onClick={() => setShowDescModal(true)}
-								/>
-							)}
-						</span>
-					}
-					action={
-						(canDelete || canUpdate) && (
-							<Dropdown menu={{ items: actionItems }}>
-								<Button className="flex-center" icon={<More />} />
-							</Dropdown>
-						)
-					}
-				>
-					{role !== roles.STUDENT && (
-						<Card title="Mô tả dự án" className="mt-4">
-							<RawHtml html={project?.description} />
-						</Card>
-					)}
-					<div className="my-3">
-						<Text>
-							Công việc đã hoàn thành:{" "}
-							<strong>
-								{completedTasks.length}/{tasks.length}
-							</strong>
-						</Text>
-						<ProgressIndicator
-							completed={completedTasks.length}
-							total={tasks.length}
-						/>
-					</div>
-					<TaskListSection
-						title="Công việc cần làm"
-						tasks={newTasks}
-						action={
-							<Button
-								type="primary"
-								icon={<Add />}
-								className="flex-center"
-								onClick={() => setShowCreateTaskModal(true)}
-							>
-								Thêm công việc
-							</Button>
+				<ProjectProvider project={project}>
+					<BasePageContent
+						title={
+							<span>
+								{project?.projectName}{" "}
+								{role === roles.STUDENT && (
+									<Button
+										size={32}
+										type="link"
+										icon={<Info />}
+										onClick={() => setShowDescModal(true)}
+									/>
+								)}
+							</span>
 						}
-						onTaskItemClick={handleTaskItemClick}
-						onTaskItemDelete={handleTaskItemDelete}
-					/>
-					<Divider />
-					<TaskListSection
-						title="Công việc đang làm"
-						tasks={inProgressTasks}
-						onTaskItemClick={handleTaskItemClick}
-						onTaskItemDelete={handleTaskItemDelete}
-					/>
-					<Divider />
-					<TaskListSection
-						title="Công việc đã hoàn thành"
-						tasks={completedTasks}
-						onTaskItemClick={handleTaskItemClick}
-						onTaskItemDelete={handleTaskItemDelete}
-					/>
-				</BasePageContent>
+						action={
+							(canDelete || canUpdate) && (
+								<Dropdown menu={{ items: actionItems }}>
+									<Button className="flex-center" icon={<More />} />
+								</Dropdown>
+							)
+						}
+					>
+						{role !== roles.STUDENT && (
+							<Card title="Mô tả dự án" className="mt-4">
+								<RawHtml html={project?.description} />
+							</Card>
+						)}
+						<div className="my-3">
+							<Text>
+								Công việc đã hoàn thành:{" "}
+								<strong>
+									{completedTasks.length}/{tasks.length}
+								</strong>
+							</Text>
+							<ProgressIndicator
+								completed={completedTasks.length}
+								total={tasks.length}
+							/>
+						</div>
+						<TaskListSection
+							title="Công việc cần làm"
+							tasks={newTasks}
+							action={
+								<Button
+									type="primary"
+									icon={<Add />}
+									className="flex-center"
+									onClick={() => setShowCreateTaskModal(true)}
+								>
+									Thêm công việc
+								</Button>
+							}
+							onTaskItemClick={handleTaskItemClick}
+							onTaskItemDelete={handleTaskItemDelete}
+							onAssignMember={() => getProjectTasks()}
+							onUnAssignMember={handleUnAssignMember}
+						/>
+						<Divider />
+						<TaskListSection
+							title="Công việc đang làm"
+							tasks={inProgressTasks}
+							onTaskItemClick={handleTaskItemClick}
+							onTaskItemDelete={handleTaskItemDelete}
+							onAssignMember={() => getProjectTasks()}
+							onUnAssignMember={handleUnAssignMember}
+						/>
+						<Divider />
+						<TaskListSection
+							title="Công việc đã hoàn thành"
+							tasks={completedTasks}
+							onTaskItemClick={handleTaskItemClick}
+							onTaskItemDelete={handleTaskItemDelete}
+							onAssignMember={() => getProjectTasks()}
+							onUnAssignMember={handleUnAssignMember}
+						/>
+					</BasePageContent>
+				</ProjectProvider>
 			</Spin>
 			<ProjectDetailModal
 				project={project}
@@ -241,12 +278,17 @@ const ProjectDetailPage = () => {
 				onCancel={() => setShowUpdateTaskModal(false)}
 				title="Cập nhật công việc"
 				task={updatingTask.current}
+				confirmLoading={taskUpdating}
 				edit={true}
+				onSubmit={handleUpdateTask}
 			/>
 			<DeleteTaskModal
-				task={deletingTask}
+				task={deletingTask.current}
 				open={showDeleteTaskModal}
 				onCancel={() => setShowDeleteTaskModal(false)}
+				onSuccess={() => {
+					getProjectTasks();
+				}}
 			/>
 		</>
 	);

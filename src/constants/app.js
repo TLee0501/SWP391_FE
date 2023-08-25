@@ -128,9 +128,3 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.task.view,
 	],
 };
-
-export const TaskStatus = {
-	NEW: 0,
-	INPROGRESS: 1,
-	COMPLETED: 2,
-};

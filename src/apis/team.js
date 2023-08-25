@@ -64,6 +64,7 @@ const AcceptTeamRequest = async (teamId) => {
 		return false;
 	}
 };
+
 const DenyTeamRequest = async (teamId) => {
 	try {
 		const response = await BaseApi.put(

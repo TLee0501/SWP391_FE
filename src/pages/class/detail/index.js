@@ -1,4 +1,4 @@
-import { Delete, Key, Setting } from "@icon-park/react";
+import { Delete, Edit, Key, Setting } from "@icon-park/react";
 import { Button, Dropdown, Row, Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,10 +11,10 @@ import { ClassBasicInfo } from "./components/ClassBasicInfo";
 import { ClassStudentList } from "./components/ClassStudentList";
 import { ClassTeamList } from "./components/ClassTeamList";
 import { EnrollClassModal } from "./components/EnrollClassModal";
-import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
 import { ClassProjectList } from "./components/ClassProjectList";
 import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
 import { useRole } from "../../../hooks/role";
+import { UpdateClassModal } from "./components/UpdateClassModal";
 import ProjectApi from "../../../apis/project";
 import { ProjectDetailModal } from "../../project/components/ProjectDetailModal";
 import { ConfirmDeleteModal } from "../../../components/ConfirmDeleteModal";
@@ -35,7 +35,7 @@ const ClassDetailPage = () => {
 	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
 	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 
-	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
+	const [showUpdateEClassModal, setShowUpdateClassModal] =
 		useState(false);
 	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 	const [showProjectDescModal, setShowProjectDescModal] = useState(false);
@@ -44,10 +44,11 @@ const ClassDetailPage = () => {
 
 	const settingItems = [
 		{
-			key: "ENROLL_KEY",
-			label: "Cập nhật mã tham gia",
-			icon: <Key />,
-			onClick: () => setShowUpdateEnrollKeyModal(true),
+			key: "UPDATE_CLASS",
+			label: "Cập nhật lớp học",
+			icon: <Edit size="20"/>,
+			
+			onClick: () => setShowUpdateClassModal(true),
 		},
 		{
 			key: "DELETE_CLASS",
@@ -154,10 +155,10 @@ const ClassDetailPage = () => {
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
-
-				<UpdateEnrollKeyModal
-					open={showUpdateEnrollKeyModal}
-					onCancel={() => setShowUpdateEnrollKeyModal(false)}
+			
+				<UpdateClassModal
+					open={showUpdateEClassModal}
+					onCancel={() => setShowUpdateClassModal(false)}
 					classId={data?.classId}
 				/>
 				<EnrollClassModal

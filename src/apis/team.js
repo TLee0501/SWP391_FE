@@ -89,6 +89,17 @@ const cancelTeamRequest = async (teamId) => {
 		return false;
 	}
 };
+const getProjectTeamInClass = async (classId) => {
+	try {
+		const response = await BaseApi.get(
+			`/${resource}/getProjectTeamInClass/${classId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error getProjectTeamInClass: ", error);
+		return [];
+	}
+};
 
 const TeamApi = {
 	getProjectTeamRequests,
@@ -97,6 +108,7 @@ const TeamApi = {
 	AcceptTeamRequest,
 	DenyTeamRequest,
 	cancelTeamRequest,
+	getProjectTeamInClass,
 };
 
 export default TeamApi;

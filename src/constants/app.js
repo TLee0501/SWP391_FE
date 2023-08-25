@@ -47,6 +47,10 @@ export const ALL_PERMISSIONS = {
 		update: "task.update",
 		delete: "task.delete",
 	},
+	report: {
+		view: "report.view",
+		sider: "report.sider",
+	},
 };
 
 export const USER_PERMISSIONS = {
@@ -126,5 +130,8 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.team.view,
 		//TASK
 		ALL_PERMISSIONS.task.view,
+		// REPORT
+		ALL_PERMISSIONS.report.sider,
+		ALL_PERMISSIONS.report.view,
 	],
 };

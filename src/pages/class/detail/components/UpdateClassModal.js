@@ -1,0 +1,87 @@
+import React, { useRef, useState } from "react";
+import BaseModal from "../../../../components/BaseModal";
+import { DatePicker, Form, Input, message } from "antd";
+import moment from "moment";
+import ClassApi from "../../../../apis/class";
+
+const { RangePicker } = DatePicker;
+
+export const UpdateClassModal = ({ open, onCancel, classId }) => {
+	const formRef = useRef();
+
+	const [classUpdating, setClassUpdating] = useState(false);
+
+	const handleUpdateClass = async (values) => {
+		const { className, enrollCode, dates } = values;
+
+		const data = {
+			classId: classId,
+			className: className,
+			timeStart: dates[0],
+			timeEnd: dates[1],
+			enrollCode: enrollCode,
+			isCompleted: false
+		};
+
+		setClassUpdating(true);
+		const success = await ClassApi.updateClass(data);
+		if (success) {
+			message.success("Cập nhật lớp học thành công");
+		} else {
+			message.error("Cập nhật lớp học thất bại");
+		}
+		setClassUpdating(false);
+		onCancel();
+	};
+
+	return (
+		<BaseModal
+			open={open}
+			onCancel={onCancel}
+			title="Cập nhật môn học"
+			onOk={() => formRef.current?.submit()}
+		>
+			<Form ref={formRef} layout="vertical" onFinish={handleUpdateClass} >
+				<Form.Item
+					name="className"
+					label="Tên lớp học"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng nhập tên lớp học",
+						},
+					]}
+				>
+					<Input placeholder="Nhập tên lớp học..." />
+				</Form.Item>
+				<Form.Item
+					name="enrollCode"
+					label="Mã tham gia"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng nhập mã tham gia",
+						},
+					]}
+				>
+					<Input.Password place holder="Nhập mã tham gia..." />
+				</Form.Item>
+				<Form.Item
+					name="dates"
+					label="Thời gian"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn ngày bắt đầu & kết thúc của lớp học",
+						},
+					]}
+				>
+					<RangePicker
+						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
+					/>
+				</Form.Item>
+			</Form>
+		</BaseModal>
+	);
+};

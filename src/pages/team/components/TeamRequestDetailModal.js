@@ -58,7 +58,7 @@ export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
 					<Button className="flex-center" icon={<Check />} type="primary" onClick={() => {
 						getAcceptTeamRequest(teamRequest?.teamId);
 						console.log(teamRequest?.teamId);
-						setShowAcceptTeamRequestModal(true);
+						setShowAcceptTeamRequestModal(false);
 						message.success(`Duyệt thành công!`);
 					}}>
 						Duyệt
@@ -68,7 +68,7 @@ export const TeamRequestDetailModal = ({ open, onCancel, teamRequest }) => {
 					<Button icon={<Forbid />} className="flex-center" danger onClick={() => {
 						getDenyTeamRequest(teamRequest?.teamId);
 						console.log(teamRequest?.teamId);
-						setShowDenyTeamRequestModal(true);
+						setShowDenyTeamRequestModal(false);
 						message.success(`Nhóm đã bị từ chối!`);
 					}}>
 						Từ chối

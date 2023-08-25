@@ -1,4 +1,4 @@
-import { Key, Setting } from "@icon-park/react";
+import { Edit, Key, Setting } from "@icon-park/react";
 import { Button, Dropdown, Row, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,10 +11,11 @@ import { ClassBasicInfo } from "./components/ClassBasicInfo";
 import { ClassStudentList } from "./components/ClassStudentList";
 import { ClassTeamList } from "./components/ClassTeamList";
 import { EnrollClassModal } from "./components/EnrollClassModal";
-import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
 import { ClassProjectList } from "./components/ClassProjectList";
 import { ProjectDescriptionModal } from "../../project/components/ProjectDescriptionModal";
 import { useRole } from "../../../hooks/role";
+import { UpdateClassModal } from "./components/UpdateClassModal";
+
 
 const ClassDetailPage = () => {
 	const { id } = useParams();
@@ -27,7 +28,7 @@ const ClassDetailPage = () => {
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
 
-	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
+	const [showUpdateEClassModal, setShowUpdateClassModal] =
 		useState(false);
 	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 	const [showProjectDescModal, setShowProjectDescModal] = useState(false);
@@ -36,10 +37,11 @@ const ClassDetailPage = () => {
 
 	const settingItems = [
 		{
-			key: "ENROLL_KEY",
-			label: "Cập nhật mã tham gia",
-			icon: <Key />,
-			onClick: () => setShowUpdateEnrollKeyModal(true),
+			key: "UPDATE_CLASS",
+			label: "Cập nhật lớp học",
+			icon: <Edit size="20"/>,
+			
+			onClick: () => setShowUpdateClassModal(true),
 		},
 	];
 
@@ -93,10 +95,10 @@ const ClassDetailPage = () => {
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
 				</Spin>
-				
-				<UpdateEnrollKeyModal
-					open={showUpdateEnrollKeyModal}
-					onCancel={() => setShowUpdateEnrollKeyModal(false)}
+			
+				<UpdateClassModal
+					open={showUpdateEClassModal}
+					onCancel={() => setShowUpdateClassModal(false)}
 					classId={data?.classId}
 				/>
 				<EnrollClassModal

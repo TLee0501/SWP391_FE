@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { ClassDetailArea } from "../../components/ClassDetailArea";
-import { ClassContext } from "../../../../providers/class";
+import { Delete, Plus, PreviewOpen } from "@icon-park/react";
 import {
 	Button,
 	Card,
@@ -11,15 +9,17 @@ import {
 	Typography,
 	message,
 } from "antd";
-import ProjectApi from "../../../../apis/project";
-import { Delete, Plus, PreviewOpen } from "@icon-park/react";
-import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
-import { usePermissions } from "../../../../hooks/permission";
-import { ALL_PERMISSIONS } from "../../../../constants/app";
-import { CreateTeamRequest } from "./CreateTeamRequest";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ClassApi from "../../../../apis/class";
+import ProjectApi from "../../../../apis/project";
 import TeamRequestApi from "../../../../apis/team";
 import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
+import { ALL_PERMISSIONS } from "../../../../constants/app";
+import { usePermissions } from "../../../../hooks/permission";
+import { ClassContext } from "../../../../providers/class";
+import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
+import { ClassDetailArea } from "../../components/ClassDetailArea";
+import { TeamRegistrationModal } from "./TeamRegistrationModal";
 
 const { Text } = Typography;
 
@@ -43,9 +43,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 
 	const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
 	const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
-	const [showCreateTeamRequestModal, setShowCreateTeamRequestModal] =
-		useState(false);
-	const [teamRequestCreating, setTeamRequestCreating] = useState(false);
+	const [showCreateTeamModal, setShowCreateTeamModal] = useState(false);
+	const [teamCreating, setTeamCreating] = useState(false);
 
 	const projectIdRef = useRef();
 	const projectRef = useRef();
@@ -78,8 +77,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	}, [data]);
 
 	const handleCloseCreateTeamRequestModal = () => {
-		setShowCreateTeamRequestModal(false);
-		setTeamRequestCreating(false);
+		setShowCreateTeamModal(false);
+		setTeamCreating(false);
 	};
 
 	const getStudents = async (classId) => {
@@ -96,8 +95,8 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		getStudents(classId);
 	}, [data]);
 
-	const handleCreateTeamRequest = async (request) => {
-		setTeamRequestCreating(true);
+	const handleCreateTeam = async (request) => {
+		setTeamCreating(true);
 
 		const { classId, projectId, teamName, listStudent } = request;
 		const data = {
@@ -109,12 +108,12 @@ export const ClassProjectList = ({ onViewDescription }) => {
 
 		const response = await TeamRequestApi.createTeamRequest(data);
 		if (response.success) {
-			message.success("Đã gửi yêu cầu đăng ký nhóm");
+			message.success("Đã đăng ký nhóm");
 		} else {
-			message.error("Gửi yêu cầu thất bại");
+			message.error("Đăng ký nhóm thất bại");
 		}
-		setTeamRequestCreating(false);
-		setShowCreateTeamRequestModal(false);
+		setTeamCreating(false);
+		setShowCreateTeamModal(false);
 	};
 
 	const handleDeleteProject = () => {
@@ -148,7 +147,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 									className="mr-2"
 									onClick={() => {
 										projectRef.current = item;
-										setShowCreateTeamRequestModal(true);
+										setShowCreateTeamModal(true);
 									}}
 								>
 									Đăng ký nhóm
@@ -218,14 +217,13 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				onSubmit={handleCreateProject}
 				submitting={projectCreating}
 			/>
-			<CreateTeamRequest
-				open={showCreateTeamRequestModal}
+			<TeamRegistrationModal
+				open={showCreateTeamModal}
 				title="Đăng ký nhóm làm dự án"
 				onCancel={handleCloseCreateTeamRequestModal}
-				confirmLoading={teamRequestCreating}
-				Students={students}
-				Projects={projects}
-				onSubmit={handleCreateTeamRequest}
+				confirmLoading={teamCreating}
+				students={students}
+				onSubmit={handleCreateTeam}
 				project={projectRef.current}
 				classId={data.classId}
 			/>

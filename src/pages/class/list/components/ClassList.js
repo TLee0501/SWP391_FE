@@ -26,20 +26,10 @@ export const ClassList = ({ classes, onDelete }) => {
 			ellipsis: true,
 		},
 		{
-			title: "Bắt đầu",
-			dataIndex: "startTime",
-			key: "startTime",
-			render: (_, { startTime }) => {
-				return <Text>{formatDate(startTime, "DD/MM/yyyy")}</Text>;
-			},
-		},
-		{
-			title: "Kết thúc",
-			dataIndex: "endTime",
-			key: "endTime",
-			render: (_, { endTime }) => {
-				return <Text>{formatDate(endTime, "DD/MM/yyyy")}</Text>;
-			},
+			title: "Học kỳ",
+			dataIndex: "semesterName",
+			key: "semesterName",
+			ellipsis: true,
 		},
 	];
 
@@ -65,7 +55,7 @@ export const ClassList = ({ classes, onDelete }) => {
 	}
 
 	columns.push({
-		dataIndex: "action",
+		title: "Thao tác",
 		key: "action",
 		render: (_, { classId }) => {
 			return (

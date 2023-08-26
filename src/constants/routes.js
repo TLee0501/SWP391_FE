@@ -12,6 +12,7 @@ const routes = {
 		profile: "profile",
 		teamRequest: "team-requests",
 		report: "project-report",
+		semester: "semester",
 	},
 };
 

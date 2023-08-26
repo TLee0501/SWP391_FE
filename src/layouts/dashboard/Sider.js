@@ -5,6 +5,7 @@ import {
 	Dashboard,
 	Classroom,
 	Analysis,
+	Hourglass,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -14,6 +15,7 @@ import { Link, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
 import { usePermissions } from "../../hooks/permission";
 import { ALL_PERMISSIONS } from "../../constants/app";
+import config from "../../constants/config";
 
 export const AppSider = () => {
 	const location = useLocation();
@@ -24,6 +26,7 @@ export const AppSider = () => {
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
 	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
 	const canViewReport = permissions?.includes(ALL_PERMISSIONS.report.sider);
+	const canViewSemester = permissions?.includes(ALL_PERMISSIONS.semester.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
@@ -32,6 +35,7 @@ export const AppSider = () => {
 		CLASS: "MANAGE_CLASS",
 		TEAM_REQUEST: "MANAGE_TEAM_REQUEST",
 		REPORT: "MANAGE_REPORT",
+		SEMESTER: "MANAGE_SEMESTER",
 	};
 	const items = [
 		canViewAccount && {
@@ -43,6 +47,11 @@ export const AppSider = () => {
 			key: itemKeys.COURSE,
 			icon: <DegreeHat size={20} />,
 			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
+		},
+		canViewSemester && {
+			key: itemKeys.SEMESTER,
+			icon: <Hourglass size={20} />,
+			label: <Link to={routes.dashboard.semester}>Học kỳ</Link>,
 		},
 		canViewClass && {
 			key: itemKeys.CLASS,
@@ -81,6 +90,8 @@ export const AppSider = () => {
 				return itemKeys.TEAM_REQUEST;
 			case routes.dashboard.report:
 				return itemKeys.REPORT;
+			case routes.dashboard.semester:
+				return itemKeys.SEMESTER;
 			default:
 		}
 
@@ -89,6 +100,7 @@ export const AppSider = () => {
 
 	return (
 		<Sider
+			width={config.SIDER_WIDTH}
 			className="pb-4"
 			style={{
 				overflow: "auto",

@@ -105,7 +105,7 @@ export const CourseListPage = () => {
 
 	return (
 		<div>
-			<Row justify="space-between">
+			<Row justify="space-between" className="mb-4">
 				{canView && (
 					<Input.Search
 						style={{ width: "50%" }}

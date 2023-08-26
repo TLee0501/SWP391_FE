@@ -51,6 +51,13 @@ export const ALL_PERMISSIONS = {
 		view: "report.view",
 		sider: "report.sider",
 	},
+	semester: {
+		sider: "semester.sider",
+		view: "semester.view",
+		create: "semester.create",
+		update: "semester.update",
+		delete: "semester.delete",
+	},
 };
 
 export const USER_PERMISSIONS = {
@@ -61,6 +68,7 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.account.create,
 		ALL_PERMISSIONS.account.update,
 		// CLASS
+		ALL_PERMISSIONS.class.sider,
 		ALL_PERMISSIONS.class.view,
 		ALL_PERMISSIONS.class.create,
 		ALL_PERMISSIONS.class.update,
@@ -87,6 +95,12 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.task.create,
 		ALL_PERMISSIONS.task.update,
 		ALL_PERMISSIONS.task.delete,
+		// SEMESTER
+		ALL_PERMISSIONS.semester.sider,
+		ALL_PERMISSIONS.semester.view,
+		ALL_PERMISSIONS.semester.create,
+		ALL_PERMISSIONS.semester.update,
+		ALL_PERMISSIONS.semester.delete,
 	],
 	[roles.STUDENT]: [
 		// CLASS

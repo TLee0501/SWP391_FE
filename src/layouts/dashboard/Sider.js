@@ -4,7 +4,6 @@ import {
 	User,
 	Dashboard,
 	Classroom,
-	ListCheckbox,
 	Analysis,
 } from "@icon-park/react";
 import { Menu } from "antd";
@@ -24,7 +23,6 @@ export const AppSider = () => {
 	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.sider);
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
 	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
-	const canViewTeamRequest = permissions?.includes(ALL_PERMISSIONS.team.sider);
 	const canViewReport = permissions?.includes(ALL_PERMISSIONS.report.sider);
 
 	const itemKeys = {
@@ -55,11 +53,6 @@ export const AppSider = () => {
 			key: itemKeys.PROJECT,
 			icon: <DocumentFolder size={20} />,
 			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
-		},
-		canViewTeamRequest && {
-			key: itemKeys.TEAM_REQUEST,
-			icon: <ListCheckbox size={20} />,
-			label: <Link to={routes.dashboard.teamRequest}>Duyệt nhóm</Link>,
 		},
 		canViewReport && {
 			key: itemKeys.REPORT,

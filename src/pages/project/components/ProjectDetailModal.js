@@ -54,7 +54,7 @@ export const ProjectDetailModal = ({
 				layout="vertical"
 				onFinish={handleSubmit}
 				initialValues={{
-					name: project?.projectName,
+					name: project?.name,
 					description: project?.description,
 					functionalReq: project?.functionalReq,
 					nonfunctionalReq: project?.nonfunctionalReq,

@@ -10,11 +10,37 @@ export const ClassBasicInfo = () => {
 
 	const role = useRole();
 
-	const items = [
+	const items1 = [
 		{
 			key: "CLASS_NAME",
 			label: "Tên lớp",
 			children: <strong>{data?.className?.toUpperCase()}</strong>,
+		},
+		{
+			key: "COURSE",
+			label: "Môn học",
+			children: (
+				<strong>
+					{`${data?.courseCode ?? ""} - ${data?.courseName ?? ""}`}
+				</strong>
+			),
+		},
+	];
+
+	if (role === roles.STUDENT) {
+		items1.push({
+			key: "TEACHER",
+			label: "Giáo viên",
+			children: data?.teacherName,
+		});
+	}
+
+	const items2 = [
+		{
+			key: "SEMESTER",
+			label: "Học kỳ",
+			// Hard code for testing only, wait for BE
+			children: "Spring2023_2024 (Năm học 2023 - 2024)",
 		},
 		{
 			key: "START_DATE",
@@ -26,28 +52,12 @@ export const ClassBasicInfo = () => {
 			label: "Ngày kết thúc",
 			children: formatDate(data?.endTime, "DD/MM/yyyy"),
 		},
-		role === roles.STUDENT && {
-			key: "TEACHER",
-			label: "Giáo viên",
-			children: data?.teacherName,
-		},
 	];
 
 	return (
 		<Card className="mt-3 mb-4" title="Thông tin cơ bản">
-			<Descriptions layout="vertical" items={items} />
-			<Descriptions
-				layout="vertical"
-				items={[
-					{
-						key: "COURSE",
-						label: "Môn học",
-						children: (
-							<strong>{`${data?.courseCode} - ${data?.courseName}`}</strong>
-						),
-					},
-				]}
-			/>
+			<Descriptions layout="vertical" items={items1} />
+			<Descriptions layout="vertical" items={items2} />
 		</Card>
 	);
 };

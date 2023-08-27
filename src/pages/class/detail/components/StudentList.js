@@ -7,8 +7,8 @@ export const StudentList = ({ students }) => {
 	const columns = [
 		{
 			title: "MSSV",
-			dataIndex: "mssv",
-			key: "mssv",
+			dataIndex: "code",
+			key: "code",
 		},
 		{
 			title: "Họ tên",

@@ -1,11 +1,11 @@
 import {
 	DegreeHat,
-	DocumentFolder,
 	User,
 	Dashboard,
 	Classroom,
 	Analysis,
 	Hourglass,
+	EveryUser,
 } from "@icon-park/react";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -24,48 +24,48 @@ export const AppSider = () => {
 	const canViewAccount = permissions?.includes(ALL_PERMISSIONS.account.sider);
 	const canViewCourse = permissions?.includes(ALL_PERMISSIONS.course.sider);
 	const canViewClass = permissions?.includes(ALL_PERMISSIONS.class.sider);
-	const canViewProject = permissions?.includes(ALL_PERMISSIONS.project.sider);
+	const canViewTeam = permissions?.includes(ALL_PERMISSIONS.team.sider);
 	const canViewReport = permissions?.includes(ALL_PERMISSIONS.report.sider);
 	const canViewSemester = permissions?.includes(ALL_PERMISSIONS.semester.sider);
 
 	const itemKeys = {
 		ACCOUNT: "MANAGE_ACCOUNT",
 		COURSE: "MANAGE_COURSE",
-		PROJECT: "MANAGE_PROJECT",
+		TEAM: "MANAGE_TEAM",
 		CLASS: "MANAGE_CLASS",
-		TEAM_REQUEST: "MANAGE_TEAM_REQUEST",
 		REPORT: "MANAGE_REPORT",
 		SEMESTER: "MANAGE_SEMESTER",
 	};
+	const iconSize = 20;
 	const items = [
 		canViewAccount && {
 			key: itemKeys.ACCOUNT,
-			icon: <User size={20} />,
+			icon: <User size={iconSize} />,
 			label: <Link to={routes.dashboard.accounts}>Tài khoản</Link>,
 		},
 		canViewCourse && {
 			key: itemKeys.COURSE,
-			icon: <DegreeHat size={20} />,
+			icon: <DegreeHat size={iconSize} />,
 			label: <Link to={routes.dashboard.courses}>Môn học</Link>,
 		},
 		canViewSemester && {
 			key: itemKeys.SEMESTER,
-			icon: <Hourglass size={20} />,
+			icon: <Hourglass size={iconSize} />,
 			label: <Link to={routes.dashboard.semester}>Học kỳ</Link>,
 		},
 		canViewClass && {
 			key: itemKeys.CLASS,
-			icon: <Classroom size={20} />,
+			icon: <Classroom size={iconSize} />,
 			label: <Link to={routes.dashboard.classes}>Lớp học</Link>,
 		},
-		canViewProject && {
-			key: itemKeys.PROJECT,
-			icon: <DocumentFolder size={20} />,
-			label: <Link to={routes.dashboard.projects}>Dự án</Link>,
+		canViewTeam && {
+			key: itemKeys.TEAM,
+			icon: <EveryUser size={iconSize} />,
+			label: <Link to={routes.dashboard.teams}>Nhóm</Link>,
 		},
 		canViewReport && {
 			key: itemKeys.REPORT,
-			icon: <Analysis size={20} />,
+			icon: <Analysis size={iconSize} />,
 			label: <Link to={routes.dashboard.report}>Báo cáo dự án</Link>,
 		},
 	];
@@ -92,6 +92,8 @@ export const AppSider = () => {
 				return itemKeys.REPORT;
 			case routes.dashboard.semester:
 				return itemKeys.SEMESTER;
+			case routes.dashboard.teams:
+				return itemKeys.TEAM;
 			default:
 		}
 

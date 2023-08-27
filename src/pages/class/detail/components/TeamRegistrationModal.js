@@ -15,7 +15,6 @@ export const TeamRegistrationModal = ({
 	confirmLoading,
 	students,
 	project,
-	classId,
 }) => {
 	const STUDENTS_KEY = "listStudent";
 	const { user } = useContext(UserContext);
@@ -25,13 +24,13 @@ export const TeamRegistrationModal = ({
 	const formRef = useRef();
 
 	const onFinish = async (values) => {
-		await onSubmit({ ...values, projectId: project?.projectId });
+		await onSubmit({ ...values, projectId: project?.id });
 	};
 
 	const getStudentOptions = (memberId) => {
 		const allOptions = students.map((item) => {
 			return {
-				value: item.userId,
+				value: item.id,
 				label: `${item.fullName} (${item.email})`,
 			};
 		});

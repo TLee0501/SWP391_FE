@@ -1,12 +1,9 @@
-import { DatePicker, Form, Input, Select, message } from "antd";
-import moment from "moment";
+import { Form, Input, Select, message } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import CourseApi from "../../../apis/course";
 import BaseModal from "../../../components/BaseModal";
 import { UserContext } from "../../../providers/user";
 import ClassApi from "../../../apis/class";
-
-const { RangePicker } = DatePicker;
 
 export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	const { user } = useContext(UserContext);
@@ -38,14 +35,12 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 
 	const handleCreateClass = async (values) => {
 		const { userId } = user;
-		const { course, name, dates, enrollCode } = values;
+		const { course, name, enrollCode } = values;
 
 		const data = {
 			courseId: course,
 			userId: userId,
 			className: name,
-			timeStart: dates[0],
-			timeEnd: dates[1],
 			enrollCode: enrollCode,
 		};
 
@@ -82,7 +77,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 				>
 					<Input placeholder="Nhập tên lớp học..." />
 				</Form.Item>
-				<Form.Item
+				{/* <Form.Item
 					name="dates"
 					label="Thời gian"
 					rules={[
@@ -97,7 +92,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 					/>
-				</Form.Item>
+				</Form.Item> */}
 				<Form.Item
 					name="course"
 					label="Môn học"

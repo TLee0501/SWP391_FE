@@ -1,34 +1,48 @@
 import React, { useState } from "react";
 import { BaseTable } from "../../../../components/BaseTable";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { More, Plus } from "@icon-park/react";
 import { SemesterFormModal } from "../../components/SemesterFormModal";
+import SemesterApi from "../../../../apis/semester";
+import moment from "moment";
 
 export const SemesterList = ({ semesters, loading }) => {
+	const [showCreateModal, setShowCreateModal] = useState(false);
+
 	const columns = [
 		{
 			title: "Tên học kỳ",
-			dataIndex: "semesterName",
+			dataIndex: "semeterName",
+			key: "semeterName"
 		},
 		{
 			title: "Ngày bắt đầu",
+			dataIndex: "startTime",
+			key: "startTime",
 			render: (_, { startTime }) => {
-				return <div>132</div>;
+				return moment(startTime).format("DD/MM");
 			},
 		},
 		{
 			title: "Ngày kết thúc",
+			dataIndex: "endTime",
+			key: "endTime",
 			render: (_, { endTime }) => {
-				return <div>132</div>;
+				return moment(endTime).format("DD/MM");
 			},
 		},
 		{
 			title: "Năm học",
-			dataIndex: "academicYear",
+			dataIndex: `info`,
+			key: "academicYear",
+			// render: (_, {startTime ,endTime }) => {
+			// 	return moment(endTime).format("DD/MM");
+			// },
 		},
 		{
 			title: "Loại",
-			dataIndex: "semesterType",
+			dataIndex: "semesterTypeId",
+			key: "semesterTypeId",
 		},
 		{
 			title: "Thao tác",
@@ -38,7 +52,26 @@ export const SemesterList = ({ semesters, loading }) => {
 		},
 	];
 
-	const [showCreateModal, setShowCreateModal] = useState(false);
+	const handleCreateSemester = async (values) => {
+		const { semesterName, academicYear, dates, semesterType } = values;
+
+		const data = {
+			semesterName: semesterName,
+			academicYear: academicYear,
+			timeStart: dates[0],
+			timeEnd: dates[1],
+			semesterType: semesterType,
+		};
+
+		setShowCreateModal(true);
+		const success = await SemesterApi.createSemester({ data });
+		if (success) {
+			message.success("Tạo học kỳ thành công");
+		} else {
+			message.error("Tạo học kỳ thất bại");
+		}
+		setShowCreateModal(false);
+	};
 
 	return (
 		<>
@@ -62,6 +95,7 @@ export const SemesterList = ({ semesters, loading }) => {
 				title="Thêm học kỳ"
 				open={showCreateModal}
 				onCancel={() => setShowCreateModal(false)}
+				onSubmit={handleCreateSemester}
 			/>
 		</>
 	);

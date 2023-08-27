@@ -11,6 +11,15 @@ const getSemesters = async () => {
 		return [];
 	}
 };
+const getSemesterTypes = async () => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetSemesterTypes`);
+		return response.data;
+	} catch (error) {
+		console.log("Error get semester type: ", error);
+		return [];
+	}
+};
 
 const getSemesterById = async (id) => {
 	try {
@@ -18,6 +27,15 @@ const getSemesterById = async (id) => {
 		return response.data;
 	} catch (error) {
 		console.log("Error get semester by id: ", error);
+		return undefined;
+	}
+};
+const getSemesterByTypeId = async (id) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetSemesterType/${id}`);
+		return response.data;
+	} catch (error) {
+		console.log("Error get semester type by id: ", error);
 		return undefined;
 	}
 };
@@ -50,6 +68,8 @@ const SemesterApi = {
 	getSemesterById,
 	updateSemester,
 	createSemester,
+	getSemesterTypes,
+	getSemesterByTypeId
 };
 
 export default SemesterApi;

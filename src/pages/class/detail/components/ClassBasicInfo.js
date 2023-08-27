@@ -17,6 +17,11 @@ export const ClassBasicInfo = () => {
 			children: <strong>{data?.className?.toUpperCase()}</strong>,
 		},
 		{
+			key: "SEMESTER_NAME",
+			label: "Học kỳ",
+			children: <strong>{data?.className?.toUpperCase()}</strong>,
+		},
+		{
 			key: "START_DATE",
 			label: "Ngày bắt đầu",
 			children: formatDate(data?.startTime, "DD/MM/yyyy"),
@@ -35,9 +40,9 @@ export const ClassBasicInfo = () => {
 
 	return (
 		<Card className="mt-3 mb-4" title="Thông tin cơ bản">
-			<Descriptions layout="vertical" items={items} />
+			<Descriptions layout="horizontal" items={items} />
 			<Descriptions
-				layout="vertical"
+				layout="horizontal"
 				items={[
 					{
 						key: "COURSE",
@@ -46,6 +51,7 @@ export const ClassBasicInfo = () => {
 							<strong>{`${data?.courseCode} - ${data?.courseName}`}</strong>
 						),
 					},
+
 				]}
 			/>
 		</Card>

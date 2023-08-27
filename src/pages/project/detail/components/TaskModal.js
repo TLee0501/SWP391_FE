@@ -62,25 +62,9 @@ export const TaskModal = ({
 				>
 					<Input placeholder="Nhập tên công việc..." />
 				</Form.Item>
-				<Form.Item
-					name="dates"
-					label="Thời gian"
-					rules={[
-						{
-							required: true,
-							message: "Vui lòng chọn ngày bắt đầu & kết thúc của lớp học",
-						},
-					]}
-				>
-					<RangePicker
-						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
-					/>
-				</Form.Item>
 				<Form.Item name="taskDescription" label="Mô tả công việc">
 					<TextArea placeholder="Nhập mô tả công việc..." />
 				</Form.Item>
-				
 				{edit && (
 					<Form.Item
 						name="status"
@@ -94,9 +78,7 @@ export const TaskModal = ({
 					>
 						<Select options={statusOptions} />
 					</Form.Item>
-
 				)}
-				
 			</Form>
 		</BaseModal>
 	);

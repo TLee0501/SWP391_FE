@@ -9,14 +9,14 @@ import {
 	Typography,
 } from "antd";
 import moment from "moment";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { mockSemesterTypes } from "../../../__mocks__/semester";
 import BaseModal from "../../../components/BaseModal";
+import SemesterApi from "../../../apis/semester";
 
 const { Text } = Typography;
 
 export const SemesterFormModal = ({
-	semester,
 	title,
 	open,
 	onCancel,
@@ -31,24 +31,41 @@ export const SemesterFormModal = ({
 	oneYearLater.setFullYear(now.getFullYear() + 1);
 	const [academicYear, setAcademicYear] = useState(now.getFullYear());
 	const years = [now.getFullYear(), oneYearLater.getFullYear()];
-
 	const [startDate, setStartDate] = useState();
 	const [endDate, setEndDate] = useState();
 	const [type, setType] = useState();
+	const [semestersType, setSemestersType] = useState();
+	const [loading, setLoading] = useState(false);
 
 	const getSemesterName = () => {
 		if (!startDate || !endDate || !type) {
 			return "-";
 		}
-		return `${
-			mockSemesterTypes.find((e) => e.id === type).name
-		}${academicYear}_${startDate.date()}${startDate.format(
-			"MM"
-		)}_${endDate.date()}${endDate.format("MM")}`;
+		return `${mockSemesterTypes.find((e) => e.id === type).name
+			}${academicYear}_${startDate.date()}${startDate.format(
+				"MM"
+			)}_${endDate.date()}${endDate.format("MM")}`;
 	};
 
+	const getSemesterTypes = async () => {
+		const result = await SemesterApi.getSemesterTypes();
+		setSemestersType(result);
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		getSemesterTypes();
+	}, []);
+
+	// const semesterTypesOptions = semestersType.map((e) => ({
+	// 	value: e.semesterTypeId,
+	// 	label: e.semesterTypeName,
+	// }));
+
 	const onFinish = (values) => {
+		const semesterName = getSemesterName();
 		console.log("Semester submit: ", values);
+		values.semesterName = semesterName;
 		onSubmit?.(values);
 	};
 
@@ -115,7 +132,8 @@ export const SemesterFormModal = ({
 					]}
 				>
 					<DatePicker.RangePicker
-						format="DD/MM/YYYY"
+						format="DD/MM"
+						picker="day"
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 						onChange={(values) => {
@@ -136,6 +154,8 @@ export const SemesterFormModal = ({
 				>
 					<Select
 						placeholder="Chọn loại học kỳ"
+						// options={semesterTypesOptions}
+						loading={loading}
 						options={mockSemesterTypes.map((e) => {
 							return {
 								label: e.name,

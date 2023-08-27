@@ -13,6 +13,8 @@ import { UserContext } from "../../../../providers/user";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
+import { TextTile } from "../../../../components/TextTile";
+import { RawHtml } from "../../../../components/RawHtml";
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const role = useRole();
@@ -168,12 +170,40 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			}
 		>
 			<BaseTable
+				rowKey={(record) => record.id}
 				dataSource={data?.projects}
 				columns={columns}
 				searchOptions={{
 					visible: false,
 				}}
 				pagination={false}
+				expandedRowRender={({
+					description,
+					functionalReq,
+					nonfunctionalReq,
+				}) => {
+					return (
+						<div>
+							<TextTile label="Mô tả" colon>
+								<RawHtml html={description} />
+							</TextTile>
+							<TextTile
+								className="mt-4"
+								label="Yêu cầu chức năng (Functional)"
+								colon
+							>
+								{functionalReq}
+							</TextTile>
+							<TextTile
+								className="mt-4"
+								label="Yêu cầu phi chức năng (Non-functional)"
+								colon
+							>
+								{nonfunctionalReq}
+							</TextTile>
+						</div>
+					);
+				}}
 			/>
 			<ProjectDetailModal
 				title="Thêm dự án"

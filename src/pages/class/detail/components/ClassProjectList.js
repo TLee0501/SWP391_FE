@@ -1,43 +1,31 @@
-import { Delete, Plus, PreviewOpen } from "@icon-park/react";
-import {
-	Button,
-	Card,
-	Empty,
-	List,
-	Row,
-	Spin,
-	Typography,
-	message,
-} from "antd";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import ClassApi from "../../../../apis/class";
+import { Delete, Edit, More, Plus } from "@icon-park/react";
+import { Button, Col, Dropdown, Row, message } from "antd";
+import React, { useContext, useRef, useState } from "react";
 import ProjectApi from "../../../../apis/project";
-import TeamRequestApi from "../../../../apis/team";
+import TeamApi from "../../../../apis/team";
+import { BaseTable } from "../../../../components/BaseTable";
 import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
-import { ALL_PERMISSIONS } from "../../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
 import { usePermissions } from "../../../../hooks/permission";
+import { useRole } from "../../../../hooks/role";
 import { ClassContext } from "../../../../providers/class";
+import { UserContext } from "../../../../providers/user";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
 
-const { Text } = Typography;
-
 export const ClassProjectList = ({ onViewDescription }) => {
+	const role = useRole();
 	const data = useContext(ClassContext);
+	const { user } = useContext(UserContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
 		ALL_PERMISSIONS.project.create
 	);
-	const canDeleteProject = permissions?.includes(
-		ALL_PERMISSIONS.project.delete
-	);
+
 	const canRegisterTeamRequest = permissions?.includes(
 		ALL_PERMISSIONS.team.create
 	);
-	const [students, setStudents] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [projects, setProjects] = useState([]);
 	const [projectCreating, setProjectCreating] = useState(false);
 	const [projectDeleting, setProjectDeleting] = useState(false);
 
@@ -49,68 +37,37 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const projectIdRef = useRef();
 	const projectRef = useRef();
 
-	const getProjectsInClass = async (classId) => {
-		setLoading(true);
-		const result = await ProjectApi.getProjects(classId);
-		setProjects(result);
-		setLoading(false);
-	};
-
 	const handleCreateProject = async (values) => {
 		setProjectCreating(true);
 		const { classId } = data;
 		const success = await ProjectApi.createProject({ ...values, classId });
 		if (success) {
 			message.success("Tạo dự án thành công");
-			getProjectsInClass(classId);
 		} else {
 			message.error("Tạo dự án thất bại");
 		}
 		setProjectCreating(false);
 	};
 
-	useEffect(() => {
-		const { classId } = data;
-		if (!classId) return;
-		getProjectsInClass(classId);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data]);
-
 	const handleCloseCreateTeamRequestModal = () => {
 		setShowCreateTeamModal(false);
 		setTeamCreating(false);
 	};
 
-	const getStudents = async (classId) => {
-		setLoading(true);
-		const result = await ClassApi.getClassStudents(classId);
-		setStudents(result);
-		setLoading(false);
-	};
-
-	useEffect(() => {
-		const { classId } = data;
-		if (!classId) return;
-
-		getStudents(classId);
-	}, [data]);
-
 	const handleCreateTeam = async (request) => {
 		setTeamCreating(true);
 
-		const { classId, projectId, teamName, listStudent } = request;
+		const { projectId, listStudent } = request;
 		const data = {
-			classId: classId,
 			projectId: projectId,
-			teamName: teamName,
-			listStudent: listStudent,
+			users: listStudent.filter((item) => item !== user?.userId),
 		};
 
-		const response = await TeamRequestApi.createTeamRequest(data);
-		if (response.success) {
-			message.success("Đã đăng ký nhóm");
+		const response = await TeamApi.registerProjectTeam(data);
+		if (response.code === 0) {
+			message.success("Đăng ký nhóm thành công");
 		} else {
-			message.error("Đăng ký nhóm thất bại");
+			message.error(response.message);
 		}
 		setTeamCreating(false);
 		setShowCreateTeamModal(false);
@@ -125,7 +82,6 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				message.success("Đã xóa dự án");
 				const { classId } = data;
 				if (!classId) return;
-				getProjectsInClass(classId);
 			} else {
 				message.error("Xóa dự án thất bại");
 			}
@@ -134,52 +90,64 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		setShowDeleteProjectModal(false);
 	};
 
-	const renderItem = (item) => {
-		return (
-			<List.Item>
-				<Card className="w-full">
-					<Row justify="space-between" align="middle">
-						<Text>{item.projectName}</Text>
-						<Row>
+	const teacherActionItems = (record) => [
+		{
+			label: "Cập nhật",
+			icon: <Edit />,
+			onClick: () => {
+				onViewDescription(record);
+			},
+		},
+		{
+			label: "Xóa",
+			danger: true,
+			icon: <Delete />,
+			onClick: () => {
+				projectIdRef.current = record.id;
+				setShowDeleteProjectModal(true);
+			},
+		},
+	];
+
+	const columns = [
+		{
+			title: "Tên dự án",
+			dataIndex: "name",
+		},
+		{
+			title: "Thao tác",
+			render: (_, record) => {
+				return (
+					<Row gutter={8}>
+						<Col>
 							{canRegisterTeamRequest && (
 								<Button
-									type="link"
-									className="mr-2"
+									type="primary"
 									onClick={() => {
-										projectRef.current = item;
+										projectRef.current = record;
 										setShowCreateTeamModal(true);
 									}}
 								>
 									Đăng ký nhóm
 								</Button>
 							)}
-							{canDeleteProject && (
-								<Button
-									type="text"
-									icon={<Delete />}
-									danger
-									className="flex-center mr-2"
-									onClick={() => {
-										projectIdRef.current = item.projectId;
-										setShowDeleteProjectModal(true);
-									}}
-								/>
+						</Col>
+						<Col>
+							{role === roles.TEACHER && (
+								<Dropdown menu={{ items: teacherActionItems(record) }}>
+									<Button icon={<More />} className="flex-center" />
+								</Dropdown>
 							)}
-							<Button
-								className="flex-center"
-								onClick={() => onViewDescription(item)}
-								icon={<PreviewOpen />}
-							/>
-						</Row>
+						</Col>
 					</Row>
-				</Card>
-			</List.Item>
-		);
-	};
+				);
+			},
+		},
+	];
 
 	return (
 		<ClassDetailArea
-			title="Danh sách dự án"
+			title={`Danh sách dự án (${data?.projects.length ?? 0})`}
 			defaultOpen
 			action={
 				canCreateProject && (
@@ -199,17 +167,14 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				)
 			}
 		>
-			<Spin spinning={loading}>
-				<List
-					dataSource={projects}
-					renderItem={renderItem}
-					locale={{
-						emptyText: (
-							<Empty description={<Text disabled>Chưa có dự án nào</Text>} />
-						),
-					}}
-				/>
-			</Spin>
+			<BaseTable
+				dataSource={data?.projects}
+				columns={columns}
+				searchOptions={{
+					visible: false,
+				}}
+				pagination={false}
+			/>
 			<ProjectDetailModal
 				title="Thêm dự án"
 				open={showCreateProjectModal}
@@ -222,7 +187,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				title="Đăng ký nhóm làm dự án"
 				onCancel={handleCloseCreateTeamRequestModal}
 				confirmLoading={teamCreating}
-				students={students}
+				students={data?.students}
 				onSubmit={handleCreateTeam}
 				project={projectRef.current}
 				classId={data.classId}

@@ -1,4 +1,5 @@
 import BaseApi from ".";
+import ApiCodes from "../constants/apiCode";
 
 const resource = "ProjectTeams";
 
@@ -101,6 +102,43 @@ const getProjectTeamInClass = async (classId) => {
 	}
 };
 
+const registerProjectTeam = async (request) => {
+	try {
+		await BaseApi.post(`/${resource}/RegisterTeam`, request);
+		return {
+			code: 0,
+			message: "",
+		};
+	} catch (error) {
+		console.log("Error register team: ", error);
+		if (error.response.data) {
+			const { code } = error.response.data;
+			return {
+				code,
+				message: ApiCodes[code],
+			};
+		}
+		return {
+			message: "Có lỗi xảy ra",
+			code: -1,
+		};
+	}
+};
+
+const getJoinedProjectTeams = async (classId) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetJoinedProjectTeams`, {
+			params: {
+				classId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.log("Error getJoinedProjectTeams: ", error);
+		return [];
+	}
+};
+
 const TeamApi = {
 	getProjectTeamRequests,
 	getTeamRequestById,
@@ -109,6 +147,8 @@ const TeamApi = {
 	DenyTeamRequest,
 	cancelTeamRequest,
 	getProjectTeamInClass,
+	registerProjectTeam,
+	getJoinedProjectTeams,
 };
 
 export default TeamApi;

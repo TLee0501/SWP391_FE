@@ -10,6 +10,7 @@ export const BaseTable = ({
 	searchOptions = {
 		visible: true,
 		placeholder: "Tìm kiếm...",
+		width: undefined,
 		onSearch: () => {},
 	},
 	pagination,
@@ -20,7 +21,7 @@ export const BaseTable = ({
 	const all = useRef();
 
 	const [list, setList] = useState([]);
-	const { visible, placeholder, onSearch } = searchOptions;
+	const { visible, placeholder, onSearch, width } = searchOptions;
 	const filters = columns
 		.filter((col) => col.filter)
 		.map((item) => ({ ...item.filter, dataIndex: item.dataIndex }));
@@ -108,6 +109,7 @@ export const BaseTable = ({
 									className="mb-4"
 									placeholder={placeholder ?? "Tìm kiếm..."}
 									onSearch={onSearch}
+									style={{ width: width }}
 								/>
 							)}
 						</Col>

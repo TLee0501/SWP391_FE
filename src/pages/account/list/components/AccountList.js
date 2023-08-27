@@ -206,6 +206,7 @@ const AccountList = () => {
 					visible: true,
 					placeholder: "Tìm email...",
 					onSearch: handleSearch,
+					width: 300,
 				}}
 			/>
 			<UpdateRoleModal

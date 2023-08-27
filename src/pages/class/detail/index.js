@@ -67,10 +67,6 @@ const ClassDetailPage = () => {
 		setLoading(false);
 	};
 
-	const checkProjectStatus = async (classId) => {
-		const result = await ProjectApi.checkClassProjectStatus(classId);
-	};
-
 	const handleUpdateProject = async (values) => {
 		if (!id) return;
 
@@ -103,7 +99,6 @@ const ClassDetailPage = () => {
 	useEffect(() => {
 		if (id) {
 			getClass();
-			checkProjectStatus(id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id]);
@@ -130,29 +125,29 @@ const ClassDetailPage = () => {
 	};
 
 	return (
-		<ClassProvider data={data}>
-			<BasePageContent
-				title={<span>{`Lớp ${data.className}`} </span>}
-				action={
-					<Row>
-						{canEnroll && (
-							<Button
-								type="primary"
-								disabled={data?.enrolled}
-								onClick={() => setShowEnrollClassModal(true)}
-							>
-								{data?.enrolled ? "Đã tham gia" : "Tham gia lớp học"}
-							</Button>
-						)}
-						{canSettings && (
-							<Dropdown menu={{ items: settingItems }}>
-								<Button className="flex-center ml-2" icon={<Setting />} />
-							</Dropdown>
-						)}
-					</Row>
-				}
-			>
-				<Spin spinning={loading}>
+		<Spin spinning={loading}>
+			<ClassProvider data={data}>
+				<BasePageContent
+					title={<span>{`Lớp ${data.className ?? ""}`} </span>}
+					action={
+						<Row>
+							{canEnroll && (
+								<Button
+									type="primary"
+									disabled={data?.enrolled}
+									onClick={() => setShowEnrollClassModal(true)}
+								>
+									{data?.enrolled ? "Đã tham gia" : "Tham gia lớp học"}
+								</Button>
+							)}
+							{canSettings && (
+								<Dropdown menu={{ items: settingItems }}>
+									<Button className="flex-center ml-2" icon={<Setting />} />
+								</Dropdown>
+							)}
+						</Row>
+					}
+				>
 					<ClassBasicInfo />
 					{(data?.enrolled || role === roles.TEACHER) && (
 						<ClassProjectList
@@ -161,42 +156,41 @@ const ClassDetailPage = () => {
 					)}
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
-				</Spin>
-
-				<UpdateClassModal
-					open={showUpdateEClassModal}
-					onCancel={() => setShowUpdateClassModal(false)}
-					data={data}
-					onSuccess={() => getClass()}
-				/>
-				<EnrollClassModal
-					classId={data?.classId}
-					open={showEnrollClassModal}
-					onCancel={() => setShowEnrollClassModal(false)}
-					onSuccess={() => getClass()}
-				/>
-				<ProjectDescriptionModal
-					open={showProjectDescModal}
-					project={projectRef.current}
-					onCancel={() => setShowProjectDescModal(false)}
-				/>
-				<ProjectDetailModal
-					title="Cập nhật dự án"
-					open={showUpdateProjectModal}
-					onCancel={() => setShowUpdateProjectModal(false)}
-					onSubmit={handleUpdateProject}
-					submitting={projectUpdating}
-					edit={true}
-					project={projectRef.current}
-				/>
-				<ConfirmDeleteModal
-					title="Bạn muốn xóa lớp học này?"
-					open={showDeleteClassModal}
-					onCancel={() => setShowDeleteClassModal(false)}
-					onOk={() => handleDeleteClass()}
-				/>
-			</BasePageContent>
-		</ClassProvider>
+					<UpdateClassModal
+						open={showUpdateEClassModal}
+						onCancel={() => setShowUpdateClassModal(false)}
+						data={data}
+						onSuccess={() => getClass()}
+					/>
+					<EnrollClassModal
+						classId={data?.classId}
+						open={showEnrollClassModal}
+						onCancel={() => setShowEnrollClassModal(false)}
+						onSuccess={() => getClass()}
+					/>
+					<ProjectDescriptionModal
+						open={showProjectDescModal}
+						project={projectRef.current}
+						onCancel={() => setShowProjectDescModal(false)}
+					/>
+					<ProjectDetailModal
+						title="Cập nhật dự án"
+						open={showUpdateProjectModal}
+						onCancel={() => setShowUpdateProjectModal(false)}
+						onSubmit={handleUpdateProject}
+						submitting={projectUpdating}
+						edit={true}
+						project={projectRef.current}
+					/>
+					<ConfirmDeleteModal
+						title="Bạn muốn xóa lớp học này?"
+						open={showDeleteClassModal}
+						onCancel={() => setShowDeleteClassModal(false)}
+						onOk={() => handleDeleteClass()}
+					/>
+				</BasePageContent>
+			</ClassProvider>
+		</Spin>
 	);
 };
 

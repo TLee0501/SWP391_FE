@@ -1,7 +1,6 @@
 import { Delete, Edit, More, Plus } from "@icon-park/react";
 import { Button, Col, Dropdown, Row, message } from "antd";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import ClassApi from "../../../../apis/class";
+import React, { useContext, useRef, useState } from "react";
 import ProjectApi from "../../../../apis/project";
 import TeamApi from "../../../../apis/team";
 import { BaseTable } from "../../../../components/BaseTable";
@@ -10,10 +9,10 @@ import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
 import { usePermissions } from "../../../../hooks/permission";
 import { useRole } from "../../../../hooks/role";
 import { ClassContext } from "../../../../providers/class";
+import { UserContext } from "../../../../providers/user";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
-import { UserContext } from "../../../../providers/user";
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const role = useRole();
@@ -27,9 +26,6 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const canRegisterTeamRequest = permissions?.includes(
 		ALL_PERMISSIONS.team.create
 	);
-	const [students, setStudents] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [projects, setProjects] = useState([]);
 	const [projectCreating, setProjectCreating] = useState(false);
 	const [projectDeleting, setProjectDeleting] = useState(false);
 
@@ -41,51 +37,22 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const projectIdRef = useRef();
 	const projectRef = useRef();
 
-	const getProjectsInClass = async (classId) => {
-		setLoading(true);
-		const result = await ProjectApi.getProjects(classId);
-		setProjects(result);
-		setLoading(false);
-	};
-
 	const handleCreateProject = async (values) => {
 		setProjectCreating(true);
 		const { classId } = data;
 		const success = await ProjectApi.createProject({ ...values, classId });
 		if (success) {
 			message.success("Tạo dự án thành công");
-			getProjectsInClass(classId);
 		} else {
 			message.error("Tạo dự án thất bại");
 		}
 		setProjectCreating(false);
 	};
 
-	useEffect(() => {
-		const { classId } = data;
-		if (!classId) return;
-		getProjectsInClass(classId);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data]);
-
 	const handleCloseCreateTeamRequestModal = () => {
 		setShowCreateTeamModal(false);
 		setTeamCreating(false);
 	};
-
-	const getStudents = async (classId) => {
-		setLoading(true);
-		const result = await ClassApi.getClassStudents(classId);
-		setStudents(result);
-		setLoading(false);
-	};
-
-	useEffect(() => {
-		const { classId } = data;
-		if (!classId) return;
-
-		getStudents(classId);
-	}, [data]);
 
 	const handleCreateTeam = async (request) => {
 		setTeamCreating(true);
@@ -97,10 +64,10 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		};
 
 		const response = await TeamApi.registerProjectTeam(data);
-		if (response.success) {
-			message.success("Đã đăng ký nhóm");
+		if (response.code === 0) {
+			message.success("Đăng ký nhóm thành công");
 		} else {
-			message.error("Đăng ký nhóm thất bại");
+			message.error(response.message);
 		}
 		setTeamCreating(false);
 		setShowCreateTeamModal(false);
@@ -115,7 +82,6 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				message.success("Đã xóa dự án");
 				const { classId } = data;
 				if (!classId) return;
-				getProjectsInClass(classId);
 			} else {
 				message.error("Xóa dự án thất bại");
 			}
@@ -137,7 +103,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			danger: true,
 			icon: <Delete />,
 			onClick: () => {
-				projectIdRef.current = record.projectId;
+				projectIdRef.current = record.id;
 				setShowDeleteProjectModal(true);
 			},
 		},
@@ -146,7 +112,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const columns = [
 		{
 			title: "Tên dự án",
-			dataIndex: "projectName",
+			dataIndex: "name",
 		},
 		{
 			title: "Thao tác",
@@ -181,7 +147,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 
 	return (
 		<ClassDetailArea
-			title="Danh sách dự án"
+			title={`Danh sách dự án (${data?.projects.length ?? 0})`}
 			defaultOpen
 			action={
 				canCreateProject && (
@@ -202,8 +168,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 			}
 		>
 			<BaseTable
-				loading={loading}
-				dataSource={projects}
+				dataSource={data?.projects}
 				columns={columns}
 				searchOptions={{
 					visible: false,
@@ -222,7 +187,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				title="Đăng ký nhóm làm dự án"
 				onCancel={handleCloseCreateTeamRequestModal}
 				confirmLoading={teamCreating}
-				students={students}
+				students={data?.students}
 				onSubmit={handleCreateTeam}
 				project={projectRef.current}
 				classId={data.classId}

@@ -1,4 +1,5 @@
 import BaseApi from ".";
+import ApiCodes from "../constants/apiCode";
 
 const resource = "ProjectTeams";
 
@@ -103,10 +104,20 @@ const getProjectTeamInClass = async (classId) => {
 
 const registerProjectTeam = async (request) => {
 	try {
-		const response = await BaseApi.post(`/${resource}/RegisterTeam`, request);
-		return response.data;
+		await BaseApi.post(`/${resource}/RegisterTeam`, request);
+		return {
+			code: 0,
+			message: "",
+		};
 	} catch (error) {
 		console.log("Error register team: ", error);
+		if (error.response.data) {
+			const { code } = error.response.data;
+			return {
+				code,
+				message: ApiCodes[code],
+			};
+		}
 		return {
 			message: "Có lỗi xảy ra",
 			code: -1,

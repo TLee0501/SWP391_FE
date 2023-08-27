@@ -25,7 +25,7 @@ export const TeamRegistrationModal = ({
 	const formRef = useRef();
 
 	const onFinish = async (values) => {
-		await onSubmit({ ...values, projectId: project?.projectId, classId });
+		await onSubmit({ ...values, projectId: project?.projectId });
 	};
 
 	const getStudentOptions = (memberId) => {

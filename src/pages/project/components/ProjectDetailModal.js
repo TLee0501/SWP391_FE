@@ -2,8 +2,9 @@ import { Form, Input, Typography } from "antd";
 import React, { useEffect, useRef } from "react";
 import BaseModal from "../../../components/BaseModal";
 import { RichTextEditor } from "../../../components/RichTextEditor";
+import TextArea from "antd/es/input/TextArea";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export const ProjectDetailModal = ({
 	open,
@@ -25,12 +26,14 @@ export const ProjectDetailModal = ({
 	}, [project]);
 
 	const handleSubmit = async (values) => {
-		const { name, classId } = values;
+		const { name, classId, functionalReq, nonfunctionalReq } = values;
 		const data = {
 			classId: classId,
 			projectName: name,
 			description: descRef.current,
 			projectId: project?.projectId,
+			functionalReq,
+			nonfunctionalReq,
 		};
 
 		onSubmit && (await onSubmit(data));
@@ -53,6 +56,8 @@ export const ProjectDetailModal = ({
 				initialValues={{
 					name: project?.projectName,
 					description: project?.description,
+					functionalReq: project?.functionalReq,
+					nonfunctionalReq: project?.nonfunctionalReq,
 					classId: project?.classID,
 				}}
 			>
@@ -68,16 +73,28 @@ export const ProjectDetailModal = ({
 				>
 					<Input placeholder="Nhập tên dự án..." />
 				</Form.Item>
-			</Form>
+				<div style={{ marginBottom: 8 }}>
+					<Text>Mô tả</Text>
+				</div>
+				<RichTextEditor
+					value={project?.description}
+					onChange={(value) => (descRef.current = value)}
+					placeholder="Nhập mô tả dự án..."
+				/>
 
-			<div style={{ marginBottom: 8 }}>
-				<Text>Mô tả</Text>
-			</div>
-			<RichTextEditor
-				value={project?.description}
-				onChange={(value) => (descRef.current = value)}
-				placeholder="Nhập mô tả dự án..."
-			/>
+				<div className="mt-6">
+					<Title level={5}>Yêu cầu của dự án</Title>
+				</div>
+				<Form.Item name="functionalReq" label="Yêu cầu chức năng (Functional)">
+					<TextArea placeholder="Nhập chi tiết yêu cầu..." />
+				</Form.Item>
+				<Form.Item
+					name="nonfunctionalReq"
+					label="Yêu cầu phi chức năng (Non-functional)"
+				>
+					<TextArea placeholder="Nhập chi tiết yêu cầu..." />
+				</Form.Item>
+			</Form>
 		</BaseModal>
 	);
 };

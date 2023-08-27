@@ -75,11 +75,19 @@ const ClassDetailPage = () => {
 		if (!id) return;
 
 		setProjectUpdating(true);
-		const { projectId, projectName, description } = values;
+		const {
+			projectId,
+			projectName,
+			description,
+			functionalReq,
+			nonfunctionalReq,
+		} = values;
 		const data = {
 			projectId,
 			projectName,
 			description,
+			functionalReq,
+			nonfunctionalReq,
 		};
 		const success = await ProjectApi.updateProject(data);
 		if (success) {

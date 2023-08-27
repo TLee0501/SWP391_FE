@@ -104,10 +104,27 @@ const getProjectTeamInClass = async (classId) => {
 const registerProjectTeam = async (request) => {
 	try {
 		const response = await BaseApi.post(`/${resource}/RegisterTeam`, request);
-		return response.status === 200;
+		return response.data;
 	} catch (error) {
 		console.log("Error register team: ", error);
-		return false;
+		return {
+			message: "Có lỗi xảy ra",
+			code: -1,
+		};
+	}
+};
+
+const getJoinedProjectTeams = async (classId) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetJoinedProjectTeams`, {
+			params: {
+				classId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.log("Error getJoinedProjectTeams: ", error);
+		return [];
 	}
 };
 
@@ -120,6 +137,7 @@ const TeamApi = {
 	cancelTeamRequest,
 	getProjectTeamInClass,
 	registerProjectTeam,
+	getJoinedProjectTeams,
 };
 
 export default TeamApi;

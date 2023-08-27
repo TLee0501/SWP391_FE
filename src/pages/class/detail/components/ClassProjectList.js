@@ -3,7 +3,7 @@ import { Button, Col, Dropdown, Row, message } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ClassApi from "../../../../apis/class";
 import ProjectApi from "../../../../apis/project";
-import TeamRequestApi from "../../../../apis/team";
+import TeamApi from "../../../../apis/team";
 import { BaseTable } from "../../../../components/BaseTable";
 import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
 import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
@@ -13,10 +13,12 @@ import { ClassContext } from "../../../../providers/class";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
+import { UserContext } from "../../../../providers/user";
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const role = useRole();
 	const data = useContext(ClassContext);
+	const { user } = useContext(UserContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
 		ALL_PERMISSIONS.project.create
@@ -88,15 +90,13 @@ export const ClassProjectList = ({ onViewDescription }) => {
 	const handleCreateTeam = async (request) => {
 		setTeamCreating(true);
 
-		const { classId, projectId, teamName, listStudent } = request;
+		const { projectId, listStudent } = request;
 		const data = {
-			classId: classId,
 			projectId: projectId,
-			teamName: teamName,
-			listStudent: listStudent,
+			users: listStudent.filter((item) => item !== user?.userId),
 		};
 
-		const response = await TeamRequestApi.createTeamRequest(data);
+		const response = await TeamApi.registerProjectTeam(data);
 		if (response.success) {
 			message.success("Đã đăng ký nhóm");
 		} else {

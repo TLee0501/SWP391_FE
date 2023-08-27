@@ -17,6 +17,7 @@ import { TeamListPage } from "../pages/team/list";
 import ProjectReportListPage from "../pages/report/list";
 import SemesterListPage from "../pages/semester/list";
 import SemesterDetailPage from "../pages/semester/detail";
+import TeamDetailPage from "../pages/team/detail";
 
 export const router = createBrowserRouter([
 	{
@@ -88,6 +89,14 @@ export const router = createBrowserRouter([
 					{
 						path: `${routes.dashboard.semester}/:id`,
 						element: <SemesterDetailPage />,
+					},
+					{
+						path: routes.dashboard.teams,
+						element: <TeamListPage />,
+					},
+					{
+						path: `${routes.dashboard.teams}/:id`,
+						element: <TeamDetailPage />,
 					},
 				],
 			},

@@ -1,37 +1,27 @@
-import { Delete, Plus, PreviewOpen } from "@icon-park/react";
-import {
-	Button,
-	Card,
-	Empty,
-	List,
-	Row,
-	Spin,
-	Typography,
-	message,
-} from "antd";
+import { Delete, Edit, More, Plus } from "@icon-park/react";
+import { Button, Col, Dropdown, Row, message } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ClassApi from "../../../../apis/class";
 import ProjectApi from "../../../../apis/project";
 import TeamRequestApi from "../../../../apis/team";
+import { BaseTable } from "../../../../components/BaseTable";
 import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
-import { ALL_PERMISSIONS } from "../../../../constants/app";
+import { ALL_PERMISSIONS, roles } from "../../../../constants/app";
 import { usePermissions } from "../../../../hooks/permission";
+import { useRole } from "../../../../hooks/role";
 import { ClassContext } from "../../../../providers/class";
 import { ProjectDetailModal } from "../../../project/components/ProjectDetailModal";
 import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
 
-const { Text } = Typography;
-
 export const ClassProjectList = ({ onViewDescription }) => {
+	const role = useRole();
 	const data = useContext(ClassContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
 		ALL_PERMISSIONS.project.create
 	);
-	const canDeleteProject = permissions?.includes(
-		ALL_PERMISSIONS.project.delete
-	);
+
 	const canRegisterTeamRequest = permissions?.includes(
 		ALL_PERMISSIONS.team.create
 	);
@@ -134,48 +124,60 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		setShowDeleteProjectModal(false);
 	};
 
-	const renderItem = (item) => {
-		return (
-			<List.Item>
-				<Card className="w-full">
-					<Row justify="space-between" align="middle">
-						<Text>{item.projectName}</Text>
-						<Row>
+	const teacherActionItems = (record) => [
+		{
+			label: "Cập nhật",
+			icon: <Edit />,
+			onClick: () => {
+				onViewDescription(record);
+			},
+		},
+		{
+			label: "Xóa",
+			danger: true,
+			icon: <Delete />,
+			onClick: () => {
+				projectIdRef.current = record.projectId;
+				setShowDeleteProjectModal(true);
+			},
+		},
+	];
+
+	const columns = [
+		{
+			title: "Tên dự án",
+			dataIndex: "projectName",
+		},
+		{
+			title: "Thao tác",
+			render: (_, record) => {
+				return (
+					<Row gutter={8}>
+						<Col>
 							{canRegisterTeamRequest && (
 								<Button
-									type="link"
-									className="mr-2"
+									type="primary"
 									onClick={() => {
-										projectRef.current = item;
+										projectRef.current = record;
 										setShowCreateTeamModal(true);
 									}}
 								>
 									Đăng ký nhóm
 								</Button>
 							)}
-							{canDeleteProject && (
-								<Button
-									type="text"
-									icon={<Delete />}
-									danger
-									className="flex-center mr-2"
-									onClick={() => {
-										projectIdRef.current = item.projectId;
-										setShowDeleteProjectModal(true);
-									}}
-								/>
+						</Col>
+						<Col>
+							{role === roles.TEACHER && (
+								<Dropdown menu={{ items: teacherActionItems(record) }}>
+									<Button icon={<More />} className="flex-center" />
+								</Dropdown>
 							)}
-							<Button
-								className="flex-center"
-								onClick={() => onViewDescription(item)}
-								icon={<PreviewOpen />}
-							/>
-						</Row>
+						</Col>
 					</Row>
-				</Card>
-			</List.Item>
-		);
-	};
+				);
+			},
+		},
+	];
 
 	return (
 		<ClassDetailArea
@@ -199,17 +201,15 @@ export const ClassProjectList = ({ onViewDescription }) => {
 				)
 			}
 		>
-			<Spin spinning={loading}>
-				<List
-					dataSource={projects}
-					renderItem={renderItem}
-					locale={{
-						emptyText: (
-							<Empty description={<Text disabled>Chưa có dự án nào</Text>} />
-						),
-					}}
-				/>
-			</Spin>
+			<BaseTable
+				loading={loading}
+				dataSource={projects}
+				columns={columns}
+				searchOptions={{
+					visible: false,
+				}}
+				pagination={false}
+			/>
 			<ProjectDetailModal
 				title="Thêm dự án"
 				open={showCreateProjectModal}

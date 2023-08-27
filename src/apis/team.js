@@ -101,6 +101,16 @@ const getProjectTeamInClass = async (classId) => {
 	}
 };
 
+const registerProjectTeam = async (request) => {
+	try {
+		const response = await BaseApi.post(`/${resource}/RegisterTeam`, request);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error register team: ", error);
+		return false;
+	}
+};
+
 const TeamApi = {
 	getProjectTeamRequests,
 	getTeamRequestById,
@@ -109,6 +119,7 @@ const TeamApi = {
 	DenyTeamRequest,
 	cancelTeamRequest,
 	getProjectTeamInClass,
+	registerProjectTeam,
 };
 
 export default TeamApi;

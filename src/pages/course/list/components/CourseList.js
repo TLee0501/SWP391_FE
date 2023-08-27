@@ -1,8 +1,20 @@
-import { Edit, More } from "@icon-park/react";
-import { Button, Dropdown, Table } from "antd";
+import { Edit, More, Plus } from "@icon-park/react";
+import { Button, Dropdown } from "antd";
 import React from "react";
+import { BaseTable } from "../../../../components/BaseTable";
+import { usePermissions } from "../../../../hooks/permission";
+import { ALL_PERMISSIONS } from "../../../../constants/app";
 
-export const CourseList = ({ courses, onDelete, onUpdate }) => {
+export const CourseList = ({
+	courses,
+	onDelete,
+	onUpdate,
+	onAdd,
+	onSearch,
+}) => {
+	const permissions = usePermissions();
+	const canCreate = permissions?.includes(ALL_PERMISSIONS.course.create);
+
 	const getActionItems = (record) => {
 		return [
 			{
@@ -19,6 +31,10 @@ export const CourseList = ({ courses, onDelete, onUpdate }) => {
 		{
 			title: "Mã môn học",
 			dataIndex: "courseCode",
+			filter: {
+				placeholder: "Chọn mã môn",
+				label: "Mã môn",
+			},
 		},
 		{
 			title: "Tên môn học",
@@ -36,5 +52,30 @@ export const CourseList = ({ courses, onDelete, onUpdate }) => {
 		},
 	];
 
-	return <Table dataSource={courses} columns={columns} pagination={false} />;
+	return (
+		<BaseTable
+			title="Danh sách môn học"
+			searchOptions={{
+				visible: true,
+				placeholder: "Tìm môn học theo mã hoặc tên...",
+				width: 300,
+				onSearch: onSearch,
+			}}
+			dataSource={courses}
+			columns={columns}
+			pagination={false}
+			actions={[
+				canCreate && (
+					<Button
+						onClick={onAdd}
+						type="primary"
+						icon={<Plus />}
+						className="flex-center"
+					>
+						Thêm môn học
+					</Button>
+				),
+			]}
+		/>
+	);
 };

@@ -1,17 +1,15 @@
-import { Plus } from "@icon-park/react";
-import { Button, Input, Row, Spin, message } from "antd";
+import { Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import CourseApi from "../../../apis/course";
+import { ALL_PERMISSIONS } from "../../../constants/app";
+import { usePermissions } from "../../../hooks/permission";
 import { CourseFormModal } from "../components/CourseFormModal";
 import { DeleteCourseModal } from "../components/DeleteCourseModal";
 import { CourseList } from "./components/CourseList";
-import { usePermissions } from "../../../hooks/permission";
-import { ALL_PERMISSIONS } from "../../../constants/app";
 
 export const CourseListPage = () => {
 	const permissions = usePermissions();
 	const canView = permissions?.includes(ALL_PERMISSIONS.course.view);
-	const canCreate = permissions?.includes(ALL_PERMISSIONS.course.create);
 
 	const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
 	const [courseCreating, setCourseCreating] = useState(false);
@@ -105,25 +103,6 @@ export const CourseListPage = () => {
 
 	return (
 		<div>
-			<Row justify="space-between" className="mb-4">
-				{canView && (
-					<Input.Search
-						style={{ width: "50%" }}
-						placeholder="Tìm môn học theo mã hoặc tên..."
-						onSearch={(value) => getCourses(value)}
-					/>
-				)}
-				{canCreate && (
-					<Button
-						className="flex-center"
-						type="primary"
-						icon={<Plus />}
-						onClick={handleShowAddCourseModal}
-					>
-						Thêm môn học
-					</Button>
-				)}
-			</Row>
 			{canView && (
 				<Spin spinning={courseLoading}>
 					<CourseList
@@ -133,6 +112,8 @@ export const CourseListPage = () => {
 							updatingCourse.current = course;
 							setShowUpdateCourseModal(true);
 						}}
+						onAdd={handleShowAddCourseModal}
+						onSearch={(value) => getCourses(value)}
 					/>
 				</Spin>
 			)}

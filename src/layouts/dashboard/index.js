@@ -57,7 +57,8 @@ export const Dashboard = () => {
 					<AppHeader />
 					<Content
 						style={{
-							padding: "16px 16px 0",
+							padding: 16,
+							paddingRight: 32,
 							overflow: "initial",
 							backgroundColor: "white",
 						}}

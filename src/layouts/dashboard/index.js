@@ -10,6 +10,7 @@ import AuthApi from "../../apis/auth";
 import { UserContext } from "../../providers/user";
 import { roles } from "../../constants/app";
 import { getRoleName } from "../../utils";
+import config from "../../constants/config";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -50,13 +51,14 @@ export const Dashboard = () => {
 				<AppSider />
 				<Layout
 					style={{
-						marginLeft: 200,
+						marginLeft: config.SIDER_WIDTH,
 					}}
 				>
 					<AppHeader />
 					<Content
 						style={{
-							padding: "16px 16px 0",
+							padding: 16,
+							paddingRight: 32,
 							overflow: "initial",
 							backgroundColor: "white",
 						}}

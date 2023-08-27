@@ -1,30 +1,40 @@
-import { Empty, List, Typography } from "antd";
+import { Edit, More } from "@icon-park/react";
+import { Button, Dropdown, Table } from "antd";
 import React from "react";
-import { CourseItem } from "./CourseItem";
-
-const { Text } = Typography;
 
 export const CourseList = ({ courses, onDelete, onUpdate }) => {
-	const renderItem = (course) => {
-		return (
-			<List.Item>
-				<CourseItem course={course} onDelete={onDelete} onUpdate={onUpdate} />
-			</List.Item>
-		);
+	const getActionItems = (record) => {
+		return [
+			{
+				label: "Cập nhật",
+				icon: <Edit />,
+				onClick: () => {
+					onUpdate(record);
+				},
+			},
+		];
 	};
 
-	return (
-		<div>
-			<List
-				locale={{
-					emptyText: (
-						<Empty description={<Text disabled>Chưa có môn học nào</Text>} />
-					),
-				}}
-				split={false}
-				dataSource={courses}
-				renderItem={renderItem}
-			/>
-		</div>
-	);
+	const columns = [
+		{
+			title: "Mã môn học",
+			dataIndex: "courseCode",
+		},
+		{
+			title: "Tên môn học",
+			dataIndex: "courseName",
+		},
+		{
+			title: "Thao tác",
+			render: (_, record) => {
+				return (
+					<Dropdown menu={{ items: getActionItems(record) }}>
+						<Button icon={<More />} className="flex-center" />
+					</Dropdown>
+				);
+			},
+		},
+	];
+
+	return <Table dataSource={courses} columns={columns} pagination={false} />;
 };

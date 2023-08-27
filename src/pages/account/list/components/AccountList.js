@@ -1,11 +1,12 @@
 import { Edit, Forbid, More, Unlock } from "@icon-park/react";
-import { Button, Dropdown, Input, Row, Table, Tag, message } from "antd";
+import { Button, Dropdown, Tag, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import RoleApi from "../../../../apis/role";
 import UserApi from "../../../../apis/user";
+import { BaseTable } from "../../../../components/BaseTable";
 import { roles } from "../../../../constants/app";
-import { UpdateRoleModal } from "../../components/UpdateRoleModal";
 import { getRoleName } from "../../../../utils";
+import { UpdateRoleModal } from "../../components/UpdateRoleModal";
 
 const AccountList = () => {
 	const [accountLoading, setAccountLoading] = useState(false);
@@ -125,11 +126,29 @@ const AccountList = () => {
 				);
 			},
 			sorter: (a, b) => a.role.localeCompare(b.role),
+			filter: {
+				placeholder: "Chọn vai trò",
+				label: "Vai trò",
+				filterOptions: [
+					{
+						label: getRoleName(roles.ADMIN),
+						value: roles.ADMIN,
+					},
+					{
+						label: getRoleName(roles.STUDENT),
+						value: roles.STUDENT,
+					},
+					{
+						label: getRoleName(roles.TEACHER),
+						value: roles.TEACHER,
+					},
+				],
+			},
 		},
 		{
 			title: "Trạng thái",
-			dataIndex: "status",
-			key: "status",
+			dataIndex: "isBan",
+			key: "isBan",
 			render: (_, { isBan }) => {
 				return (
 					<Tag color={!isBan ? "blue-inverse" : "red-inverse"}>
@@ -138,6 +157,20 @@ const AccountList = () => {
 				);
 			},
 			sorter: (a, b) => a.isBan - b.isBan,
+			filter: {
+				placeholder: "Chọn trạng thái",
+				label: "Trạng thái",
+				filterOptions: [
+					{
+						label: "Đang hoạt động",
+						value: false,
+					},
+					{
+						label: "Khóa",
+						value: true,
+					},
+				],
+			},
 		},
 		{
 			title: "Thao tác",
@@ -163,18 +196,17 @@ const AccountList = () => {
 
 	return (
 		<>
-			<Row justify="space-between mb-2">
-				<Input.Search
-					placeholder="Tìm tài khoản..."
-					className="w-1/2"
-					onSearch={handleSearch}
-				/>
-			</Row>
-			<Table
-				pagination={false}
-				loading={accountLoading}
+			<BaseTable
+				title="Danh sách tài khoản"
 				dataSource={accounts}
 				columns={columns}
+				loading={accountLoading}
+				pagination={false}
+				searchOptions={{
+					visible: true,
+					placeholder: "Tìm email...",
+					onSearch: handleSearch,
+				}}
 			/>
 			<UpdateRoleModal
 				user={userRef.current}

@@ -1,9 +1,7 @@
-import { Card, Collapse, Descriptions, List, Typography } from "antd";
+import { Card, Collapse, Descriptions, List } from "antd";
 import React, { useContext } from "react";
 import { TeamContext } from "../../../../providers/team";
 import { UserContext } from "../../../../providers/user";
-
-const { Text } = Typography;
 
 export const TeamBasicInfo = () => {
 	const { user } = useContext(UserContext);

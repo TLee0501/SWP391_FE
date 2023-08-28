@@ -172,3 +172,22 @@ export const TaskColumnId = {
 	IN_PROGRESS: "IN_PROGRESS",
 	COMPLETED: "COMPLETED",
 };
+
+export const SemesterTypeOptions = [
+	{
+		label: "Spring",
+		value: "Spring",
+	},
+	{
+		label: "Summer",
+		value: "Summer",
+	},
+	{
+		label: "Fall",
+		value: "Fall",
+	},
+	{
+		label: "Winter",
+		value: "Winter",
+	},
+];

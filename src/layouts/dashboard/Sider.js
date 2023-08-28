@@ -66,7 +66,7 @@ export const AppSider = () => {
 		canViewReport && {
 			key: itemKeys.REPORT,
 			icon: <Analysis size={iconSize} />,
-			label: <Link to={routes.dashboard.report}>Báo cáo dự án</Link>,
+			label: <Link to={routes.dashboard.report}>Báo cáo nhóm</Link>,
 		},
 	];
 

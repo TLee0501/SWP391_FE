@@ -10,11 +10,10 @@ import {
 	message,
 } from "antd";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { mockSemesterTypes } from "../../../__mocks__/semester";
 import BaseModal from "../../../components/BaseModal";
-import SemesterApi from "../../../apis/semester";
-import { Option } from "rc-select";
+import { SemesterTypeOptions } from "../../../constants/app";
 
 const { Text } = Typography;
 
@@ -28,15 +27,9 @@ export const SemesterFormModal = ({
 }) => {
 	const formRef = useRef();
 
-	const now = new Date();
-	const oneYearLater = new Date(now);
-	oneYearLater.setFullYear(now.getFullYear());
-	const [academicYear, setAcademicYear] = useState(now.getFullYear());
-	// const years = [now.getFullYear(), oneYearLater.getFullYear()];
 	const [startDate, setStartDate] = useState();
 	const [endDate, setEndDate] = useState();
 	const [type, setType] = useState();
-	const [semestersType, setSemestersType] = useState("Spring");
 	const [loading, setLoading] = useState(false);
 	const [year, setYear] = useState(2023);
 
@@ -66,15 +59,15 @@ export const SemesterFormModal = ({
 		message.success(`success ${value}`);
 	};
 
-	console.log("startdate", startDate);
 	const getSemesterName = () => {
 		if (!startDate || !endDate || !type) {
 			return "-";
 		}
-		return `${mockSemesterTypes.find((e) => e.id === type)?.name
-			}${year}_${startDate.date()}${startDate.format(
-				"MM"
-			)}_${endDate.date()}${endDate.format("MM")}`;
+		return `${
+			mockSemesterTypes.find((e) => e.id === type)?.name
+		}${year}_${startDate.date()}${startDate.format(
+			"MM"
+		)}_${endDate.date()}${endDate.format("MM")}`;
 	};
 
 	const handleChange = (values) => {
@@ -121,55 +114,22 @@ export const SemesterFormModal = ({
 				</Form.Item>
 
 				<Form.Item
-					name="academicYear"
-					label="Năm học"
+					name="dates"
+					label="Thời gian"
 					rules={[
 						{
 							required: true,
-							message: "Vui lòng chọn năm học",
+							message: "Vui lòng chọn ngày bắt đầu & kết thúc",
 						},
 					]}
-				>
-					<Select value={year} onChange={(value) => setYear(value)}>
-						{years.map((year) => (
-							<Option key={year} value={year}>{year}</Option>
-						))}
-					</Select>
-					{/* <Select
-						placeholder="Chọn năm học"
-						// options={years.map((e) => {
-						// 	return {
-						// 		label: e,
-						// 		value: e,
-						// 	};
-						// })}
-						// onChange={(v) => {
-						// 	setAcademicYear(v);
-						// }}
-						options={options}
-					/> */}
-				</Form.Item>
-				<Form.Item
-					name="dates"
-					label="Thời gian"
-				// rules={[
-				// 	{
-				// 		required: true,
-				// 		message: "Vui lòng chọn ngày bắt đầu & kết thúc",
-				// 	},
-				// ]}
 				>
 					<DatePicker.RangePicker
 						value={[startDate, endDate]}
 						format="DD/MM"
-						disabled
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						onChange={handleChange}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
-					// onChange={(values) => {
-					// 	setStartDate(values?.[0]);
-					// 	setEndDate(values?.[1]);
-					// }}
+						className="w-full"
 					/>
 				</Form.Item>
 				<Form.Item
@@ -184,17 +144,10 @@ export const SemesterFormModal = ({
 				>
 					<Select
 						placeholder="Chọn loại học kỳ"
-						// options={semesterTypesOptions}
+						options={SemesterTypeOptions}
 						value={type}
 						loading={loading}
 						onChange={handleSemesterChange}
-
-						options={mockSemesterTypes.map((e) => {
-							return {
-								label: e.name,
-								value: e.id,
-							};
-						})}
 					/>
 				</Form.Item>
 			</Form>

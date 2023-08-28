@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill/lib";
 
-export const RichTextEditor = ({ value, onChange, placeholder, height }) => {
+export const RichTextEditor = ({
+	value,
+	onChange,
+	placeholder,
+	height,
+	className,
+	onBlur,
+	autoFocus,
+}) => {
 	const [text, setText] = useState();
+	const ref = useRef();
 
 	useEffect(() => {
 		setText(value);
 	}, [value]);
+
+	useEffect(() => {
+		if (autoFocus) {
+			ref.current.focus();
+		}
+	}, [autoFocus]);
 
 	const handleChange = (value) => {
 		setText(value);
@@ -17,6 +32,8 @@ export const RichTextEditor = ({ value, onChange, placeholder, height }) => {
 	return (
 		<div>
 			<ReactQuill
+				onBlur={onBlur}
+				className={className}
 				value={text}
 				onChange={handleChange}
 				modules={RichTextEditor.modules}
@@ -25,6 +42,7 @@ export const RichTextEditor = ({ value, onChange, placeholder, height }) => {
 				style={{
 					height: height,
 				}}
+				ref={ref}
 			/>
 		</div>
 	);

@@ -48,17 +48,16 @@ export const SemesterList = ({ semesters, loading }) => {
 	];
 
 	const handleCreateSemester = async (values) => {
-		const { semesterName, academicYear, dates } = values;
-
+		const { semeterName, dates } = values;
+		console.log("values: ", values)
 		const data = {
-			semesterName: semesterName,
-			// academicYear: academicYear,
+			semeterName: semeterName,
 			timeStart: dates[0],
 			timeEnd: dates[1],
 		};
 
 		setShowCreateModal(true);
-		const success = await SemesterApi.createSemester({ data });
+		const success = await SemesterApi.createSemester( data );
 		if (success) {
 			message.success("Tạo học kỳ thành công");
 		} else {

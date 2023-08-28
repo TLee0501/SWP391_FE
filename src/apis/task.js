@@ -22,6 +22,21 @@ const updateTask = async (data) => {
 	}
 };
 
+const updateTaskStatus = async (taskId, status) => {
+	try {
+		const response = await BaseApi.put(
+			`/${resource}/UpdateTaskStatus/${taskId}`,
+			{
+				status,
+			}
+		);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update task status: ", error);
+		return false;
+	}
+};
+
 const deleteTask = async (id) => {
 	try {
 		const response = await BaseApi.delete(`/${resource}/DeleteTask`, {
@@ -83,6 +98,7 @@ const TaskApi = {
 	getAllTasks,
 	assignTask,
 	unAssignTask,
+	updateTaskStatus,
 };
 
 export default TaskApi;

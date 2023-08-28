@@ -7,6 +7,7 @@ import {
 	Select,
 	Tooltip,
 	Typography,
+	message,
 } from "antd";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
@@ -32,8 +33,8 @@ export const SemesterFormModal = ({
 	oneYearLater.setFullYear(now.getFullYear());
 	const [academicYear, setAcademicYear] = useState(now.getFullYear());
 	// const years = [now.getFullYear(), oneYearLater.getFullYear()];
-	const [startDate, setStartDate] = useState("1/1");
-	const [endDate, setEndDate] = useState("31/1");
+	const [startDate, setStartDate] = useState();
+	const [endDate, setEndDate] = useState();
 	const [type, setType] = useState();
 	const [semestersType, setSemestersType] = useState("Spring");
 	const [loading, setLoading] = useState(false);
@@ -52,25 +53,28 @@ export const SemesterFormModal = ({
 			setStartDate(start);
 			setEndDate(end);
 		} else if (value === "Summer") {
-			setStartDate(start.setMonth(4));
-			setEndDate(end.setMonth(6));
+			setStartDate(start.setMonth(4), start.setDate(1));
+			setEndDate(end.setMonth(6), end.setDate(31));
 		} else if (value === "Fall") {
-			setStartDate(start.setMonth(7));
-			setEndDate(end.setMonth(9));
+			setStartDate(start.setMonth(7), start.setDate(1));
+			setEndDate(end.setMonth(9), end.setDate(31));
 		} else {
-			setStartDate(start.setMonth(10));
-			setEndDate(end.setMonth(12));
+			setStartDate(start.setMonth(10), start.setDate(1));
+			setEndDate(end.setMonth(12), end.setDate(31));
 		}
+		setType(value);
+		message.success(`success ${value}`);
 	};
 
+	console.log("startdate", startDate);
 	const getSemesterName = () => {
 		if (!startDate || !endDate || !type) {
 			return "-";
 		}
 		return `${mockSemesterTypes.find((e) => e.id === type)?.name
-			}-${year}-${startDate.date()}${startDate.format(
+			}${year}_${startDate.date()}${startDate.format(
 				"MM"
-			)}-${endDate.date()}${endDate.format("MM")}`;
+			)}_${endDate.date()}${endDate.format("MM")}`;
 	};
 
 	const handleChange = (values) => {
@@ -99,7 +103,7 @@ export const SemesterFormModal = ({
 				onFinish={onFinish}
 				layout="vertical"
 				initialValues={{
-					academicYear: academicYear,
+					setYear: setYear,
 				}}
 			>
 				<Form.Item
@@ -158,50 +162,40 @@ export const SemesterFormModal = ({
 					<DatePicker.RangePicker
 						value={[startDate, endDate]}
 						format="DD/MM"
-						// disabled
+						disabled
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-						// disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
-						// onChange={(values) => {
-						// 	setStartDate(values?.[0]);
-						// 	setEndDate(values?.[1]);
-						// }}
 						onChange={handleChange}
-
+						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
+					// onChange={(values) => {
+					// 	setStartDate(values?.[0]);
+					// 	setEndDate(values?.[1]);
+					// }}
 					/>
 				</Form.Item>
 				<Form.Item
 					name="semesterType"
 					label="Loại học kỳ"
-				// rules={[
-				// 	{
-				// 		required: true,
-				// 		message: "Vui lòng chọn loại học kỳ",
-				// 	},
-				// ]}
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn loại học kỳ",
+						},
+					]}
 				>
-					<Select placeholder="Chọn loại học kỳ" value={semestersType} onChange={handleSemesterChange}>
-						<option value="Spring">Spring</option>
-						<option value="Summer">Summer</option>
-						<option value="Fall">Fall</option>
-						<option value="Winter">Winter</option>
-					</Select>
-					{/* <Select
+					<Select
 						placeholder="Chọn loại học kỳ"
 						// options={semesterTypesOptions}
-						value={semestersType}
+						value={type}
 						loading={loading}
 						onChange={handleSemesterChange}
-						
-						// options={mockSemesterTypes.map((e) => {
-						// 	return {
-						// 		label: e.name,
-						// 		value: e.id,
-						// 	};
-						// })}
-						// onChange={(value) => {
-						// 	setType(value);
-						// }}
-					/> */}
+
+						options={mockSemesterTypes.map((e) => {
+							return {
+								label: e.name,
+								value: e.id,
+							};
+						})}
+					/>
 				</Form.Item>
 			</Form>
 		</BaseModal>

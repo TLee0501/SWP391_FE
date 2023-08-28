@@ -1,13 +1,13 @@
-import { Button, Row, Select, Tooltip, Typography, message } from "antd";
+import { Plus } from "@icon-park/react";
+import { Button, Row, Select, Typography, message } from "antd";
 import React, { useContext, useRef, useState } from "react";
-import { TaskBoard } from "./TaskBoard";
-import { TaskCreateModal } from "../../../../components/modals/task/create";
-import { Plus, Refresh } from "@icon-park/react";
-import { UserContext } from "../../../../providers/user";
-import { TeamContext } from "../../../../providers/team";
 import TaskApi from "../../../../apis/task";
-import TaskDetailModal from "../../../../components/modals/task/detail";
 import { ConfirmDeleteModal } from "../../../../components/ConfirmDeleteModal";
+import { TaskCreateModal } from "../../../../components/modals/task/create";
+import TaskDetailModal from "../../../../components/modals/task/detail";
+import { TeamContext } from "../../../../providers/team";
+import { UserContext } from "../../../../providers/user";
+import { TaskBoard } from "./TaskBoard";
 
 const { Title } = Typography;
 
@@ -105,13 +105,6 @@ export const TeamTaskManagement = () => {
 						style={{ width: 250 }}
 					/>
 				</Row>
-				{/* <Tooltip title="Tải lại">
-					<Button
-						icon={<Refresh />}
-						className="flex-center"
-						onClick={() => reload(false)}
-					/>
-				</Tooltip> */}
 			</Row>
 			<TaskBoard
 				onViewTask={(task) => {

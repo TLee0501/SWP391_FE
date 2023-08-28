@@ -166,3 +166,9 @@ export const taskStatusOptions = [
 		label: "Đã hoàn thành",
 	},
 ];
+
+export const TaskColumnId = {
+	TODO: "TODO",
+	IN_PROGRESS: "IN_PROGRESS",
+	COMPLETED: "COMPLETED",
+};

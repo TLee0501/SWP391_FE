@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BaseTable } from "../../../../components/BaseTable";
 import { Button, message } from "antd";
 import { More, Plus } from "@icon-park/react";
@@ -33,16 +33,11 @@ export const SemesterList = ({ semesters, loading }) => {
 		},
 		{
 			title: "Năm học",
-			dataIndex: `info`,
-			key: "academicYear",
-			// render: (_, {startTime ,endTime }) => {
-			// 	return moment(endTime).format("DD/MM");
-			// },
-		},
-		{
-			title: "Loại",
-			dataIndex: "semesterTypeId",
-			key: "semesterTypeId",
+			dataIndex: `endTime`,
+			key: "endTime",
+			render: (_, { endTime }) => {
+				return moment(endTime).format("YYYY");
+			},
 		},
 		{
 			title: "Thao tác",
@@ -53,14 +48,13 @@ export const SemesterList = ({ semesters, loading }) => {
 	];
 
 	const handleCreateSemester = async (values) => {
-		const { semesterName, academicYear, dates, semesterType } = values;
+		const { semesterName, academicYear, dates } = values;
 
 		const data = {
 			semesterName: semesterName,
-			academicYear: academicYear,
+			// academicYear: academicYear,
 			timeStart: dates[0],
 			timeEnd: dates[1],
-			semesterType: semesterType,
 		};
 
 		setShowCreateModal(true);

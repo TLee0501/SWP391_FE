@@ -5,7 +5,7 @@ import { Col, Row } from "antd";
 import { TeamContext } from "../../../../../providers/team";
 import { TaskStatus } from "../../../../../constants/enum";
 
-export const TaskBoard = () => {
+export const TaskBoard = ({ onViewTask, onDeleteTask }) => {
 	const { team } = useContext(TeamContext);
 	const tasks = team?.tasks;
 
@@ -13,17 +13,17 @@ export const TaskBoard = () => {
 		{
 			id: "TODO",
 			title: "Cần làm",
-			tasks: tasks.filter((e) => e.status === TaskStatus.new),
+			tasks: tasks?.filter((e) => e.status === TaskStatus.new),
 		},
 		{
 			id: "IN_PROGRESS",
 			title: "Đang làm",
-			tasks: tasks.filter((e) => e.status === TaskStatus.inProgress),
+			tasks: tasks?.filter((e) => e.status === TaskStatus.inProgress),
 		},
 		{
 			id: "COMPLETED",
 			title: "Đã hoàn thành",
-			tasks: tasks.filter((e) => e.status === TaskStatus.completed),
+			tasks: tasks?.filter((e) => e.status === TaskStatus.completed),
 		},
 	];
 
@@ -35,8 +35,12 @@ export const TaskBoard = () => {
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Row gutter={16}>
 				{columns.map((column) => (
-					<Col span={8}>
-						<TaskColumn column={column} />
+					<Col key={column.id} span={8}>
+						<TaskColumn
+							column={column}
+							onViewTask={onViewTask}
+							onDeleteTask={onDeleteTask}
+						/>
 					</Col>
 				))}
 			</Row>

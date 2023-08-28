@@ -83,12 +83,14 @@ const ProjectDetailPage = () => {
 	};
 
 	const handleCreateTask = async (values) => {
-		const { taskName, taskDescription } = values;
+		const { taskName, taskDescription, dates } = values;
 		setTaskCreating(true);
 		const success = await TaskApi.createTask({
 			projectId: id,
-			taskName,
-			taskDescription,
+			taskName: taskName,
+			timeStart: dates[0],
+			timeEnd: dates[1],
+			taskDescription: taskDescription,
 		});
 		if (success) {
 			message.success("Đã thêm công việc mới");

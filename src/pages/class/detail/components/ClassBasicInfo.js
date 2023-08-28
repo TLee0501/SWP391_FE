@@ -27,7 +27,7 @@ export const ClassBasicInfo = () => {
 		},
 	];
 
-	if (role === roles.STUDENT) {
+	if (role === roles.STUDENT || role === roles.ADMIN || role === roles.TEACHER ) {
 		items1.push({
 			key: "TEACHER",
 			label: "Giáo viên",

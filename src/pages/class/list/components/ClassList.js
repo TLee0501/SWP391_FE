@@ -1,5 +1,5 @@
-import { PreviewOpen } from "@icon-park/react";
-import { Button, Empty, Table, Tag, Typography } from "antd";
+import { Delete, Edit, More, PreviewOpen } from "@icon-park/react";
+import { Button, Dropdown, Empty, Row, Space, Table, Tag, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
@@ -11,6 +11,25 @@ const { Text } = Typography;
 export const ClassList = ({ classes, onDelete }) => {
 	const role = useRole();
 	const navigate = useNavigate();
+
+	const getActionItems = (record) => {
+		return [
+			{
+				label: "Chỉ định giáo viên",
+				icon: <Edit />,
+				// onClick: () => {
+				// 	onUpdate(record);
+				// },
+			},
+			{
+				label: "Bỏ chỉ định giáo viên",
+				icon: <Delete />,
+				// onClick: () => {
+				// 	onUpdate(record);
+				// },
+			},
+		];
+	};
 
 	const columns = [
 		{
@@ -57,14 +76,20 @@ export const ClassList = ({ classes, onDelete }) => {
 	columns.push({
 		title: "Thao tác",
 		key: "action",
-		render: (_, { classId }) => {
+		render: (_, { classId, record }) => {
 			return (
-				<Button
-					icon={<PreviewOpen />}
-					className="flex-center"
-					type="primary"
-					onClick={() => navigate(classId)}
-				/>
+				<Row justifyContent="space-around">
+					<Button
+						icon={<PreviewOpen />}
+						className="flex-center"
+						type="primary"
+						onClick={() => navigate	(classId)}
+					/>
+					<Dropdown menu={{ items: getActionItems(record) }}>
+						<Button icon={<More />} className="flex-center" />
+					</Dropdown>
+				</Row>
+
 			);
 		},
 	});
@@ -82,3 +107,4 @@ export const ClassList = ({ classes, onDelete }) => {
 		/>
 	);
 };
+

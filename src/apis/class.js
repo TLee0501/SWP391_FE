@@ -94,6 +94,19 @@ const updateClass = async (data) => {
 	}
 };
 
+const assignCourseToTeacher = async (classId, enrollCode) => {
+	try {
+		const response = await BaseApi.post(`/${resource}/EnrollClass`, {
+			classId,
+			enrollCode,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error enroll class: ", error);
+		return false;
+	}
+};
+
 const ClassApi = {
 	enrollClass,
 	createClass,

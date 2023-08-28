@@ -11,7 +11,6 @@ const getSemesters = async () => {
 		return [];
 	}
 };
-
 const getSemesterById = async (id) => {
 	try {
 		const response = await BaseApi.get(`/${resource}/GetSemester/${id}`);

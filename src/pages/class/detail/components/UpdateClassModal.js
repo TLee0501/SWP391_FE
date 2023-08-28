@@ -1,11 +1,7 @@
 import React, { useRef, useState } from "react";
 import BaseModal from "../../../../components/BaseModal";
-import { DatePicker, Form, Input, message } from "antd";
-import moment from "moment";
+import { Form, Input, message } from "antd";
 import ClassApi from "../../../../apis/class";
-import dayjs from "dayjs";
-
-const { RangePicker } = DatePicker;
 
 export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 	const formRef = useRef();
@@ -40,7 +36,7 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 		<BaseModal
 			open={open}
 			onCancel={onCancel}
-			title="Cập nhật môn học"
+			title="Cập nhật mã tham gia"
 			onOk={() => formRef.current?.submit()}
 			confirmLoading={classUpdating}
 		>
@@ -49,12 +45,12 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 				layout="vertical"
 				onFinish={handleUpdateClass}
 				initialValues={{
-					className: data?.className,
+					// className: data?.className,
 					enrollCode: data?.enrollCode,
-					dates: [dayjs(data?.startTime), dayjs(data?.endTime)],
+					// dates: [dayjs(data?.startTime), dayjs(data?.endTime)],
 				}}
 			>
-				<Form.Item
+				{/* <Form.Item
 					name="className"
 					label="Tên lớp học"
 					rules={[
@@ -65,7 +61,7 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 					]}
 				>
 					<Input placeholder="Nhập tên lớp học..." />
-				</Form.Item>
+				</Form.Item> */}
 				<Form.Item
 					name="enrollCode"
 					label="Mã tham gia"
@@ -78,7 +74,7 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 				>
 					<Input.Password place holder="Nhập mã tham gia..." />
 				</Form.Item>
-				<Form.Item
+				{/* <Form.Item
 					name="dates"
 					label="Thời gian"
 					rules={[
@@ -93,7 +89,7 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 						format={"DD/MM/YYYY"}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 					/>
-				</Form.Item>
+				</Form.Item> */}
 			</Form>
 		</BaseModal>
 	);

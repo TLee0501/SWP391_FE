@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { SemesterList } from "./components/SemesterList";
+import React, { useContext, useEffect, useState } from "react";
 import SemesterApi from "../../../apis/semester";
+import { SemesterList } from "./components/SemesterList";
+import { SemesterTypeContext } from "../../../providers/semesterType";
 
 const SemesterListPage = () => {
+	const data = useContext(SemesterTypeContext);
+
 	const [semesters, setSemesters] = useState([]);
 	const [loading, setLoading] = useState(false);
 
@@ -15,9 +18,9 @@ const SemesterListPage = () => {
 
 	useEffect(() => {
 		getSemesters();
-	}, []);
+	}, [data]);
 
-	return <SemesterList loading={loading} semesters={semesters} />;
+	return <SemesterList loading={loading} semesters={semesters}/>;
 };
 
 export default SemesterListPage;

@@ -33,31 +33,31 @@ export const SemesterFormModal = ({
 	const [loading, setLoading] = useState(false);
 	const [year, setYear] = useState(2023);
 
-	const years = [];
-	for (let year = 2023; year <= 2100; year++) {
-		years.push(year);
-	}
+	// const years = [];
+	// for (let year = 2023; year <= 2100; year++) {
+	// 	years.push(year);
+	// }
 
-	const handleSemesterChange = (value) => {
-		const start = new Date(year, 0, 1);
-		const end = new Date(year, 3, 31);
+	// const handleSemesterChange = (value) => {
+	// 	const start = new Date(year, 0, 1);
+	// 	const end = new Date(year, 3, 31);
 
-		if (value === "Spring") {
-			setStartDate(start);
-			setEndDate(end);
-		} else if (value === "Summer") {
-			setStartDate(start.setMonth(4), start.setDate(1));
-			setEndDate(end.setMonth(6), end.setDate(31));
-		} else if (value === "Fall") {
-			setStartDate(start.setMonth(7), start.setDate(1));
-			setEndDate(end.setMonth(9), end.setDate(31));
-		} else {
-			setStartDate(start.setMonth(10), start.setDate(1));
-			setEndDate(end.setMonth(12), end.setDate(31));
-		}
-		setType(value);
-		message.success(`success ${value}`);
-	};
+	// 	if (value === "Spring") {
+	// 		setStartDate(start);
+	// 		setEndDate(end);
+	// 	} else if (value === "Summer") {
+	// 		setStartDate(start.setMonth(4), start.setDate(1));
+	// 		setEndDate(end.setMonth(6), end.setDate(31));
+	// 	} else if (value === "Fall") {
+	// 		setStartDate(start.setMonth(7), start.setDate(1));
+	// 		setEndDate(end.setMonth(9), end.setDate(31));
+	// 	} else {
+	// 		setStartDate(start.setMonth(10), start.setDate(1));
+	// 		setEndDate(end.setMonth(12), end.setDate(31));
+	// 	}
+	// 	setType(value);
+	// 	message.success(`success ${value}`);
+	// };
 
 	const getSemesterName = () => {
 		if (!startDate || !endDate || !type) {
@@ -76,11 +76,11 @@ export const SemesterFormModal = ({
 	};
 
 	const onFinish = (values) => {
-		const semesterName = getSemesterName();
-		const times = handleSemesterChange();
+		const semeterName = getSemesterName();
+		// const times = handleSemesterChange();
 		console.log("Semester submit: ", values);
-		values.semesterName = semesterName;
-		values.times = times;
+		values.semeterName = semeterName;
+		// values.times = times;
 		onSubmit?.(values);
 	};
 
@@ -100,7 +100,7 @@ export const SemesterFormModal = ({
 				}}
 			>
 				<Form.Item
-					name="semesterName"
+					name="semeterName"
 					label={
 						<Row align="middle">
 							<Text style={{ margin: 0, padding: 0 }}>Tên học kỳ</Text>
@@ -144,10 +144,19 @@ export const SemesterFormModal = ({
 				>
 					<Select
 						placeholder="Chọn loại học kỳ"
-						options={SemesterTypeOptions}
+						// options={SemesterTypeOptions}
 						value={type}
 						loading={loading}
-						onChange={handleSemesterChange}
+						options={mockSemesterTypes.map((e) => {
+							return {
+								label: e.name,
+								value: e.id,
+							};
+						})}
+						onChange={(value) => {
+							setType(value);
+						}}
+						// onChange={handleSemesterChange}
 					/>
 				</Form.Item>
 			</Form>

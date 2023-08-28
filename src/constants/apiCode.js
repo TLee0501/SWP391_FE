@@ -12,7 +12,7 @@ const ApiCodes = {
 	15: "Tên dự án đã tồn tại",
 	// team
 	8: "Có thành viên bị lặp",
-	9: "Có thành viên đã tham gia nhóm khác",
+	9: "Bạn hoặc các thành viên đăng ký khác đã có nhóm",
 };
 
 export default ApiCodes;

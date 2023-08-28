@@ -139,6 +139,18 @@ const getJoinedProjectTeams = async (classId) => {
 	}
 };
 
+const getJoinedProjectTeamById = async (teamId) => {
+	try {
+		const response = await BaseApi.get(
+			`/${resource}/GetJoinedProjectTeamsById/${teamId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error getJoinedProjectTeamById: ", error);
+		return undefined;
+	}
+};
+
 const TeamApi = {
 	getProjectTeamRequests,
 	getTeamRequestById,
@@ -149,6 +161,7 @@ const TeamApi = {
 	getProjectTeamInClass,
 	registerProjectTeam,
 	getJoinedProjectTeams,
+	getJoinedProjectTeamById,
 };
 
 export default TeamApi;

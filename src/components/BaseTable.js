@@ -17,6 +17,8 @@ export const BaseTable = ({
 	actions,
 	loading,
 	reload,
+	expandedRowRender,
+	rowKey,
 }) => {
 	const all = useRef();
 
@@ -118,6 +120,7 @@ export const BaseTable = ({
 				</Col>
 			</Row>
 			<Table
+				rowKey={rowKey}
 				pagination={pagination}
 				dataSource={list}
 				columns={columns}
@@ -126,6 +129,9 @@ export const BaseTable = ({
 					emptyText: (
 						<Empty description={<Text disabled>Chưa có dữ liệu</Text>} />
 					),
+				}}
+				expandable={{
+					expandedRowRender: expandedRowRender,
 				}}
 			/>
 		</div>

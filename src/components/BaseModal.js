@@ -13,11 +13,13 @@ const BaseModal = ({
 	confirmLoading,
 	okButtonProps,
 	cancelButtonProps,
+	width,
+	okText,
 }) => {
 	return (
 		<Modal
 			destroyOnClose
-			okText="Xác nhận"
+			okText={okText ?? "Xác nhận"}
 			cancelText="Hủy"
 			open={open}
 			onCancel={onCancel}
@@ -28,6 +30,7 @@ const BaseModal = ({
 			okType={okType}
 			okButtonProps={okButtonProps}
 			cancelButtonProps={cancelButtonProps}
+			width={width}
 		>
 			{children}
 		</Modal>

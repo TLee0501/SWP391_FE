@@ -1,3 +1,5 @@
+import { TaskStatus } from "./enum";
+
 export const roles = {
 	ADMIN: "Admin",
 	STUDENT: "Student",
@@ -149,3 +151,18 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.report.view,
 	],
 };
+
+export const taskStatusOptions = [
+	{
+		value: TaskStatus.new,
+		label: "Cần làm",
+	},
+	{
+		value: TaskStatus.inProgress,
+		label: "Đang làm",
+	},
+	{
+		value: TaskStatus.completed,
+		label: "Đã hoàn thành",
+	},
+];

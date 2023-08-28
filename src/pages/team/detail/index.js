@@ -1,5 +1,5 @@
 import { Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import TeamApi from "../../../apis/team";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
@@ -14,23 +14,49 @@ const TeamDetailPage = () => {
 	const [team, setTeam] = useState();
 	const [loading, setLoading] = useState(false);
 
-	const getTeam = async (teamId) => {
-		setLoading(true);
+	const allTasks = useRef();
+
+	const getTeam = async (teamId, handleLoading) => {
+		if (handleLoading) {
+			setLoading(true);
+		}
 		const data = await TeamApi.getJoinedProjectTeamById(teamId);
+		allTasks.current = data?.tasks;
 		setTeam(data);
-		setLoading(false);
+		if (handleLoading) {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
 		if (id) {
-			getTeam(id);
+			getTeam(id, true);
 		}
 	}, [id]);
 
 	return (
 		<Spin spinning={loading}>
-			<TeamProvider team={team} onReload={() => getTeam(id)}>
-				<BasePageContent>
+			<TeamProvider
+				team={team}
+				onReload={(handleLoading) => {
+					getTeam(id, handleLoading);
+				}}
+				onFilterTask={(memberId) => {
+					console.log("filter task: ", memberId);
+					if (memberId) {
+						const newTeam = { ...team };
+						newTeam.tasks = allTasks.current.filter(
+							(e) => e?.members?.find((x) => x.id === memberId) !== undefined
+						);
+						setTeam(newTeam);
+					} else {
+						const newTeam = { ...team };
+						newTeam.tasks = allTasks.current;
+						setTeam(newTeam);
+					}
+				}}
+			>
+				<BasePageContent title="Nhóm của tôi">
 					<div className="mt-4">
 						<TeamBasicInfo />
 					</div>

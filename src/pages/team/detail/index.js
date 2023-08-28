@@ -1,5 +1,5 @@
 import { Spin } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import TeamApi from "../../../apis/team";
 import { BasePageContent } from "../../../layouts/containers/BasePageContent";
@@ -7,12 +7,17 @@ import { TeamProvider } from "../../../providers/team";
 import { TeamBasicInfo } from "./components/TeamBasicInfo";
 import { TeamProjectInfo } from "./components/TeamProjectInfo";
 import { TeamTaskManagement } from "./components/TeamTaskManagement";
+import { UserContext } from "../../../providers/user";
+import { TeamProgressOverview } from "./components/TeamProgressOverview";
 
 const TeamDetailPage = () => {
 	const { id } = useParams();
+	const { user } = useContext(UserContext);
 
 	const [team, setTeam] = useState();
 	const [loading, setLoading] = useState(false);
+
+	const isLeader = user?.userId === team?.leader?.id;
 
 	const allTasks = useRef();
 
@@ -57,12 +62,17 @@ const TeamDetailPage = () => {
 				}}
 			>
 				<BasePageContent title="Nhóm của tôi">
-					<div className="mt-4">
-						<TeamBasicInfo />
-					</div>
 					<div className="mt-2">
 						<TeamProjectInfo />
 					</div>
+					<div className="mt-4">
+						<TeamBasicInfo />
+					</div>
+					{isLeader && (
+						<div className="mt-4">
+							<TeamProgressOverview />
+						</div>
+					)}
 					<div className="mt-4">
 						<TeamTaskManagement />
 					</div>

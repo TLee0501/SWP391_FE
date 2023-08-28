@@ -6,6 +6,7 @@ import {
 	Col,
 	Dropdown,
 	Row,
+	Tag,
 	Tooltip,
 	Typography,
 } from "antd";
@@ -15,6 +16,7 @@ import { TextTile } from "../../../../../components/TextTile";
 import { TeamContext } from "../../../../../providers/team";
 import { UserContext } from "../../../../../providers/user";
 import { formatDate } from "../../../../../utils";
+import moment, { now } from "moment";
 
 const { Text } = Typography;
 
@@ -24,6 +26,8 @@ export const TaskItem = ({ task, index, onView, onDelete }) => {
 	const isLeader = user?.userId === team?.leader?.id;
 
 	const { id, name, members, startTime, endTime } = task;
+
+	const overdue = moment(task?.endTime).isBefore(now());
 
 	return (
 		<Draggable draggableId={id} index={index}>
@@ -95,6 +99,11 @@ export const TaskItem = ({ task, index, onView, onDelete }) => {
 							</Avatar.Group>
 						</Col>
 					</Row>
+					{overdue && (
+						<Tag className="mt-4" color="red-inverse">
+							Đã quá hạn
+						</Tag>
+					)}
 				</Card>
 			)}
 		</Draggable>

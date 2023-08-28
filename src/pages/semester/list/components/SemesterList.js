@@ -20,7 +20,7 @@ export const SemesterList = ({ semesters, loading }) => {
 			dataIndex: "startTime",
 			key: "startTime",
 			render: (_, { startTime }) => {
-				return moment(startTime).format("DD/MM");
+				return moment(startTime).format("DD/MM/YYYY");
 			},
 		},
 		{
@@ -28,23 +28,23 @@ export const SemesterList = ({ semesters, loading }) => {
 			dataIndex: "endTime",
 			key: "endTime",
 			render: (_, { endTime }) => {
-				return moment(endTime).format("DD/MM");
+				return moment(endTime).format("DD/MM/YYYY");
 			},
 		},
-		{
-			title: "Năm học",
-			dataIndex: `endTime`,
-			key: "endTime",
-			render: (_, { endTime }) => {
-				return moment(endTime).format("YYYY");
-			},
-		},
-		{
-			title: "Thao tác",
-			render: (_, record) => {
-				<Button icon={<More />} className="flex-center" />;
-			},
-		},
+		// {
+		// 	title: "Năm học",
+		// 	dataIndex: `endTime`,
+		// 	key: "endTime",
+		// 	render: (_, { endTime }) => {
+		// 		return moment(endTime).format("YYYY");
+		// 	},
+		// },
+		// {
+		// 	title: "Thao tác",
+		// 	render: (_, record) => {
+		// 		<Button icon={<More />} className="flex-center" />;
+		// 	},
+		// },
 	];
 
 	const handleCreateSemester = async (values) => {

@@ -94,15 +94,27 @@ const updateClass = async (data) => {
 	}
 };
 
-const assignCourseToTeacher = async (classId, enrollCode) => {
+const assignCourseToTeacher = async (userID, classID) => {
 	try {
-		const response = await BaseApi.post(`/${resource}/EnrollClass`, {
-			classId,
-			enrollCode,
+		const response = await BaseApi.post(`/${resource}/AssignClass`, {
+			userID,
+			classID,
 		});
 		return response.status === 200;
 	} catch (error) {
-		console.log("Error enroll class: ", error);
+		console.log("Error assign class: ", error);
+		return false;
+	}
+};
+const unassignCourseToTeacher = async (userID, classID) => {
+	try {
+		const response = await BaseApi.post(`/${resource}/UnassignClass`, {
+			userID,
+			classID,
+		});
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error unassign class: ", error);
 		return false;
 	}
 };
@@ -116,6 +128,8 @@ const ClassApi = {
 	deleteClass,
 	getUserInClass,
 	updateClass,
+	assignCourseToTeacher,
+	unassignCourseToTeacher
 };
 
 export default ClassApi;

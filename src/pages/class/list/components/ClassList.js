@@ -12,8 +12,15 @@ export const ClassList = ({ classes, onDelete }) => {
 	const role = useRole();
 	const navigate = useNavigate();
 
-	const getActionItems = (record) => {
+	const getActionItems = (record, classId) => {
 		return [
+			{
+				label: "Xem chi tiết",
+				icon: <PreviewOpen />,
+				onClick: () => {
+					navigate(classId);
+				},
+			},
 			{
 				label: "Chỉ định giáo viên",
 				icon: <Edit />,
@@ -27,7 +34,7 @@ export const ClassList = ({ classes, onDelete }) => {
 				// onClick: () => {
 				// 	onUpdate(record);
 				// },
-			},
+			},			
 		];
 	};
 
@@ -78,18 +85,9 @@ export const ClassList = ({ classes, onDelete }) => {
 		key: "action",
 		render: (_, { classId, record }) => {
 			return (
-				<Row justifyContent="space-around">
-					<Button
-						icon={<PreviewOpen />}
-						className="flex-center"
-						type="primary"
-						onClick={() => navigate	(classId)}
-					/>
-					<Dropdown menu={{ items: getActionItems(record) }}>
-						<Button icon={<More />} className="flex-center" />
-					</Dropdown>
-				</Row>
-
+				<Dropdown menu={{ items: getActionItems(record, classId) }}>
+					<Button icon={<More />} className="flex-center" />
+				</Dropdown>
 			);
 		},
 	});

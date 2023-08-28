@@ -8,7 +8,7 @@ export const ClassStudentList = () => {
 
 	return (
 		<ClassDetailArea
-			title={`Danh sách sinh viên (${data?.students.length ?? 0})`}
+			title={`Danh sách sinh viên (${data?.students?.length ?? 0})`}
 			defaultOpen
 		>
 			<StudentList students={data?.students} />

@@ -149,7 +149,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 
 	return (
 		<ClassDetailArea
-			title={`Danh sách dự án (${data?.projects.length ?? 0})`}
+			title={`Danh sách dự án (${data?.projects?.length ?? 0})`}
 			defaultOpen
 			action={
 				canCreateProject && (

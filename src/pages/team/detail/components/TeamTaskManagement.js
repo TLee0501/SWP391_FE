@@ -78,7 +78,7 @@ export const TeamTaskManagement = () => {
 			<Row align="middle" className="mb-3" justify="space-between">
 				<Row align="middle">
 					<Title level={5} style={{ margin: 0 }}>
-						Danh sách công việc ({team?.tasks?.length})
+						Công việc ({team?.tasks?.length})
 					</Title>
 					{isLeader && (
 						<Button

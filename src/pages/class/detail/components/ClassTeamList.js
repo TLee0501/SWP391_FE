@@ -47,10 +47,10 @@ export const ClassTeamList = () => {
 
 	return (
 		<ClassDetailArea
-			title={`Danh sách nhóm làm dự án (${data?.teams.length ?? 0})`}
+			title={`Danh sách nhóm làm dự án (${data?.teams?.length ?? 0})`}
 			defaultOpen
 		>
-			{items.length > 0 ? (
+			{items?.length > 0 ? (
 				<Collapse items={items} />
 			) : (
 				<Empty description={<Text disabled>Chưa có nhóm nào đăng ký</Text>} />

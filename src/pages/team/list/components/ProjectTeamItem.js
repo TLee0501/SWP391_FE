@@ -4,17 +4,22 @@ import {
 	Collapse,
 	Descriptions,
 	List,
+	Tag,
 	Tooltip,
 	Typography,
 } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import { RawHtml } from "../../../../components/RawHtml";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../../providers/user";
 
 const { Text } = Typography;
 
 export const ProjectTeamItem = ({ team, index }) => {
 	const navigate = useNavigate();
+
+	const { user } = useContext(UserContext);
+	const isLeader = user?.userId === team?.leader?.id;
 
 	return (
 		<Card
@@ -40,6 +45,11 @@ export const ProjectTeamItem = ({ team, index }) => {
 							>
 								<Text className="cursor-pointer" underline>
 									{team.leader.fullName}
+									{isLeader && (
+										<Tag className="ml-2" color="blue">
+											Tôi
+										</Tag>
+									)}
 								</Text>
 							</Tooltip>
 						),

@@ -1,4 +1,5 @@
 import BaseApi from ".";
+import ApiCodes from "../constants/apiCode";
 
 const resource = "Semesters";
 
@@ -24,10 +25,17 @@ const getSemesterById = async (id) => {
 const createSemester = async (data) => {
 	try {
 		const response = await BaseApi.post(`/${resource}/CreateSemester`, data);
-		return response.status === 200;
+		return response.data;
 	} catch (error) {
 		console.log("Error create semester: ", error);
-		return false;
+		if (error.response.data) {
+			return error.response.data;
+		}
+
+		return {
+			code: 99,
+			message: "Có lỗi xảy ra",
+		};
 	}
 };
 
@@ -37,10 +45,17 @@ const updateSemester = async (id, data) => {
 			`/${resource}/UpdateSemester/${id}`,
 			data
 		);
-		return response.status === 200;
+		return response.data;
 	} catch (error) {
 		console.log("Error update semester: ", error);
-		return false;
+		if (error.response.data) {
+			return error.response.data;
+		}
+
+		return {
+			code: 99,
+			message: "Có lỗi xảy ra",
+		};
 	}
 };
 

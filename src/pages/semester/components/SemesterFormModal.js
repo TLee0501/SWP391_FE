@@ -9,10 +9,13 @@ import {
 	Typography,
 } from "antd";
 import moment from "moment";
-import React, { useRef, useState } from "react";
-import { mockSemesterTypes } from "../../../__mocks__/semester";
+import React, { useEffect, useRef, useState } from "react";
 import BaseModal from "../../../components/BaseModal";
-import { SemesterTypeOptions } from "../../../constants/app";
+import {
+	SemesterTypeOptions,
+	SemesterTypeRanges,
+} from "../../../constants/app";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
@@ -22,54 +25,111 @@ export const SemesterFormModal = ({
 	onCancel,
 	onSubmit,
 	submitting,
-	onChange,
+	semester,
 }) => {
 	const formRef = useRef();
 
 	const [startDate, setStartDate] = useState();
 	const [endDate, setEndDate] = useState();
-	const [type, setType] = useState();
-	const [loading, setLoading] = useState(false);
-	const [year, setYear] = useState(2023);
+	const [semesterType, setSemesterType] = useState("Spring");
 
 	const getSemesterName = () => {
-		if (!startDate || !endDate || !type) {
+		if (!startDate || !endDate || !semesterType) {
 			return "-";
 		}
-		return `${
-			mockSemesterTypes.find((e) => e.id === type)?.name
-		}${year}_${startDate.date()}${startDate.format(
+
+		var year;
+		const y1 = startDate?.year();
+		const y2 = endDate?.year();
+		if (y1 === y2) {
+			year = y1;
+		} else {
+			year = `${y1}_${y2}`;
+		}
+
+		return `${semesterType}${year}_${startDate.date()}${startDate.format(
 			"MM"
 		)}_${endDate.date()}${endDate.format("MM")}`;
 	};
 
 	const handleChange = (values) => {
-		setStartDate(values[0]);
-		setEndDate(values[1]);
+		setStartDate(values?.[0]);
+		setEndDate(values?.[1]);
 	};
 
 	const onFinish = (values) => {
-		const semeterName = getSemesterName();
-		// const times = handleSemesterChange();
-		console.log("Semester submit: ", values);
-		values.semeterName = semeterName;
-		// values.times = times;
-		onSubmit?.(values);
+		const semesterName = getSemesterName();
+		const dates = values.dates;
+		const startTime = dates[0];
+		const endTime = dates[1];
+
+		const data = {
+			semesterName,
+			startTime,
+			endTime,
+		};
+		onSubmit?.(data);
 	};
+
+	const disabledDate = (current) => {
+		const isBeforeNow = current.isBefore(moment().subtract(1, "days"));
+
+		const ranges = SemesterTypeRanges[semesterType];
+		const startMonth = ranges?.startMonth;
+		const startDay = ranges?.startDay;
+		const endMonth = ranges?.endMonth;
+		const endDay = ranges?.endDay;
+
+		const currentMonth = current.month();
+		const currentDay = current.date();
+
+		const notInSemesterTypeRange =
+			(currentMonth === startMonth && currentDay < startDay) ||
+			(currentMonth === endMonth && currentDay > endDay) ||
+			currentMonth < startMonth ||
+			currentMonth > endMonth;
+
+		return notInSemesterTypeRange || isBeforeNow;
+	};
+
+	useEffect(() => {
+		if (semester !== undefined) {
+			// Extract semester type from name
+			// Ex: name: Spring2023_xxx => "Spring"
+			const pattern = /^[a-zA-Z]+/;
+			const semesterName = semester?.semesterName;
+			const match = semesterName?.match(pattern);
+			const type = match ? match[0] : "";
+			setSemesterType(type);
+			setStartDate(dayjs(semester?.startTime));
+			setEndDate(dayjs(semester?.endTime));
+		} else {
+			setSemesterType("Spring");
+		}
+	}, [semester]);
 
 	return (
 		<BaseModal
 			title={title}
 			open={open}
-			onCancel={onCancel}
+			onCancel={() => {
+				setSemesterType("Spring");
+				setStartDate(undefined);
+				setEndDate(undefined);
+				onCancel();
+			}}
 			onOk={() => formRef.current?.submit()}
+			confirmLoading={submitting}
 		>
 			<Form
 				ref={formRef}
 				onFinish={onFinish}
 				layout="vertical"
 				initialValues={{
-					setYear: setYear,
+					dates: [
+						semester !== undefined && dayjs(semester?.startTime),
+						semester !== undefined && dayjs(semester?.endTime),
+					],
 				}}
 			>
 				<Form.Item
@@ -86,8 +146,14 @@ export const SemesterFormModal = ({
 					<Text strong>{getSemesterName()}</Text>
 				</Form.Item>
 				<Form.Item
-					name="semesterType"
-					label="Loại học kỳ"
+					label={
+						<div>
+							Loại học kỳ
+							<Tooltip title="Loại học kỳ sẽ qui định thời gian được phép tạo học kỳ">
+								<Button icon={<Info />} type="link" style={{ padding: 0 }} />
+							</Tooltip>
+						</div>
+					}
 					rules={[
 						{
 							required: true,
@@ -98,11 +164,10 @@ export const SemesterFormModal = ({
 					<Select
 						placeholder="Chọn loại học kỳ"
 						options={SemesterTypeOptions}
-						value={type}
-						loading={loading}
 						onChange={(value) => {
-							setType(value);
+							setSemesterType(value);
 						}}
+						value={semesterType}
 					/>
 				</Form.Item>
 				<Form.Item
@@ -120,7 +185,7 @@ export const SemesterFormModal = ({
 						format="DD/MM/YYYY"
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						onChange={handleChange}
-						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
+						disabledDate={disabledDate}
 						className="w-full"
 					/>
 				</Form.Item>

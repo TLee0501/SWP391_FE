@@ -56,7 +56,7 @@ export const BaseTable = ({
 							}
 
 							return (
-								<Col>
+								<Col key={dataIndex}>
 									{label && <span className="mr-2">{label}:</span>}
 									<Select
 										mode={multiple ? "multiple" : undefined}

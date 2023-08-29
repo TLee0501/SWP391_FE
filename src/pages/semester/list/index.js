@@ -20,7 +20,13 @@ const SemesterListPage = () => {
 		getSemesters();
 	}, [data]);
 
-	return <SemesterList loading={loading} semesters={semesters}/>;
+	return (
+		<SemesterList
+			loading={loading}
+			semesters={semesters}
+			onSuccess={() => getSemesters()}
+		/>
+	);
 };
 
 export default SemesterListPage;

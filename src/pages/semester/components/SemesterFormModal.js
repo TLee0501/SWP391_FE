@@ -125,7 +125,7 @@ export const SemesterFormModal = ({
 				>
 					<DatePicker.RangePicker
 						value={[startDate, endDate]}
-						format="DD/MM"
+						format="DD/MM/YYYY"
 						placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
 						onChange={handleChange}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}

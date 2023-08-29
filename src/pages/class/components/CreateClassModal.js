@@ -4,6 +4,7 @@ import CourseApi from "../../../apis/course";
 import BaseModal from "../../../components/BaseModal";
 import { UserContext } from "../../../providers/user";
 import ClassApi from "../../../apis/class";
+import SemesterApi from "../../../apis/semester";
 
 export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	const { user } = useContext(UserContext);
@@ -13,7 +14,11 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	const [classCreating, setClassCreating] = useState(false);
 
 	const [courseLoading, setCourseLoading] = useState(false);
+	const [semestersLoading, setSemestersLoading] = useState(false);
+	const [teacherLoading, setTeacherLoading] = useState(false);
 	const [courses, setCourses] = useState([]);
+	const [semesters, setSemesters] = useState([]);
+	const [teacher, setTeacher] = useState([]);
 
 	const getCourses = async () => {
 		setCourseLoading(true);
@@ -22,8 +27,24 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 		setCourseLoading(false);
 	};
 
+	const getSemester = async (semesterId) => {
+		setSemestersLoading(true);
+		const data = await SemesterApi.getSemesterById(semesterId);
+		setSemesters(data);
+		setSemestersLoading(false);
+	};
+
+	const getTeacherUnassign = async (semesterId) => {
+		setTeacherLoading(true);
+		const data = await ClassApi.getTeacherUnassign(semesterId);
+		setTeacher(data);
+		setTeacherLoading(false);
+	};
+
 	useEffect(() => {
 		getCourses();
+		getSemester();
+		getTeacherUnassign();
 	}, []);
 
 	const courseOptions = courses.map((e) => {
@@ -33,15 +54,31 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 		};
 	});
 
+	// const semestersOptions = semesters.map((e) => {
+	// 	return {
+	// 		value: e.semesterId,
+	// 		label: e.semestersName,
+	// 	};
+	// });
+
+	// const teacherOptions = semesters.map((e) => {
+	// 	return {
+	// 		value: e.teacherId,
+	// 		label: e.teacherName,
+	// 	};
+	// });
+
 	const handleCreateClass = async (values) => {
 		const { userId } = user;
-		const { course, name, enrollCode } = values;
+		const { course, name, enrollCode, semester, teacher } = values;
 
 		const data = {
 			courseId: course,
 			userId: userId,
+			teacherId: teacher, //chờ API
 			className: name,
 			enrollCode: enrollCode,
+			semesterId: semester, //chờ API
 		};
 
 		setClassCreating(true);
@@ -94,6 +131,23 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 					/>
 				</Form.Item> */}
 				<Form.Item
+					name="teacher"
+					label="Giáo viên hướng dẫn"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn giáo viên",
+						},
+					]}
+				>
+					<Select
+						// showSearch
+						// options={teacherOptions}
+						placeholder="Chọn giáo viên"
+						loading={teacherLoading}
+					/>
+				</Form.Item>
+				<Form.Item
 					name="course"
 					label="Môn học"
 					rules={[
@@ -104,10 +158,27 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 					]}
 				>
 					<Select
-						showSearch
+						// showSearch
 						options={courseOptions}
 						placeholder="Chọn môn học"
 						loading={courseLoading}
+					/>
+				</Form.Item>
+				<Form.Item
+					name="semester"
+					label="Kỳ học"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn môn học",
+						},
+					]}
+				>
+					<Select
+						// showSearch
+						// options={semestersOptions}
+						placeholder="Chọn kỳ học"
+						loading={semestersLoading}
 					/>
 				</Form.Item>
 				<Form.Item

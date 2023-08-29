@@ -63,7 +63,7 @@ export const CourseList = ({
 			}}
 			dataSource={courses}
 			columns={columns}
-			pagination={false}
+			pagination={true}
 			actions={[
 				canCreate && (
 					<Button

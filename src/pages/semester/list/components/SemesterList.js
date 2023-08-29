@@ -1,10 +1,11 @@
-import { Edit, More, Plus } from "@icon-park/react";
+import { Edit, More, Plus, PreviewOpen } from "@icon-park/react";
 import { Button, Dropdown, message } from "antd";
 import moment from "moment";
 import React, { useRef, useState } from "react";
 import SemesterApi from "../../../../apis/semester";
 import { BaseTable } from "../../../../components/BaseTable";
 import { SemesterFormModal } from "../../components/SemesterFormModal";
+import { useNavigate } from "react-router-dom";
 
 export const SemesterList = ({ semesters, loading, onSuccess }) => {
 	const [showCreateModal, setShowCreateModal] = useState(false);
@@ -14,6 +15,7 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 	const [updating, setUpdating] = useState(false);
 
 	const semesterRef = useRef();
+	const navigate = useNavigate();
 
 	const columns = [
 		{
@@ -39,11 +41,18 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 		},
 		{
 			title: "Thao tác",
-			render: (_, record) => {
+			render: (_, record, semesterId) => {
 				return (
 					<Dropdown
 						menu={{
 							items: [
+								{
+									label: "Xem chi tiết",
+									icon: <PreviewOpen/>,
+									onClick: () => {
+										navigate(semesterId);
+									},
+								},
 								{
 									label: "Cập nhật",
 									icon: <Edit />,

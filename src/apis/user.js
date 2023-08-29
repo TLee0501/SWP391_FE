@@ -13,6 +13,16 @@ export const searchUsers = async (keyword) => {
 	}
 };
 
+export const getListTeacher = async () => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetListTeacher`);
+		return response.data;
+	} catch (error) {
+		console.log("Error get list teacherss: ", error);
+		return [];
+	}
+};
+
 const banUser = async (userId) => {
 	try {
 		const response = await BaseApi.put(`/Users/BanUser/${userId}`);
@@ -51,6 +61,7 @@ const UserApi = {
 	banUser,
 	unbanUser,
 	updateUserRole,
+	getListTeacher,
 };
 
 export default UserApi;

@@ -58,13 +58,17 @@ const ClassDetailPage = () => {
 		// },
 	];
 
-	const getClass = async () => {
-		setLoading(true);
+	const getClass = async (handleLoading) => {
+		if (handleLoading) {
+			setLoading(true);
+		}
 		const response = await ClassApi.getClassById(id);
 		if (response) {
 			setData(response);
 		}
-		setLoading(false);
+		if (handleLoading) {
+			setLoading(false);
+		}
 	};
 
 	const handleUpdateProject = async (values) => {
@@ -88,7 +92,7 @@ const ClassDetailPage = () => {
 		const success = await ProjectApi.updateProject(data);
 		if (success) {
 			message.success("Cập nhật dự án thành công");
-			getClass();
+			getClass(true);
 		} else {
 			message.error("Cập nhật dự án thất bại");
 		}
@@ -98,7 +102,7 @@ const ClassDetailPage = () => {
 
 	useEffect(() => {
 		if (id) {
-			getClass();
+			getClass(true);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id]);
@@ -126,7 +130,10 @@ const ClassDetailPage = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<ClassProvider data={data}>
+			<ClassProvider
+				data={data}
+				reload={(handleLoading) => getClass(handleLoading)}
+			>
 				<BasePageContent
 					title={<span>{`Lớp ${data.className ?? ""}`} </span>}
 					action={
@@ -160,13 +167,13 @@ const ClassDetailPage = () => {
 						open={showUpdateEClassModal}
 						onCancel={() => setShowUpdateClassModal(false)}
 						data={data}
-						onSuccess={() => getClass()}
+						onSuccess={() => getClass(true)}
 					/>
 					<EnrollClassModal
 						classId={data?.classId}
 						open={showEnrollClassModal}
 						onCancel={() => setShowEnrollClassModal(false)}
-						onSuccess={() => getClass()}
+						onSuccess={() => getClass(true)}
 					/>
 					<ProjectDescriptionModal
 						open={showProjectDescModal}

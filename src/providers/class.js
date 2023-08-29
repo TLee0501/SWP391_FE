@@ -1,11 +1,16 @@
 import { createContext } from "react";
 
-const initialValue = {};
+const ClassContext = createContext({
+	data: undefined,
+	reload: (handleLoading) => {},
+});
 
-const ClassContext = createContext(initialValue);
-
-const ClassProvider = ({ data, children }) => {
-	return <ClassContext.Provider value={data}>{children}</ClassContext.Provider>;
+const ClassProvider = ({ data, children, reload }) => {
+	return (
+		<ClassContext.Provider value={{ data, reload }}>
+			{children}
+		</ClassContext.Provider>
+	);
 };
 
 export { ClassContext, ClassProvider };

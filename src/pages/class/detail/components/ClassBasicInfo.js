@@ -1,15 +1,11 @@
 import { Card, Descriptions } from "antd";
 import React, { useContext } from "react";
-import { formatDate } from "../../../../utils";
 import { ClassContext } from "../../../../providers/class";
-import { useRole } from "../../../../hooks/role";
-import { roles } from "../../../../constants/app";
+import { formatDate } from "../../../../utils";
 
 export const ClassBasicInfo = () => {
-	const data = useContext(ClassContext);
+	const { data } = useContext(ClassContext);
 	const semester = data?.semester;
-
-	const role = useRole();
 
 	const items1 = [
 		{

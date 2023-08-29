@@ -178,6 +178,7 @@ const ClassApi = {
 	updateClass,
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
+	getTeacherClassList,
 	updateEnrollCode,
 	updateTeamRegisterDeadline,
 	updateTeamReportDeadline,

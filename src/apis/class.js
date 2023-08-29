@@ -123,10 +123,48 @@ const unassignCourseToTeacher = async (userID, classID) => {
 
 const getTeacherUnassign = async (id) => {
 	try {
-		const response = await BaseApi.get(`/${resource}/getTeacherUnassign?classId=${id}`);
+		const response = await BaseApi.get(
+			`/${resource}/getTeacherUnassign?classId=${id}`
+		);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error get student in class: ", error);
+		return false;
+	}
+};
+
+const updateEnrollCode = async (data) => {
+	try {
+		const response = await BaseApi.put(`/${resource}/UpdateEnrollCode`, data);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update enroll code: ", error);
+		return false;
+	}
+};
+
+const updateTeamRegisterDeadline = async (data) => {
+	try {
+		const response = await BaseApi.put(
+			`/${resource}/UpdateTeamRegisterDeadline`,
+			data
+		);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update enroll code: ", error);
+		return false;
+	}
+};
+
+const updateTeamReportDeadline = async (data) => {
+	try {
+		const response = await BaseApi.put(
+			`/${resource}/UpdateTeamReportDeadline`,
+			data
+		);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error update enroll code: ", error);
 		return false;
 	}
 };
@@ -143,6 +181,9 @@ const ClassApi = {
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
 	getTeacherUnassign,
+	updateEnrollCode,
+	updateTeamRegisterDeadline,
+	updateTeamReportDeadline,
 };
 
 export default ClassApi;

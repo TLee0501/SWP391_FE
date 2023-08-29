@@ -1,21 +1,9 @@
-import { Delete, Edit, More, PreviewOpen } from "@icon-park/react";
-import {
-	Button,
-	Dropdown,
-	Empty,
-	Row,
-	Space,
-	Table,
-	Tag,
-	Typography,
-} from "antd";
+import { Edit, More, PreviewOpen } from "@icon-park/react";
+import { Button, Dropdown, Empty, Table, Tag, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
 import { useRole } from "../../../../hooks/role";
-import { formatDate } from "../../../../utils";
-import { UpdateClassModal } from "../../detail/components/UpdateClassModal";
-import ClassApi from "../../../../apis/class";
 
 const { Text } = Typography;
 
@@ -23,26 +11,24 @@ export const ClassList = ({ classes, onDelete }) => {
 	const role = useRole();
 	const navigate = useNavigate();
 
-
-	// const getActionItems = (record, classId) => {
-	// 	return [
-	// 		{
-	// 			label: "Xem chi tiết",
-	// 			icon: <PreviewOpen />,
-	// 			onClick: () => {
-	// 				navigate(classId);
-	// 			},
-	// 		},
-	// 		// role === roles.ADMIN && {
-	// 		// 	label: "Cập nhật lớp học",
-	// 		// 	icon: <Edit />,
-	// 		// 	// onClick: () => {
-	// 		// 	// 	onUpdate(record);
-	// 		// 	// },
-	// 		// },
-	// 	];
-	// };
-
+	const getActionItems = (record) => {
+		return [
+			{
+				label: "Xem chi tiết",
+				icon: <PreviewOpen />,
+				onClick: () => {
+					navigate(record?.classId);
+				},
+			},
+			role === roles.ADMIN && {
+				label: "Thay đổi giáo viên",
+				icon: <Edit />,
+				// onClick: () => {
+				// 	onUpdate(record);
+				// },
+			},
+		];
+	};
 
 	const columns = [
 		{
@@ -63,7 +49,6 @@ export const ClassList = ({ classes, onDelete }) => {
 			key: "semesterName",
 			ellipsis: true,
 		},
-
 	];
 
 	if (role === roles.STUDENT || role === roles.ADMIN) {
@@ -92,17 +77,11 @@ export const ClassList = ({ classes, onDelete }) => {
 	columns.push({
 		title: "Thao tác",
 		key: "action",
-		render: (_, { classId, record }) => {
+		render: (_, record) => {
 			return (
-				<Button
-					icon={<PreviewOpen />}
-					className="flex-center"
-					type="primary"
-					onClick={() => navigate(classId)}
-				/>
-				// <Dropdown menu={{ items: getActionItems(record, classId) }}>
-				// 	<Button icon={<More />} className="flex-center" />
-				// </Dropdown>
+				<Dropdown menu={{ items: getActionItems(record) }}>
+					<Button icon={<More />} className="flex-center" />
+				</Dropdown>
 			);
 		},
 	});
@@ -119,7 +98,6 @@ export const ClassList = ({ classes, onDelete }) => {
 					),
 				}}
 			/>
-			<UpdateClassModal></UpdateClassModal>
 		</>
 	);
 };

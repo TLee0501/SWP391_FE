@@ -22,19 +22,12 @@ export const ClassList = ({ classes, onDelete }) => {
 				},
 			},
 			{
-				label: "Chỉ định giáo viên",
+				label: "Thay đổi giáo viên",
 				icon: <Edit />,
 				// onClick: () => {
 				// 	onUpdate(record);
 				// },
-			},
-			{
-				label: "Bỏ chỉ định giáo viên",
-				icon: <Delete />,
-				// onClick: () => {
-				// 	onUpdate(record);
-				// },
-			},			
+			},	
 		];
 	};
 
@@ -96,7 +89,7 @@ export const ClassList = ({ classes, onDelete }) => {
 		<Table
 			dataSource={classes}
 			columns={columns}
-			pagination={false}
+			pagination={true}
 			locale={{
 				emptyText: (
 					<Empty description={<Text disabled>Chưa có lớp học nào</Text>} />

@@ -38,7 +38,7 @@ export const TeamProgressOverview = () => {
 							)
 						}
 					>
-						Báo cáo giáo viên
+						Gửi báo cáo cho giáo viên
 					</Button>
 				)
 			}

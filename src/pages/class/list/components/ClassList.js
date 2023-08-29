@@ -1,19 +1,9 @@
-import { Delete, Edit, More, PreviewOpen } from "@icon-park/react";
-import {
-	Button,
-	Dropdown,
-	Empty,
-	Row,
-	Space,
-	Table,
-	Tag,
-	Typography,
-} from "antd";
+import { Edit, More, PreviewOpen } from "@icon-park/react";
+import { Button, Dropdown, Empty, Table, Tag, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
 import { useRole } from "../../../../hooks/role";
-import { formatDate } from "../../../../utils";
 
 const { Text } = Typography;
 
@@ -30,7 +20,7 @@ export const ClassList = ({ classes, onDelete }) => {
 					navigate(classId);
 				},
 			},
-			{
+			role === roles.ADMIN && {
 				label: "Thay đổi giáo viên",
 				icon: <Edit />,
 				// onClick: () => {

@@ -1,5 +1,5 @@
-import { Edit, Setting } from "@icon-park/react";
-import { Button, Dropdown, Row, Spin, message } from "antd";
+import { Key, Setting } from "@icon-park/react";
+import { Button, Card, Dropdown, Row, Spin, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ClassApi from "../../../apis/class";
@@ -17,7 +17,9 @@ import { ClassProjectList } from "./components/ClassProjectList";
 import { ClassStudentList } from "./components/ClassStudentList";
 import { ClassTeamList } from "./components/ClassTeamList";
 import { EnrollClassModal } from "./components/EnrollClassModal";
-import { UpdateClassModal } from "./components/UpdateClassModal";
+import { UpdateEnrollKeyModal } from "./components/UpdateEnrollKeyModal";
+import { ClassTeamRegisterDeadline } from "./components/ClassTeamRegisterDeadline";
+import { ClassTeamReportDeadline } from "./components/ClassTeamReportDeadline";
 
 const ClassDetailPage = () => {
 	const navigate = useNavigate();
@@ -35,7 +37,8 @@ const ClassDetailPage = () => {
 	const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
 	const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 
-	const [showUpdateEClassModal, setShowUpdateClassModal] = useState(false);
+	const [showUpdateEnrollKeyModal, setShowUpdateEnrollKeyModal] =
+		useState(false);
 	const [showEnrollClassModal, setShowEnrollClassModal] = useState(false);
 	const [showProjectDescModal, setShowProjectDescModal] = useState(false);
 
@@ -43,11 +46,10 @@ const ClassDetailPage = () => {
 
 	const settingItems = [
 		{
-			key: "UPDATE_CLASS",
-			label: "Cập nhật lớp học",
-			icon: <Edit size="20" />,
-
-			onClick: () => setShowUpdateClassModal(true),
+			key: "UPDATE_ENROLL_CODE",
+			label: "Cập nhật mã tham gia",
+			icon: <Key />,
+			onClick: () => setShowUpdateEnrollKeyModal(true),
 		},
 		// {
 		// 	key: "DELETE_CLASS",
@@ -156,16 +158,23 @@ const ClassDetailPage = () => {
 					}
 				>
 					<ClassBasicInfo />
+					{role === roles.TEACHER && (
+						<Card title="Thiết lập thời hạn">
+							<ClassTeamRegisterDeadline />
+							<ClassTeamReportDeadline />
+						</Card>
+					)}
 					{(data?.enrolled || role === roles.TEACHER) && (
 						<ClassProjectList
 							onViewDescription={handleViewProjectDescription}
 						/>
 					)}
+
 					{role === roles.TEACHER && <ClassTeamList />}
 					{role === roles.TEACHER && <ClassStudentList />}
-					<UpdateClassModal
-						open={showUpdateEClassModal}
-						onCancel={() => setShowUpdateClassModal(false)}
+					<UpdateEnrollKeyModal
+						open={showUpdateEnrollKeyModal}
+						onCancel={() => setShowUpdateEnrollKeyModal(false)}
 						data={data}
 						onSuccess={() => getClass(true)}
 					/>

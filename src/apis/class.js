@@ -121,14 +121,12 @@ const unassignCourseToTeacher = async (userID, classID) => {
 	}
 };
 
-const getTeacherUnassign = async (id) => {
+const getTeacherClassList = async () => {
 	try {
-		const response = await BaseApi.get(
-			`/${resource}/getTeacherUnassign?classId=${id}`
-		);
+		const response = await BaseApi.get(`/${resource}/GetTeacherClassList`);
 		return response.status === 200;
 	} catch (error) {
-		console.log("Error get student in class: ", error);
+		console.log("Error get list class by teacher: ", error);
 		return false;
 	}
 };
@@ -180,7 +178,7 @@ const ClassApi = {
 	updateClass,
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
-	getTeacherUnassign,
+	getTeacherClassList,
 	updateEnrollCode,
 	updateTeamRegisterDeadline,
 	updateTeamReportDeadline,

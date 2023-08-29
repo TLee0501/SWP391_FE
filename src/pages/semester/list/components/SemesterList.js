@@ -48,10 +48,11 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 							items: [
 								{
 									label: "Xem chi tiết",
-									icon: <PreviewOpen/>,
+									icon: <PreviewOpen />,
 									onClick: () => {
 										navigate(record.semesterId);
 									},
+
 								},
 								{
 									label: "Cập nhật",
@@ -70,6 +71,7 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 			},
 		},
 	];
+
 
 	const handleCreateSemester = async (values) => {
 		setCreating(true);

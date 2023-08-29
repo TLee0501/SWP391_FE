@@ -108,16 +108,18 @@ export const SemesterFormModal = ({
 		}
 	}, [semester]);
 
+	const handleCancel = () => {
+		setSemesterType("Spring");
+		setStartDate(undefined);
+		setEndDate(undefined);
+		onCancel();
+	};
+
 	return (
 		<BaseModal
 			title={title}
 			open={open}
-			onCancel={() => {
-				setSemesterType("Spring");
-				setStartDate(undefined);
-				setEndDate(undefined);
-				onCancel();
-			}}
+			onCancel={handleCancel}
 			onOk={() => formRef.current?.submit()}
 			confirmLoading={submitting}
 		>
@@ -126,10 +128,10 @@ export const SemesterFormModal = ({
 				onFinish={onFinish}
 				layout="vertical"
 				initialValues={{
-					dates: [
-						semester !== undefined && dayjs(semester?.startTime),
-						semester !== undefined && dayjs(semester?.endTime),
-					],
+					dates:
+						semester !== undefined
+							? [dayjs(semester?.startTime), dayjs(semester?.endTime)]
+							: undefined,
 				}}
 			>
 				<Form.Item

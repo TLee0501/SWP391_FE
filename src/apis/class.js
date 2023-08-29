@@ -121,6 +121,16 @@ const unassignCourseToTeacher = async (userID, classID) => {
 	}
 };
 
+const getTeacherUnassign = async (id) => {
+	try {
+		const response = await BaseApi.get(`/${resource}/getTeacherUnassign?classId=${id}`);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error get student in class: ", error);
+		return false;
+	}
+};
+
 const ClassApi = {
 	enrollClass,
 	createClass,
@@ -132,6 +142,7 @@ const ClassApi = {
 	updateClass,
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
+	getTeacherUnassign,
 };
 
 export default ClassApi;

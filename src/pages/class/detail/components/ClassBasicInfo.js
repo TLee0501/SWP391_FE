@@ -4,7 +4,7 @@ import { ClassContext } from "../../../../providers/class";
 import { formatDate } from "../../../../utils";
 
 export const ClassBasicInfo = () => {
-	const role = useRole();
+	// const role = useRole();
 	const { data } = useContext(ClassContext);
 	const semester = data?.semester;
 

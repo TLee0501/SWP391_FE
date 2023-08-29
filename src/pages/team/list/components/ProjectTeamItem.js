@@ -1,3 +1,4 @@
+import { ArrowRight } from "@icon-park/react";
 import {
 	Button,
 	Card,
@@ -9,8 +10,8 @@ import {
 	Typography,
 } from "antd";
 import React, { useContext } from "react";
-import { RawHtml } from "../../../../components/RawHtml";
 import { useNavigate } from "react-router-dom";
+import { RawHtml } from "../../../../components/RawHtml";
 import { UserContext } from "../../../../providers/user";
 
 const { Text } = Typography;
@@ -30,9 +31,10 @@ export const ProjectTeamItem = ({ team, index }) => {
 					onClick={() => {
 						navigate(team.id);
 					}}
-				>
-					Xem nhóm
-				</Button>
+					icon={<ArrowRight size={20} />}
+					className="flex-center"
+					size="large"
+				/>
 			}
 		>
 			<Descriptions

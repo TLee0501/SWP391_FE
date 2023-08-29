@@ -30,7 +30,7 @@ export const TaskItem = ({ task, index, onView, onDelete }) => {
 	const overdue = moment(task?.endTime).isBefore(now());
 
 	return (
-		<Draggable draggableId={id} index={index}>
+		<Draggable key={id} draggableId={id} index={index}>
 			{(provided) => (
 				<Card
 					hoverable
@@ -77,6 +77,7 @@ export const TaskItem = ({ task, index, onView, onDelete }) => {
 									const isCurrentUser = user?.userId === item.id;
 									return (
 										<Tooltip
+											key={item.id}
 											title={`${item.fullName}${isCurrentUser ? " (Bạn)" : ""}`}
 										>
 											<Avatar

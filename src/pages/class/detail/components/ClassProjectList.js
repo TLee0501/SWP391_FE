@@ -18,7 +18,7 @@ import { RawHtml } from "../../../../components/RawHtml";
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const role = useRole();
-	const data = useContext(ClassContext);
+	const { data, reload } = useContext(ClassContext);
 	const { user } = useContext(UserContext);
 	const permissions = usePermissions();
 	const canCreateProject = permissions?.includes(
@@ -45,6 +45,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		const success = await ProjectApi.createProject({ ...values, classId });
 		if (success) {
 			message.success("Tạo dự án thành công");
+			reload(false);
 		} else {
 			message.error("Tạo dự án thất bại");
 		}
@@ -68,6 +69,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		const response = await TeamApi.registerProjectTeam(data);
 		if (response.code === 0) {
 			message.success("Đăng ký nhóm thành công");
+			reload(false);
 		} else {
 			message.error(response.message);
 		}
@@ -82,8 +84,7 @@ export const ClassProjectList = ({ onViewDescription }) => {
 		ProjectApi.deleteProject(projectId).then((success) => {
 			if (success) {
 				message.success("Đã xóa dự án");
-				const { classId } = data;
-				if (!classId) return;
+				reload(false);
 			} else {
 				message.error("Xóa dự án thất bại");
 			}

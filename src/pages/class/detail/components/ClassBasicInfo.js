@@ -1,13 +1,12 @@
 import { Card, Descriptions } from "antd";
-import React, { useContext, useState } from "react";
-import { formatDate } from "../../../../utils";
+import React, { useContext } from "react";
 import { ClassContext } from "../../../../providers/class";
-import { useRole } from "../../../../hooks/role";
-import { roles } from "../../../../constants/app";
+import { formatDate } from "../../../../utils";
 
 export const ClassBasicInfo = () => {
-	const data = useContext(ClassContext);
 	const role = useRole();
+	const { data } = useContext(ClassContext);
+	const semester = data?.semester;
 
 	const items1 = [
 		{
@@ -24,31 +23,28 @@ export const ClassBasicInfo = () => {
 				</strong>
 			),
 		},
-	];
-
-	if (role === roles.STUDENT || role === roles.ADMIN || role === roles.TEACHER ) {
-		items1.push({
+		{
 			key: "TEACHER",
-			label: "Giáo viên hướng dẫn",
-			children: data?.teacherName,
-		});
-	}
+			label: "Giáo viên",
+			children: data?.teacherName ?? "(Chưa có)",
+		},
+	];
 
 	const items2 = [
 		{
 			key: "SEMESTER",
 			label: "Học kỳ",
-			children: data.semesterName,
+			children: `${semester?.name}`,
 		},
 		{
 			key: "START_DATE",
 			label: "Ngày bắt đầu",
-			children: formatDate(data?.startTime, "DD/MM/yyyy"),
+			children: formatDate(semester?.startTime, "DD/MM/yyyy"),
 		},
 		{
 			key: "END_DATE",
 			label: "Ngày kết thúc",
-			children: formatDate(data?.endTime, "DD/MM/yyyy"),
+			children: formatDate(semester?.endTime, "DD/MM/yyyy"),
 		},
 	];
 

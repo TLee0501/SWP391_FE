@@ -123,13 +123,15 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 					</Button>,
 				]}
 			/>
-			<SemesterFormModal
-				title="Thêm học kỳ"
-				open={showCreateModal}
-				onCancel={() => setShowCreateModal(false)}
-				onSubmit={handleCreateSemester}
-				submitting={creating}
-			/>
+			{showCreateModal && (
+				<SemesterFormModal
+					title="Thêm học kỳ"
+					open={showCreateModal}
+					onCancel={() => setShowCreateModal(false)}
+					onSubmit={handleCreateSemester}
+					submitting={creating}
+				/>
+			)}
 			<SemesterFormModal
 				title="Cập nhật học kỳ"
 				open={showUpdateModal}

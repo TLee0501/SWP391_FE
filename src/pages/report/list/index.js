@@ -4,7 +4,7 @@ import { ProjectReportList } from "./components/ProjectReportList";
 import { ClassSelect } from "../../project/components/ClassSelect";
 import { useSearchParams } from "react-router-dom";
 import TeamApi from "../../../apis/team";
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const ProjectReportListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -28,7 +28,7 @@ const ProjectReportListPage = () => {
 
 	return (
 		<div>
-			<Title level={4}>Các dự án đang làm của sinh viên</Title>
+			<Title level={4}>Các nhóm đang làm của sinh viên</Title>
 			<div className="mb-4">
 				<span className="mr-2">Lớp học:</span>
 				<ClassSelect

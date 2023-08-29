@@ -25,14 +25,26 @@ const enrollClass = async (classId, enrollCode) => {
 	}
 };
 
-const searchClass = async (courseId, keyword) => {
+const searchClass = async (keyword, courseId, semesterId, teacherId) => {
 	try {
+		var params = {};
+		if (keyword) {
+			params = { ...params, searchText: keyword };
+		}
+		if (courseId) {
+			params = { ...params, courseId };
+		}
+		if (semesterId) {
+			params = { ...params, semesterId };
+		}
+		if (teacherId) {
+			params = { ...params, teacherId };
+		}
+
 		const response = await BaseApi.get(`/${resource}/SearchClass`, {
-			params: {
-				courseId: courseId,
-				searchText: keyword,
-			},
+			params: params,
 		});
+
 		return response.data;
 	} catch (error) {
 		console.log("Error search class: ", error);

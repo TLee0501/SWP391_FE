@@ -1,23 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BaseModal from "../../../../components/BaseModal";
-import { Form, Input, message } from "antd";
+import { Form, Input, Select, message } from "antd";
 import ClassApi from "../../../../apis/class";
+import UserApi from "../../../../apis/user";
 
 export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 	const formRef = useRef();
 
 	const [classUpdating, setClassUpdating] = useState(false);
+	const [teacher, setTeacher] = useState([]);
+	const [teacherLoading, setTeacherLoading] = useState(false);
+
+	const teacherOptions = teacher.map((e) => {
+		return {
+			value: e.userId,
+			label: e.fullName,
+		};
+	});
+
+	const getTeacher = async () => {
+		setTeacherLoading(true);
+		const data = await UserApi.getListTeacher();
+		setTeacher(data);
+		setTeacherLoading(false);
+	};
+
+	useEffect(() => {
+		getTeacher();
+	}, []);
 
 	const handleUpdateClass = async (values) => {
-		const { className, enrollCode, dates } = values;
+		const { className, enrollCode, teacher} = values;
 
 		const request = {
 			classId: data?.classId,
 			className: className,
-			timeStart: dates[0],
-			timeEnd: dates[1],
 			enrollCode: enrollCode,
-			isCompleted: false,
+			teacherId: teacher,
 		};
 
 		setClassUpdating(true);
@@ -45,12 +64,29 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 				layout="vertical"
 				onFinish={handleUpdateClass}
 				initialValues={{
-					// className: data?.className,
+					teacher: data?.teacherName,
 					enrollCode: data?.enrollCode,
-					// dates: [dayjs(data?.startTime), dayjs(data?.endTime)],
+					className: data?.className
 				}}
 			>
-				{/* <Form.Item
+				<Form.Item
+					name="teacher"
+					label="Giáo viên hướng dẫn"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng nhập tên lớp học",
+						},
+					]}
+				>
+					<Select
+						// showSearch
+						options={teacherOptions}
+						placeholder="Chọn giáo viên"
+						loading={teacherLoading}
+					/>
+				</Form.Item>
+				<Form.Item
 					name="className"
 					label="Tên lớp học"
 					rules={[
@@ -61,7 +97,7 @@ export const UpdateClassModal = ({ open, onCancel, data, onSuccess }) => {
 					]}
 				>
 					<Input placeholder="Nhập tên lớp học..." />
-				</Form.Item> */}
+				</Form.Item>
 				<Form.Item
 					name="enrollCode"
 					label="Mã tham gia"

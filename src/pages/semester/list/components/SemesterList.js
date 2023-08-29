@@ -41,7 +41,7 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 		},
 		{
 			title: "Thao tác",
-			render: (_, record, semesterId) => {
+			render: (_, record) => {
 				return (
 					<Dropdown
 						menu={{
@@ -50,7 +50,7 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 									label: "Xem chi tiết",
 									icon: <PreviewOpen/>,
 									onClick: () => {
-										navigate(semesterId);
+										navigate(record.semesterId);
 									},
 								},
 								{
@@ -123,15 +123,13 @@ export const SemesterList = ({ semesters, loading, onSuccess }) => {
 					</Button>,
 				]}
 			/>
-			{showCreateModal && (
-				<SemesterFormModal
-					title="Thêm học kỳ"
-					open={showCreateModal}
-					onCancel={() => setShowCreateModal(false)}
-					onSubmit={handleCreateSemester}
-					submitting={creating}
-				/>
-			)}
+			<SemesterFormModal
+				title="Thêm học kỳ"
+				open={showCreateModal}
+				onCancel={() => setShowCreateModal(false)}
+				onSubmit={handleCreateSemester}
+				submitting={creating}
+			/>
 			<SemesterFormModal
 				title="Cập nhật học kỳ"
 				open={showUpdateModal}

@@ -191,3 +191,30 @@ export const SemesterTypeOptions = [
 		value: "Winter",
 	},
 ];
+
+export const SemesterTypeRanges = {
+	Spring: {
+		startMonth: 0,
+		startDay: 1,
+		endMonth: 2,
+		endDay: 31,
+	}, // Jan 1st to March 31th
+	Summer: {
+		startMonth: 3,
+		startDay: 1,
+		endMonth: 5,
+		endDay: 30,
+	}, // April 1st to June 30st
+	Fall: {
+		startMonth: 6,
+		startDay: 1,
+		endMonth: 8,
+		endDay: 30,
+	}, // July 1st to September 30th
+	Winter: {
+		startMonth: 9,
+		startDay: 1,
+		endMonth: 11,
+		endDay: 31,
+	}, // October 1st to December 31th
+};

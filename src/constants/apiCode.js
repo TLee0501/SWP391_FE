@@ -8,6 +8,7 @@ const ApiCodes = {
 	3: "Ngày kết thúc bị trùng",
 	4: "Ngày bắt đầu nhỏ hơn hiện tại",
 	5: "Ngày bắt đầu lớn hơn ngày kết thúc",
+	1001: "Ngày bắt đầu hoặc kết thúc bị trùng với học kỳ khác",
 	// project
 	15: "Tên dự án đã tồn tại",
 	// team

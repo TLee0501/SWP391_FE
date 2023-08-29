@@ -55,7 +55,6 @@ const ClassListPage = () => {
 
 	const getClasses = async (courseId, keyword, enrolled) => {
 		setClassLoading(true);
-		console.log(courseId, keyword, enrolled);
 		var data = await ClassApi.searchClass(courseId, keyword);
 
 		if (enrolled != null && enrolled !== undefined) {

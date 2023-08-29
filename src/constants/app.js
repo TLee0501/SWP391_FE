@@ -130,7 +130,6 @@ export const USER_PERMISSIONS = {
 		// CLASS
 		ALL_PERMISSIONS.class.sider,
 		ALL_PERMISSIONS.class.view,
-		ALL_PERMISSIONS.class.create,
 		ALL_PERMISSIONS.class.update,
 		ALL_PERMISSIONS.class.delete,
 		ALL_PERMISSIONS.class.settings,

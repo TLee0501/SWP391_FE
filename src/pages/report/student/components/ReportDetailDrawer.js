@@ -112,7 +112,7 @@ export const ReportDetailDrawer = ({
 								label: <Title level={5}>Nhận xét của giáo viên</Title>,
 								children: report?.feedback ? (
 									<div>
-										<TeacherFeedback />
+										<TeacherFeedback feedback={report?.feedback} />
 									</div>
 								) : (
 									<Empty description={<Text disabled>Chưa có nhận xét</Text>} />

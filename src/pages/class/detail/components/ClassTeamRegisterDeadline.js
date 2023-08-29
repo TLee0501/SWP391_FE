@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
-import { Button, DatePicker, Form, Typography } from "antd";
-import { ClassContext } from "../../../../providers/class";
+import { Button, DatePicker, Form, Row, message } from "antd";
 import dayjs from "dayjs";
-import moment from "moment";
-
-const { Title, Text } = Typography;
+import React, { useContext } from "react";
+import { ClassContext } from "../../../../providers/class";
+import ClassApi from "../../../../apis/class";
 
 export const ClassTeamRegisterDeadline = () => {
 	const { data } = useContext(ClassContext);
@@ -15,40 +13,66 @@ export const ClassTeamRegisterDeadline = () => {
 		data?.registerTeamStartDate && dayjs(data?.registerTeamStartDate),
 		data?.registerTeamEndDate && dayjs(data?.registerTeamEndDate),
 	].filter((e) => e);
-	console.log(initialDates);
 
 	const onSubmit = async (values) => {
+		console.log(values);
 		const dates = values.dates;
 		const startTime = dates?.[0];
 		const endTime = dates?.[1];
-		if (
-			moment(startTime).isAfter(moment(semesterStartTime)) &&
-			moment(endTime).isBefore(moment(semesterEndTime))
-		) {
-			console.log("valid date");
+
+		const semesStartTime = dayjs(semesterStartTime);
+		const semesEndTime = dayjs(semesterEndTime);
+		const isValidDate =
+			startTime.isAfter(semesStartTime) && endTime.isBefore(semesEndTime);
+
+		if (isValidDate) {
+			const request = {
+				classId: data?.classId,
+				startTime,
+				endTime,
+			};
+			const success = await ClassApi.updateTeamRegisterDeadline(request);
+			if (success) {
+				message.success("Đã cập nhật thời hạn đăng ký nhóm");
+			}
+		} else {
+			message.info(
+				`Ngày bắt đầu & kết thúc phải nằm trong khoảng thời gian (${dayjs(
+					semesStartTime
+				).format("DD/MM/YYYY")} -> ${dayjs(semesEndTime)
+					.subtract(1, "day")
+					.format("DD/MM/YYYY")})`
+			);
 		}
 	};
 
 	return (
-		<Form onFinish={onSubmit}>
-			<Form.Item
-				name="dates"
-				label="Đăng ký nhóm"
-				rules={[
-					{
-						required: true,
-						message: "Vui lòng chọn thời hạn đăng ký nhóm",
-					},
-				]}
-			>
-				<DatePicker.RangePicker
-					format="DD/MM/YYYY"
-					placeholder={["Bắt đầu", "Kết thúc"]}
-				/>
+		<Form
+			onFinish={onSubmit}
+			initialValues={{
+				dates: initialDates,
+			}}
+		>
+			<Row>
+				<Form.Item
+					name="dates"
+					label="Đăng ký nhóm"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn thời hạn đăng ký nhóm",
+						},
+					]}
+				>
+					<DatePicker.RangePicker
+						format="DD/MM/YYYY"
+						placeholder={["Bắt đầu", "Kết thúc"]}
+					/>
+				</Form.Item>
 				<Button htmlType="submit" type="primary" className="ml-2">
 					Cập nhật
 				</Button>
-			</Form.Item>
+			</Row>
 		</Form>
 	);
 };

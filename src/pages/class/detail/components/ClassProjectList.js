@@ -15,6 +15,7 @@ import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { TeamRegistrationModal } from "./TeamRegistrationModal";
 import { TextTile } from "../../../../components/TextTile";
 import { RawHtml } from "../../../../components/RawHtml";
+import dayjs from "dayjs";
 
 export const ClassProjectList = ({ onViewDescription }) => {
 	const role = useRole();

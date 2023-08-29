@@ -1,40 +1,18 @@
-import { Send, UploadOne } from "@icon-park/react";
-import { Button, Descriptions, Drawer, Form, Input, Upload } from "antd";
+import { Send } from "@icon-park/react";
+import { Button, Descriptions, Drawer, Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import React from "react";
+import React, { useContext, useRef } from "react";
+import { TeamContext } from "../../../../providers/team";
 
-export const SubmitReportDrawer = ({ open, onCancel }) => {
-	const uploadProps = {
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-		onChange({ file, fileList }) {
-			if (file.status !== "uploading") {
-				console.log(file, fileList);
-			}
-		},
-		defaultFileList: [
-			{
-				uid: "1",
-				name: "xxx.png",
-				status: "uploading",
-				url: "http://www.baidu.com/xxx.png",
-				percent: 33,
-			},
-			{
-				uid: "2",
-				name: "yyy.png",
-				status: "done",
-				url: "http://www.baidu.com/yyy.png",
-			},
-			{
-				uid: "3",
-				name: "zzz.png",
-				status: "error",
-				response: "Server Error 500",
-				// custom error message to show
-				url: "http://www.baidu.com/zzz.png",
-			},
-		],
-	};
+export const SubmitReportDrawer = ({
+	open,
+	onCancel,
+	onSubmit,
+	confirmLoading,
+	period,
+}) => {
+	const { team } = useContext(TeamContext);
+	const formRef = useRef();
 
 	return (
 		<Drawer
@@ -44,14 +22,35 @@ export const SubmitReportDrawer = ({ open, onCancel }) => {
 			open={open}
 			onClose={onCancel}
 			maskClosable={false}
+			afterOpenChange={(isOpen) => {
+				if (!isOpen) {
+					formRef.current?.resetFields();
+				}
+			}}
 		>
 			<Descriptions
-				items={[{ label: "Sinh viên báo cáo", children: "Nguyễn Văn A" }]}
+				items={[
+					{
+						label: "Sinh viên báo cáo",
+						children: team?.leader?.fullName ?? "N/A",
+					},
+				]}
 			/>
 			<Descriptions
-				items={[{ label: "Giáo viên nhận báo cáo", children: "Trần Văn C" }]}
+				items={[
+					{
+						label: "Giáo viên nhận báo cáo",
+						children: team?.instructor?.fullName,
+					},
+				]}
 			/>
-			<Form layout="vertical">
+			<Form
+				ref={formRef}
+				layout="vertical"
+				onFinish={async (values) => {
+					await onSubmit({ ...values, period: period });
+				}}
+			>
 				<Form.Item
 					name="title"
 					label="Tiêu đề"
@@ -65,7 +64,7 @@ export const SubmitReportDrawer = ({ open, onCancel }) => {
 					<Input placeholder="Nhập tiêu đề..." />
 				</Form.Item>
 				<Form.Item
-					name="content"
+					name="overviewReport"
 					label="Báo cáo chung"
 					rules={[
 						{
@@ -77,7 +76,7 @@ export const SubmitReportDrawer = ({ open, onCancel }) => {
 					<TextArea placeholder="Báo cáo tổng quan về tiến độ của nhóm..." />
 				</Form.Item>
 				<Form.Item
-					name="completedTask"
+					name="doneReport"
 					label="Công việc đã làm"
 					rules={[
 						{
@@ -89,7 +88,7 @@ export const SubmitReportDrawer = ({ open, onCancel }) => {
 					<TextArea placeholder="Những công việc nhóm đã đạt được..." />
 				</Form.Item>
 				<Form.Item
-					name="inProgressTask"
+					name="doingReport"
 					label="Công việc đang làm"
 					rules={[
 						{
@@ -100,17 +99,12 @@ export const SubmitReportDrawer = ({ open, onCancel }) => {
 				>
 					<TextArea placeholder="Những công việc nhóm đang làm..." />
 				</Form.Item>
-				<Form.Item name="todoTask" label="Công việc dự định làm">
+				<Form.Item name="todoReport" label="Công việc dự định làm">
 					<TextArea placeholder="Những công việc nhóm đang làm..." />
 				</Form.Item>
-				<Form.Item name="files" label="Tệp đính kèm">
-					<Upload {...uploadProps}>
-						<Button className="flex-center" icon={<UploadOne />}>
-							Tải tệp lên
-						</Button>
-					</Upload>
-				</Form.Item>
+
 				<Button
+					loading={confirmLoading}
 					icon={<Send />}
 					className="flex-center"
 					htmlType="submit"

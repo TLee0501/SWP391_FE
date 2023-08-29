@@ -151,6 +151,28 @@ const getJoinedProjectTeamById = async (teamId) => {
 	}
 };
 
+const getProjectTeamsByTeacher = async () => {
+	try {
+		const response = await BaseApi.get(`/${resource}/GetProjectTeamsByTeacher`);
+		return response.data;
+	} catch (error) {
+		console.log("Error getProjectTeamsByTeacher: ", error);
+		return [];
+	}
+};
+
+const getProjectTeamDetailByTeacher = async (teamId) => {
+	try {
+		const response = await BaseApi.get(
+			`/${resource}/GetProjectTeamByTeacher/${teamId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.log("Error getProjectTeamDetailByTeacher: ", error);
+		return [];
+	}
+};
+
 const TeamApi = {
 	getProjectTeamRequests,
 	getTeamRequestById,
@@ -162,6 +184,8 @@ const TeamApi = {
 	registerProjectTeam,
 	getJoinedProjectTeams,
 	getJoinedProjectTeamById,
+	getProjectTeamsByTeacher,
+	getProjectTeamDetailByTeacher,
 };
 
 export default TeamApi;

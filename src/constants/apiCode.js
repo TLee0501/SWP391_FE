@@ -14,6 +14,7 @@ const ApiCodes = {
 	// team
 	8: "Có thành viên bị lặp",
 	9: "Bạn hoặc các thành viên đăng ký khác đã có nhóm",
+	20: "Chưa thể đăng ký nhóm vào lúc này",
 };
 
 export default ApiCodes;

@@ -13,5 +13,4 @@ export const TaskStatus = {
 export const ReportFeedbackStatus = {
 	passed: 0,
 	notPassed: 1,
-	reportAgain: 2,
 };

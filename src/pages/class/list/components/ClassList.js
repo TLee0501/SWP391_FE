@@ -58,7 +58,9 @@ export const ClassList = ({ classes, onDelete }) => {
 			key: "teacherName",
 			ellipsis: true,
 		});
-	} else if (role === roles.STUDENT) {
+	} 
+	
+	if (role === roles.STUDENT) {
 		columns.push({
 			title: "Trạng thái",
 			dataIndex: "enrolled",

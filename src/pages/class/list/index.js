@@ -10,8 +10,10 @@ import { useSearchParams } from "react-router-dom";
 import { usePermissions } from "../../../hooks/permission";
 import { ALL_PERMISSIONS, roles } from "../../../constants/app";
 import { useRole } from "../../../hooks/role";
+import { UserContext } from "../../../providers/user";
 
 const ClassListPage = () => {
+	const { user } = useContext(UserContext);
 	const role = useRole();
 	const permissions = usePermissions();
 	const canCreate = permissions?.includes(ALL_PERMISSIONS.class.create);
@@ -53,19 +55,17 @@ const ClassListPage = () => {
 		setShowDeleteClassModal(false);
 	};
 
-	const getClasses = async (courseId, keyword, semesterId, enrolled) => {
+	const getClasses = async (keyword, courseId, enrolled) => {
+		console.log("get classes: ", enrolled);
 		setClassLoading(true);
-		console.log(courseId, keyword, enrolled);
-
-		if (role === roles.TEACHER) {
-			var data = await ClassApi.getTeacherClassList();
-		} else {
-			var data = await ClassApi.searchClass(courseId, keyword, semesterId);
-		}
-
-		if (enrolled != null && enrolled !== undefined) {
-			console.log(data);
-			data = data.filter((e) => e.enrolled === enrolled);
+		var data = await ClassApi.searchClass(
+			keyword,
+			courseId,
+			undefined,
+			role === roles.TEACHER ? user?.userId : undefined
+		);
+		if (enrolled !== undefined) {
+			data = data?.filter((e) => e.enrolled === enrolled);
 		}
 		setClasses(data);
 		setClassLoading(false);
@@ -92,7 +92,7 @@ const ClassListPage = () => {
 		}
 		setSearchParams(searchParams);
 	};
-	
+
 	const handleClearCourse = () => {
 		searchParams.delete("course");
 		setSearchParams(searchParams);
@@ -103,15 +103,11 @@ const ClassListPage = () => {
 	};
 
 	useEffect(() => {
-		getClasses();
-	}, []);
-
-	useEffect(() => {
 		const courseId = searchParams.get("course");
-		const semesterId = searchParams.get("semester");
 		const search = searchParams.get("search");
 		const enrolled = searchParams.get("enrolled");
-		getClasses(courseId, search, enrolled, semesterId ? enrolled === "true" : undefined);
+		getClasses(search, courseId, enrolled ? enrolled === "true" : undefined);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams]);
 
 	return (

@@ -9,3 +9,9 @@ export const TaskStatus = {
 	inProgress: 1,
 	completed: 2,
 };
+
+export const ReportFeedbackStatus = {
+	passed: 0,
+	notPassed: 1,
+	reportAgain: 2,
+};

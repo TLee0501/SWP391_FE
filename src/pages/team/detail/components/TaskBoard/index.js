@@ -78,7 +78,8 @@ export const TaskBoard = ({ onViewTask, onDeleteTask }) => {
 			default:
 		}
 
-		if (taskId && taskStatus) {
+		if (taskId !== undefined && taskStatus !== undefined) {
+			console.log("123");
 			TaskApi.updateTaskStatus(taskId, taskStatus).then((success) => {
 				if (success) {
 					reload(false);

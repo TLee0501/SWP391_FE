@@ -13,6 +13,16 @@ const sendReport = async (data) => {
 	}
 };
 
+const sendReportFeedback = async (data) => {
+	try {
+		const response = await BaseApi.post(`/${resoure}/SendReportFeedback`, data);
+		return response.status === 200;
+	} catch (error) {
+		console.log("Error send report feedback: ", error);
+		return false;
+	}
+};
+
 const getReports = async (teamId) => {
 	try {
 		const response = await BaseApi.get(`/${resoure}/GetTeamReports`, {
@@ -43,6 +53,7 @@ const ReportApi = {
 	sendReport,
 	getReports,
 	getReportById,
+	sendReportFeedback,
 };
 
 export default ReportApi;

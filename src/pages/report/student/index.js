@@ -1,4 +1,4 @@
-import { Spin, message } from "antd";
+import { Spin, message, Typography, Descriptions } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import ReportApi from "../../../apis/report";
@@ -8,6 +8,9 @@ import { ReportSection } from "../components/ReportSection";
 import { ReportDetailDrawer } from "./components/ReportDetailDrawer";
 import { SubmitReportDrawer } from "./components/SubmitReportDrawer";
 import { TeamProvider } from "../../../providers/team";
+import { formatDate } from "../../../utils";
+
+const { Text, Title } = Typography;
 
 const StudentTeamReportPage = () => {
 	const { id } = useParams();
@@ -81,7 +84,28 @@ const StudentTeamReportPage = () => {
 						team?.instructor?.fullName ?? ""
 					}`}
 				>
-					<div className="mt-4 mb-4">
+					<div className="mt-4">
+						<Descriptions
+							items={[
+								{
+									label: "Hạn nộp báo cáo",
+									children: (
+										<Text>
+											Từ{" "}
+											<strong>
+												{formatDate(team?.reportStartTime, "DD/MM/YYYY")}
+											</strong>{" "}
+											đến{" "}
+											<strong>
+												{formatDate(team?.reportEndTime, "DD/MM/YYYY")}
+											</strong>
+										</Text>
+									),
+								},
+							]}
+						/>
+					</div>
+					<div className="mb-4">
 						<ReportSection
 							index={0}
 							report={report1}

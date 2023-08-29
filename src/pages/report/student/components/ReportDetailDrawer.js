@@ -1,17 +1,25 @@
 import {
+	Button,
 	Collapse,
 	Descriptions,
 	Divider,
 	Drawer,
 	Empty,
+	Form,
+	Select,
 	Spin,
 	Typography,
 } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { TextTile } from "../../../../components/TextTile";
 import { TeacherFeedback } from "./TeacherFeedback";
 import ReportApi from "../../../../apis/report";
 import { TeamContext } from "../../../../providers/team";
+import { useRole } from "../../../../hooks/role";
+import { roles } from "../../../../constants/app";
+import TextArea from "antd/es/input/TextArea";
+import { Send } from "@icon-park/react";
+import { ReportFeedbackStatus } from "../../../../constants/enum";
 
 const { Title, Text } = Typography;
 
@@ -20,7 +28,12 @@ export const ReportDetailDrawer = ({
 	open,
 	onCancel,
 	afterOpenChange,
+	onSendFeedback,
+	sendingFeedback,
 }) => {
+	const formRef = useRef();
+
+	const role = useRole();
 	const { team } = useContext(TeamContext);
 	const [report, setReport] = useState();
 	const [loading, setLoading] = useState(false);
@@ -34,10 +47,15 @@ export const ReportDetailDrawer = ({
 	};
 
 	useEffect(() => {
-		console.log("hihi: ", reportId);
 		getReport();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [reportId]);
+
+	useEffect(() => {
+		formRef.current?.setFieldValue("content", report?.feedback?.content);
+		formRef.current?.setFieldValue("grade", report?.feedback?.grade);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [report]);
 
 	return (
 		<Drawer
@@ -86,21 +104,90 @@ export const ReportDetailDrawer = ({
 					<div className="mt-1">{report?.todoReport ?? "-"}</div>
 				</TextTile>
 				<Divider />
-				<Collapse
-					ghost
-					items={[
-						{
-							label: <Title level={5}>Nhận xét của giáo viên</Title>,
-							children: report?.feedback ? (
-								<div>
-									<TeacherFeedback />
-								</div>
-							) : (
-								<Empty description={<Text disabled>Chưa có nhận xét</Text>} />
-							),
-						},
-					]}
-				/>
+				{role === roles.STUDENT && (
+					<Collapse
+						ghost
+						items={[
+							{
+								label: <Title level={5}>Nhận xét của giáo viên</Title>,
+								children: report?.feedback ? (
+									<div>
+										<TeacherFeedback />
+									</div>
+								) : (
+									<Empty description={<Text disabled>Chưa có nhận xét</Text>} />
+								),
+							},
+						]}
+					/>
+				)}
+				{role === roles.TEACHER && (
+					<Form
+						ref={formRef}
+						layout="vertical"
+						initialValues={{
+							content: report?.feedback?.content,
+							grade: report?.feedback?.grade,
+						}}
+						onFinish={async (values) => {
+							const data = { ...values, reportId: report?.id };
+							await onSendFeedback(data);
+						}}
+					>
+						<Title level={4}>Gửi nhận xét</Title>
+						<Form.Item
+							name="content"
+							label="Nội dung"
+							rules={[
+								{
+									required: true,
+									message: "Vui lòng nhập nhận xét",
+								},
+							]}
+						>
+							<TextArea
+								disabled={report?.feedback ? true : false}
+								placeholder="Nhập nhận xét..."
+							/>
+						</Form.Item>
+						<Form.Item
+							name="grade"
+							label="Đánh giá"
+							rules={[
+								{
+									required: true,
+									message: "Vui lòng chọn đánh giá",
+								},
+							]}
+						>
+							<Select
+								disabled={report?.feedback ? true : false}
+								placeholder="Chọn đánh giá"
+								options={[
+									{
+										label: "Đạt",
+										value: ReportFeedbackStatus.passed,
+									},
+									{
+										label: "Chưa đạt",
+										value: ReportFeedbackStatus.notPassed,
+									},
+								]}
+							/>
+						</Form.Item>
+						{!report?.feedback && (
+							<Button
+								className="flex-center"
+								icon={<Send />}
+								htmlType="submit"
+								type="primary"
+								loading={sendingFeedback}
+							>
+								Gửi
+							</Button>
+						)}
+					</Form>
+				)}
 			</Spin>
 		</Drawer>
 	);

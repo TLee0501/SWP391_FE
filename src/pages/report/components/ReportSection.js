@@ -1,8 +1,9 @@
 import { PreviewOpen, Send } from "@icon-park/react";
 import { Button, Card, Col, Row, Tag, Typography } from "antd";
 import React, { useContext } from "react";
-import { UserContext } from "../../../providers/user";
+import { ReportFeedbackStatus } from "../../../constants/enum";
 import { TeamContext } from "../../../providers/team";
+import { UserContext } from "../../../providers/user";
 import { formatDate } from "../../../utils";
 
 const { Text } = Typography;
@@ -27,11 +28,14 @@ export const ReportSection = ({
 					<Text style={{ fontWeight: 400 }}>
 						{`Báo cáo lần ${index + 1}`}{" "}
 						{report ? (
-							<Tag color="green" className="ml-4">
+							<Tag color="green-inverse" className="ml-4">
 								Đã nộp
 							</Tag>
 						) : (
 							<Tag className="ml-4">Chưa nộp</Tag>
+						)}
+						{report?.feedback && (
+							<Tag color="purple-inverse">Đã được nhận xét</Tag>
 						)}
 					</Text>
 					{report?.createdDate && (
@@ -40,6 +44,27 @@ export const ReportSection = ({
 								<Text style={{ marginRight: 4 }}>Ngày nộp báo cáo:</Text>
 								<Text strong>
 									{formatDate(report?.createdDate, "DD/MM/YYYY")}
+								</Text>
+							</Text>
+						</div>
+					)}
+
+					{report?.feedback && (
+						<div className="mt-3">
+							<Text>
+								<Text style={{ marginRight: 4 }}>Đánh giá:</Text>
+								<Text
+									strong
+									type={
+										report?.feedback?.grade === ReportFeedbackStatus.passed
+											? "success"
+											: "danger"
+									}
+									style={{ fontSize: 16 }}
+								>
+									{report?.feedback?.grade === ReportFeedbackStatus.passed
+										? "Đạt"
+										: "Chưa đạt"}
 								</Text>
 							</Text>
 						</div>

@@ -69,13 +69,12 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	// });
 
 	const handleCreateClass = async (values) => {
-		const { userId } = user;
-		const { course, name, enrollCode, semester, teacher } = values;
+		const { teacherId } = user;
+		const { course, name, enrollCode, semester } = values;
 
 		const data = {
 			courseId: course,
-			userId: userId,
-			teacherId: teacher, //chờ API
+			teacherId: teacherId, //chờ API
 			className: name,
 			enrollCode: enrollCode,
 			semesterId: semester, //chờ API

@@ -4,7 +4,7 @@ import { ClassDetailArea } from "../../components/ClassDetailArea";
 import { StudentList } from "./StudentList";
 
 export const ClassStudentList = () => {
-	const data = useContext(ClassContext);
+	const { data } = useContext(ClassContext);
 
 	return (
 		<ClassDetailArea

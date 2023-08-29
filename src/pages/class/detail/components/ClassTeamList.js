@@ -10,7 +10,7 @@ const { Text } = Typography;
 
 export const ClassTeamList = () => {
 	const navigate = useNavigate();
-	const data = useContext(ClassContext);
+	const { data } = useContext(ClassContext);
 
 	const items = data?.teams?.map((e, index) => {
 		return {

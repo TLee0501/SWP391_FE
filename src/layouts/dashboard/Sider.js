@@ -61,7 +61,7 @@ export const AppSider = () => {
 		canViewTeam && {
 			key: itemKeys.TEAM,
 			icon: <EveryUser size={iconSize} />,
-			label: <Link to={routes.dashboard.teams}>Nhóm</Link>,
+			label: <Link to={routes.dashboard.teams}>Nhóm của tôi</Link>,
 		},
 		canViewReport && {
 			key: itemKeys.REPORT,

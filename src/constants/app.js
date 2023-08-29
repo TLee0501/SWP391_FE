@@ -141,7 +141,6 @@ export const USER_PERMISSIONS = {
 		ALL_PERMISSIONS.project.update,
 		ALL_PERMISSIONS.project.delete,
 		//TEAM
-		ALL_PERMISSIONS.team.sider,
 		ALL_PERMISSIONS.team.view,
 		//TASK
 		ALL_PERMISSIONS.task.view,

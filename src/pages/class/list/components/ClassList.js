@@ -1,5 +1,14 @@
 import { Delete, Edit, More, PreviewOpen } from "@icon-park/react";
-import { Button, Dropdown, Empty, Row, Space, Table, Tag, Typography } from "antd";
+import {
+	Button,
+	Dropdown,
+	Empty,
+	Row,
+	Space,
+	Table,
+	Tag,
+	Typography,
+} from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
@@ -27,7 +36,7 @@ export const ClassList = ({ classes, onDelete }) => {
 				// onClick: () => {
 				// 	onUpdate(record);
 				// },
-			},	
+			},
 		];
 	};
 
@@ -89,7 +98,7 @@ export const ClassList = ({ classes, onDelete }) => {
 		<Table
 			dataSource={classes}
 			columns={columns}
-			pagination={true}
+			pagination={false}
 			locale={{
 				emptyText: (
 					<Empty description={<Text disabled>Chưa có lớp học nào</Text>} />
@@ -98,4 +107,3 @@ export const ClassList = ({ classes, onDelete }) => {
 		/>
 	);
 };
-

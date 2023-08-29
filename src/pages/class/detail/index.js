@@ -82,6 +82,7 @@ const ClassDetailPage = () => {
 			functionalReq,
 			nonfunctionalReq,
 		} = values;
+		
 		const data = {
 			projectId,
 			projectName,

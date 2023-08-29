@@ -26,7 +26,7 @@ export const ClassBasicInfo = () => {
 		{
 			key: "TEACHER",
 			label: "Giáo viên",
-			children: data?.teacherName ?? "(Chưa có)",
+			children: data?.teacherName ?? "(Chưa có giáo viên)",
 		},
 	];
 

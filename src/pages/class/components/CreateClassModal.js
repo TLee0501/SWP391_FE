@@ -35,7 +35,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 		setSemestersLoading(false);
 	};
 
-	const getTeacherUnassign = async () => {
+	const getTeacher = async () => {
 		setTeacherLoading(true);
 		const data = await UserApi.getListTeacher();
 		setTeacher(data);
@@ -45,7 +45,7 @@ export const CreateClassModal = ({ open, onCancel, onSuccess }) => {
 	useEffect(() => {
 		getCourses();
 		getSemester();
-		getTeacherUnassign();
+		getTeacher();
 	}, []);
 
 	const courseOptions = courses.map((e) => {

@@ -1,6 +1,6 @@
 import { Plus } from "@icon-park/react";
 import { Button, Col, Input, Row, Select, Spin } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ClassApi from "../../../apis/class";
 import { CreateClassModal } from "../components/CreateClassModal";
 import { ClassList } from "./components/ClassList";
@@ -56,7 +56,12 @@ const ClassListPage = () => {
 	const getClasses = async (courseId, keyword, semesterId, enrolled) => {
 		setClassLoading(true);
 		console.log(courseId, keyword, enrolled);
-		var data = await ClassApi.searchClass(courseId, keyword, semesterId);
+
+		if (role === roles.TEACHER) {
+			var data = await ClassApi.getTeacherClassList();
+		} else {
+			var data = await ClassApi.searchClass(courseId, keyword, semesterId);
+		}
 
 		if (enrolled != null && enrolled !== undefined) {
 			console.log(data);
@@ -87,15 +92,7 @@ const ClassListPage = () => {
 		}
 		setSearchParams(searchParams);
 	};
-	const handleChangeSemester = (semesterID) => {
-		if (semesterID) {
-			searchParams.set("semester", semesterID);
-		} else {
-			searchParams.delete("semester");
-		}
-		setSearchParams(searchParams);
-	};
-
+	
 	const handleClearCourse = () => {
 		searchParams.delete("course");
 		setSearchParams(searchParams);

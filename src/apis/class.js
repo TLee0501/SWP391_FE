@@ -123,9 +123,7 @@ const unassignCourseToTeacher = async (userID, classID) => {
 
 const getTeacherClassList = async () => {
 	try {
-		const response = await BaseApi.get(
-			`/${resource}/getTeacherUnassign?classId=${id}`
-		);
+		const response = await BaseApi.get(`/${resource}/GetTeacherClassList`);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error get list class by teacher: ", error);
@@ -180,14 +178,10 @@ const ClassApi = {
 	updateClass,
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
-<<<<<<< HEAD
 	getTeacherClassList,
-=======
-	getTeacherUnassign,
 	updateEnrollCode,
 	updateTeamRegisterDeadline,
 	updateTeamReportDeadline,
->>>>>>> aa11c199abb01c896628f488f830bfc731074a14
 };
 
 export default ClassApi;

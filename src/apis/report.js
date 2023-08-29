@@ -1,3 +1,4 @@
+import { message } from "antd";
 import BaseApi from ".";
 
 const resoure = "Report";
@@ -5,9 +6,10 @@ const resoure = "Report";
 const sendReport = async (data) => {
 	try {
 		const response = await BaseApi.post(`/${resoure}/SendReport`, data);
-		return response.data;
+		return response.status === 200;
 	} catch (error) {
 		console.log("Error send report: ", error);
+		message.error(error?.response?.data);
 	}
 };
 

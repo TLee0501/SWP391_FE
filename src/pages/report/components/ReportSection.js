@@ -1,35 +1,50 @@
 import { PreviewOpen, Send } from "@icon-park/react";
-import { Button, Card, Col, Empty, Row, Tag, Typography } from "antd";
-import React from "react";
+import { Button, Card, Col, Row, Tag, Typography } from "antd";
+import React, { useContext } from "react";
+import { UserContext } from "../../../providers/user";
+import { TeamContext } from "../../../providers/team";
 import { formatDate } from "../../../utils";
-import moment from "moment";
 
 const { Text } = Typography;
 
-export const ReportSection = ({ report, onSendReport, onViewReport }) => {
-	const isOverdue = moment().isAfter(report?.endTime);
-	const canSubmitReport =
-		moment().isBetween(report?.startTime, report?.endTime) && !isOverdue;
-	const canViewReport = true;
+export const ReportSection = ({
+	index,
+	report,
+	onSendReport,
+	onViewReport,
+}) => {
+	const canViewReport = report !== undefined || report != null;
+	const canSubmitReport = report == null || report === undefined;
+
+	const { user } = useContext(UserContext);
+	const { team } = useContext(TeamContext);
+	const isLeader = user?.userId === team?.leader?.id;
 
 	return (
-		<Card
-			className="w-full"
-			title={
-				<Text style={{ fontWeight: 400 }}>
-					{`Báo cáo lần ${(report?.index ?? 0) + 1}`}{" "}
-					<strong>
-						({formatDate(report?.startTime, "DD/MM/YYYY")} -{" "}
-						{formatDate(report?.endTime, "DD/MM/YYYY")})
-					</strong>
-					{isOverdue && (
-						<Tag color="red" className="ml-4">
-							Đã quá hạn nộp báo cáo
-						</Tag>
+		<Card className="w-full">
+			<Row align="middle" justify="space-between">
+				<Col>
+					<Text style={{ fontWeight: 400 }}>
+						{`Báo cáo lần ${index + 1}`}{" "}
+						{report ? (
+							<Tag color="green" className="ml-4">
+								Đã nộp
+							</Tag>
+						) : (
+							<Tag className="ml-4">Chưa nộp</Tag>
+						)}
+					</Text>
+					{report?.createdDate && (
+						<div className="mt-3">
+							<Text>
+								<Text style={{ marginRight: 4 }}>Ngày nộp báo cáo:</Text>
+								<Text strong>
+									{formatDate(report?.createdDate, "DD/MM/YYYY")}
+								</Text>
+							</Text>
+						</div>
 					)}
-				</Text>
-			}
-			extra={
+				</Col>
 				<Row>
 					<Col>
 						{canViewReport && (
@@ -44,25 +59,19 @@ export const ReportSection = ({ report, onSendReport, onViewReport }) => {
 						)}
 					</Col>
 					<Col>
-						{canSubmitReport && (
+						{canSubmitReport && isLeader && (
 							<Button
 								type="link"
 								className="w-full flex-center"
 								icon={<Send />}
-								onClick={() => onSendReport(report)}
+								onClick={() => onSendReport(index)}
 							>
 								Nộp báo cáo
 							</Button>
 						)}
 					</Col>
 				</Row>
-			}
-		>
-			{report?.content ? (
-				<div>{report?.content}</div>
-			) : (
-				<Empty description={<Text disabled>Chưa có nội dung</Text>} />
-			)}
+			</Row>
 		</Card>
 	);
 };

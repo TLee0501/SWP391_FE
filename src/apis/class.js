@@ -180,14 +180,10 @@ const ClassApi = {
 	updateClass,
 	assignCourseToTeacher,
 	unassignCourseToTeacher,
-<<<<<<< HEAD
-	getTeacherClassList,
-=======
 	getTeacherUnassign,
 	updateEnrollCode,
 	updateTeamRegisterDeadline,
 	updateTeamReportDeadline,
->>>>>>> aa11c199abb01c896628f488f830bfc731074a14
 };
 
 export default ClassApi;

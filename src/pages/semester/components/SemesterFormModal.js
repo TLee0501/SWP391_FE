@@ -7,7 +7,6 @@ import {
 	Select,
 	Tooltip,
 	Typography,
-	message,
 } from "antd";
 import moment from "moment";
 import React, { useRef, useState } from "react";
@@ -32,32 +31,6 @@ export const SemesterFormModal = ({
 	const [type, setType] = useState();
 	const [loading, setLoading] = useState(false);
 	const [year, setYear] = useState(2023);
-
-	// const years = [];
-	// for (let year = 2023; year <= 2100; year++) {
-	// 	years.push(year);
-	// }
-
-	// const handleSemesterChange = (value) => {
-	// 	const start = new Date(year, 0, 1);
-	// 	const end = new Date(year, 3, 31);
-
-	// 	if (value === "Spring") {
-	// 		setStartDate(start);
-	// 		setEndDate(end);
-	// 	} else if (value === "Summer") {
-	// 		setStartDate(start.setMonth(4), start.setDate(1));
-	// 		setEndDate(end.setMonth(6), end.setDate(31));
-	// 	} else if (value === "Fall") {
-	// 		setStartDate(start.setMonth(7), start.setDate(1));
-	// 		setEndDate(end.setMonth(9), end.setDate(31));
-	// 	} else {
-	// 		setStartDate(start.setMonth(10), start.setDate(1));
-	// 		setEndDate(end.setMonth(12), end.setDate(31));
-	// 	}
-	// 	setType(value);
-	// 	message.success(`success ${value}`);
-	// };
 
 	const getSemesterName = () => {
 		if (!startDate || !endDate || !type) {
@@ -112,7 +85,26 @@ export const SemesterFormModal = ({
 				>
 					<Text strong>{getSemesterName()}</Text>
 				</Form.Item>
-
+				<Form.Item
+					name="semesterType"
+					label="Loại học kỳ"
+					rules={[
+						{
+							required: true,
+							message: "Vui lòng chọn loại học kỳ",
+						},
+					]}
+				>
+					<Select
+						placeholder="Chọn loại học kỳ"
+						options={SemesterTypeOptions}
+						value={type}
+						loading={loading}
+						onChange={(value) => {
+							setType(value);
+						}}
+					/>
+				</Form.Item>
 				<Form.Item
 					name="dates"
 					label="Thời gian"
@@ -130,33 +122,6 @@ export const SemesterFormModal = ({
 						onChange={handleChange}
 						disabledDate={(date) => date.isBefore(moment().subtract(1, "days"))}
 						className="w-full"
-					/>
-				</Form.Item>
-				<Form.Item
-					name="semesterType"
-					label="Loại học kỳ"
-					rules={[
-						{
-							required: true,
-							message: "Vui lòng chọn loại học kỳ",
-						},
-					]}
-				>
-					<Select
-						placeholder="Chọn loại học kỳ"
-						// options={SemesterTypeOptions}
-						value={type}
-						loading={loading}
-						options={mockSemesterTypes.map((e) => {
-							return {
-								label: e.name,
-								value: e.id,
-							};
-						})}
-						onChange={(value) => {
-							setType(value);
-						}}
-						// onChange={handleSemesterChange}
 					/>
 				</Form.Item>
 			</Form>

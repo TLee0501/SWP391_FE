@@ -76,7 +76,9 @@ const deleteClass = async (id) => {
 
 const getUserInClass = async (id) => {
 	try {
-		const response = await BaseApi.get(`/${resource}/GetUsersInClass?classId=${id}`);
+		const response = await BaseApi.get(
+			`/${resource}/GetUsersInClass?classId=${id}`
+		);
 		return response.status === 200;
 	} catch (error) {
 		console.log("Error get student in class: ", error);

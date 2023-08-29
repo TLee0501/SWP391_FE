@@ -59,6 +59,12 @@ export const ClassList = ({ classes, onDelete }) => {
 			key: "semesterName",
 			ellipsis: true,
 		},
+		{
+			title: "Giáo viên hướng dẫn",
+			dataIndex: "teacherName",
+			key: "teacherName",
+			ellipsis: true,
+		},
 	];
 
 	if (role === roles.STUDENT) {

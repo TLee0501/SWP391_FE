@@ -53,9 +53,10 @@ const ClassListPage = () => {
 		setShowDeleteClassModal(false);
 	};
 
-	const getClasses = async (courseId, keyword, enrolled) => {
+	const getClasses = async (courseId, keyword, semesterId, enrolled) => {
 		setClassLoading(true);
-		var data = await ClassApi.searchClass(courseId, keyword);
+		console.log(courseId, keyword, enrolled);
+		var data = await ClassApi.searchClass(courseId, keyword, semesterId);
 
 		if (enrolled != null && enrolled !== undefined) {
 			console.log(data);
@@ -84,7 +85,14 @@ const ClassListPage = () => {
 		} else {
 			searchParams.delete("course");
 		}
-
+		setSearchParams(searchParams);
+	};
+	const handleChangeSemester = (semesterID) => {
+		if (semesterID) {
+			searchParams.set("semester", semesterID);
+		} else {
+			searchParams.delete("semester");
+		}
 		setSearchParams(searchParams);
 	};
 
@@ -103,9 +111,10 @@ const ClassListPage = () => {
 
 	useEffect(() => {
 		const courseId = searchParams.get("course");
+		const semesterId = searchParams.get("semester");
 		const search = searchParams.get("search");
 		const enrolled = searchParams.get("enrolled");
-		getClasses(courseId, search, enrolled ? enrolled === "true" : undefined);
+		getClasses(courseId, search, enrolled, semesterId ? enrolled === "true" : undefined);
 	}, [searchParams]);
 
 	return (

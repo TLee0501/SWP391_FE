@@ -11,13 +11,13 @@ export const ClassList = ({ classes, onDelete }) => {
 	const role = useRole();
 	const navigate = useNavigate();
 
-	const getActionItems = (record, classId) => {
+	const getActionItems = (record) => {
 		return [
 			{
 				label: "Xem chi tiết",
 				icon: <PreviewOpen />,
 				onClick: () => {
-					navigate(classId);
+					navigate(record?.classId);
 				},
 			},
 			role === roles.ADMIN && {
@@ -51,12 +51,14 @@ export const ClassList = ({ classes, onDelete }) => {
 		},
 	];
 
-	if (role === roles.STUDENT) {
+	if (role === roles.STUDENT || role === roles.ADMIN) {
 		columns.push({
-			title: "Giáo viên",
+			title: "Giáo viên hướng dẫn",
 			dataIndex: "teacherName",
 			key: "teacherName",
+			ellipsis: true,
 		});
+	} else if (role === roles.STUDENT) {
 		columns.push({
 			title: "Trạng thái",
 			dataIndex: "enrolled",
@@ -75,9 +77,9 @@ export const ClassList = ({ classes, onDelete }) => {
 	columns.push({
 		title: "Thao tác",
 		key: "action",
-		render: (_, { classId, record }) => {
+		render: (_, record) => {
 			return (
-				<Dropdown menu={{ items: getActionItems(record, classId) }}>
+				<Dropdown menu={{ items: getActionItems(record) }}>
 					<Button icon={<More />} className="flex-center" />
 				</Dropdown>
 			);
@@ -85,15 +87,17 @@ export const ClassList = ({ classes, onDelete }) => {
 	});
 
 	return (
-		<Table
-			dataSource={classes}
-			columns={columns}
-			pagination={false}
-			locale={{
-				emptyText: (
-					<Empty description={<Text disabled>Chưa có lớp học nào</Text>} />
-				),
-			}}
-		/>
+		<>
+			<Table
+				dataSource={classes}
+				columns={columns}
+				pagination={false}
+				locale={{
+					emptyText: (
+						<Empty description={<Text disabled>Chưa có lớp học nào</Text>} />
+					),
+				}}
+			/>
+		</>
 	);
 };

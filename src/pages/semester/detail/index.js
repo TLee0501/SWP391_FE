@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const SemesterDetailPage = () => {
-	return <div>SemesterDetailPage</div>;
+const SemesterDetailPage = ({
+	}) => {
+
 };
 
 export default SemesterDetailPage;

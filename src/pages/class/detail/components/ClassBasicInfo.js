@@ -4,6 +4,7 @@ import { ClassContext } from "../../../../providers/class";
 import { formatDate } from "../../../../utils";
 
 export const ClassBasicInfo = () => {
+	// const role = useRole();
 	const { data } = useContext(ClassContext);
 	const semester = data?.semester;
 
@@ -25,7 +26,7 @@ export const ClassBasicInfo = () => {
 		{
 			key: "TEACHER",
 			label: "Giáo viên",
-			children: data?.teacherName ?? "(Chưa có)",
+			children: data?.teacherName ?? "(Chưa có giáo viên)",
 		},
 	];
 

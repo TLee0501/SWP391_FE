@@ -34,7 +34,7 @@ export const ClassTeamList = () => {
 						icon={<TableReport />}
 						onClick={() =>
 							navigate(
-								`${routes.dashboard.root}/${routes.dashboard.report}/${e?.projectId}`
+								`${routes.dashboard.root}/${routes.dashboard.report}/${e?.id}`
 							)
 						}
 					>

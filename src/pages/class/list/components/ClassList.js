@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { roles } from "../../../../constants/app";
 import { useRole } from "../../../../hooks/role";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export const ClassList = ({ classes, onDelete }) => {
 	const role = useRole();
@@ -58,15 +58,13 @@ export const ClassList = ({ classes, onDelete }) => {
 			key: "teacherName",
 			ellipsis: true,
 		});
-	} 
-	
+	}
 	if (role === roles.STUDENT) {
 		columns.push({
 			title: "Trạng thái",
 			dataIndex: "enrolled",
 			key: "enrolled",
 			render: (_, { enrolled }) => {
-				console.log(enrolled);
 				return (
 					<Tag color={enrolled ? "purple-inverse" : "default"}>
 						{enrolled ? "Đã tham gia" : "Chưa tham gia"}
@@ -90,6 +88,7 @@ export const ClassList = ({ classes, onDelete }) => {
 
 	return (
 		<>
+			{role === roles.TEACHER && <Title level={5}>Lớp học của tôi</Title>}
 			<Table
 				dataSource={classes}
 				columns={columns}

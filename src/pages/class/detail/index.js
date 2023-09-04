@@ -24,13 +24,15 @@ import { ClassTeamReportDeadline } from "./components/ClassTeamReportDeadline";
 const ClassDetailPage = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
-
+	const [data, setData] = useState({});
 	const role = useRole();
 	const permissions = usePermissions();
-	const canEnroll = permissions?.includes(ALL_PERMISSIONS.class.enroll);
+	const canEnroll =
+		permissions?.includes(ALL_PERMISSIONS.class.enroll) &&
+		data?.teacherId != null &&
+		data?.teacherId !== undefined;
 	const canSettings = permissions?.includes(ALL_PERMISSIONS.class.settings);
 
-	const [data, setData] = useState({});
 	const [loading, setLoading] = useState({});
 	const [projectUpdating, setProjectUpdating] = useState(false);
 
@@ -84,7 +86,7 @@ const ClassDetailPage = () => {
 			functionalReq,
 			nonfunctionalReq,
 		} = values;
-		
+
 		const data = {
 			projectId,
 			projectName,
@@ -160,7 +162,7 @@ const ClassDetailPage = () => {
 				>
 					<ClassBasicInfo />
 					{role === roles.TEACHER && (
-						<Card title="Thiết lập thời hạn">
+						<Card title="Thiết lập thời hạn" className="mb-2">
 							<ClassTeamRegisterDeadline />
 							<ClassTeamReportDeadline />
 						</Card>
